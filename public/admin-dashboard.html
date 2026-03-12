@@ -1,0 +1,213 @@
+<!-- admin-dashboard.html: Moderation dashboard -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Admin Dashboard | ETIB Directory</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <header class="site-header">
+    <div class="container header-row">
+      <a class="brand" href="index.html">
+        <img src="assets/etib-logo.png" alt="Even Though I’m Blind (ETIB) logo" />
+        <span class="brand-text">
+          <strong>ETIB Community Connect Directory</strong>
+          <span>Connecting the blind and visually impaired community to trusted businesses</span>
+        </span>
+      </a>
+      <nav class="site-nav" aria-label="Directory site navigation">
+        <ul>
+          <li><a href="index.html">Directory</a></li>
+          <li><a href="advertise.html">Advertise</a></li>
+          <li><a href="add-business.html">Add Business</a></li>
+          <li><a href="login.html">Sign In</a></li>
+          <li><a href="owner-dashboard.html">Dashboard</a></li>
+          <li><a href="admin-dashboard.html" aria-current="page">Admin</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+  <main id="main-content">
+    <section class="container" style="margin-top:18px;">
+      <div class="panel" style="padding:16px;">
+        <h1>Admin review and moderation dashboard</h1>
+        <p>Review new submissions, enforce directory mission rules, and manage listing status before anything goes live.</p>
+        <div class="notice">
+          <strong>Admin review note:</strong> Approve listings only if they clearly fit the directory mission, provide complete contact information, and explain how they support blind and visually impaired individuals.
+        </div>
+      </div>
+      <section class="panel" style="padding:14px; margin-top:12px;">
+        <h2>Submission filters</h2>
+        <div class="filter-grid">
+          <div class="field">
+            <label for="admin-search">Search listings</label>
+            <input id="admin-search" type="search" placeholder="Business name or owner" />
+          </div>
+          <div class="field">
+            <label for="admin-status">Status</label>
+            <select id="admin-status">
+              <option>All statuses</option>
+              <option>Pending</option>
+              <option>Approved</option>
+              <option>Needs changes</option>
+              <option>Rejected</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="admin-category">Category</label>
+            <select id="admin-category">
+              <option>All categories</option>
+              <option>Technology Support</option>
+              <option>Legal Services</option>
+              <option>Transportation</option>
+              <option>Creative Services</option>
+            </select>
+          </div>
+        </div>
+      </section>
+      <section class="panel" style="padding:14px; margin-top:12px;">
+        <h2>Submission queue</h2>
+        <div class="table-wrap">
+          <table>
+            <caption>Listings awaiting moderation</caption>
+      <!-- admin-dashboard.html: Moderation dashboard -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Admin Dashboard | ETIB Directory</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <header class="site-header">
+    <div class="container header-row">
+      <a class="brand" href="index.html">
+        <img src="assets/etib-logo.png" alt="Even Though I’m Blind (ETIB) logo" />
+        <span class="brand-text">
+          <strong>ETIB Community Connect Directory</strong>
+          <span>Connecting the blind and visually impaired community to trusted businesses</span>
+        </span>
+      </a>
+      <nav class="site-nav" aria-label="Directory site navigation">
+        <ul>
+          <li><a href="index.html">Directory</a></li>
+          <li><a href="advertise.html">Advertise</a></li>
+          <li><a href="add-business.html">Add Business</a></li>
+          <li><a href="login.html">Sign In</a></li>
+          <li><a href="owner-dashboard.html">Dashboard</a></li>
+          <li><a href="admin-dashboard.html" aria-current="page">Admin</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+  <main id="main-content">
+    <section class="container" style="margin-top:18px;">
+      <div class="panel" style="padding:16px;">
+        <h1>Admin review and moderation dashboard</h1>
+        <p>Review new submissions, enforce directory mission rules, and manage listing status before anything goes live.</p>
+        <div class="notice">
+          <strong>Admin review note:</strong> Approve listings only if they clearly fit the directory mission, provide complete contact information, and explain how they support blind and visually impaired individuals.
+        </div>
+      </div>
+      <section class="panel" style="padding:14px; margin-top:12px;">
+        <h2>Submission filters</h2>
+        <div class="filter-grid">
+          <div class="field">
+            <label for="admin-search">Search listings</label>
+            <input id="admin-search" type="search" placeholder="Business name or owner" />
+          </div>
+          <div class="field">
+            <label for="admin-status">Status</label>
+            <select id="admin-status">
+              <option>All statuses</option>
+              <option>Pending</option>
+              <option>Approved</option>
+              <option>Needs changes</option>
+              <option>Rejected</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="admin-category">Category</label>
+            <select id="admin-category">
+              <option>All categories</option>
+              <option>Technology Support</option>
+              <option>Legal Services</option>
+              <option>Transportation</option>
+              <option>Creative Services</option>
+            </select>
+          </div>
+        </div>
+      </section>
+      <section class="panel" style="padding:14px; margin-top:12px;">
+        <h2>Submission queue</h2>
+        <div class="table-wrap">
+          <table>
+            <caption>Listings awaiting moderation</caption>
+            <thead>
+              <tr>
+                <th>Business</th>
+                <th>Listing Type</th>
+                <th>Category</th>
+                <th>Status</th>
+                <th>Last Updated</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Vision Path Tech Support</td>
+                <td>Community Service Provider</td>
+                <td>Technology Support</td>
+                <td><span class="status pending">Pending</span></td>
+                <td>2026-02-23</td>
+                <td>
+                  <button class="btn btn-primary" type="button">Approve</button>
+                  <button class="btn" type="button">Needs Changes</button>
+                  <button class="btn btn-danger" type="button">Reject</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </section>
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>      <thead>
+              <tr>
+                <th>Business</th>
+                <th>Listing Type</th>
+                <th>Category</th>
+                <th>Status</th>
+                <th>Last Updated</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Vision Path Tech Support</td>
+                <td>Community Service Provider</td>
+                <td>Technology Support</td>
+                <td><span class="status pending">Pending</span></td>
+                <td>2026-02-23</td>
+                <td>
+                  <button class="btn btn-primary" type="button">Approve</button>
+                  <button class="btn" type="button">Needs Changes</button>
+                  <button class="btn btn-danger" type="button">Reject</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </section>
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>
