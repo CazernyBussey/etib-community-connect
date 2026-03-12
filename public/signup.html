@@ -1,0 +1,77 @@
+<!-- signup.html: Account creation page for providers -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Sign Up | ETIB Directory</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <header class="site-header">
+    <div class="container header-row">
+      <a class="brand" href="index.html">
+        <img src="assets/etib-logo.png" alt="Even Though I’m Blind (ETIB) logo" />
+        <span class="brand-text">
+          <strong>ETIB Community Connect Directory</strong>
+          <span>Connecting the blind and visually impaired community to trusted businesses</span>
+        </span>
+      </a>
+      <nav class="site-nav" aria-label="Directory site navigation">
+        <ul>
+          <li><a href="index.html">Directory</a></li>
+          <li><a href="advertise.html">Advertise</a></li>
+          <li><a href="add-business.html">Add Business</a></li>
+          <li><a href="login.html">Sign In</a></li>
+          <li><a href="signup.html" aria-current="page">Sign Up</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+  <main id="main-content">
+    <section class="container">
+      <div class="panel" style="padding:16px; margin: 18px 0;">
+        <h1>Create your account</h1>
+        <form class="form-layout" novalidate>
+          <div class="form-grid-2">
+            <div class="field">
+              <label for="signup-name">Full name <span class="req">*</span></label>
+              <input id="signup-name" name="fullName" type="text" required />
+            </div>
+            <div class="field">
+              <label for="signup-email">Business email <span class="req">*</span></label>
+              <input id="signup-email" name="email" type="email" required />
+            </div>
+          </div>
+          <div class="form-grid-2">
+            <div class="field">
+              <label for="signup-password">Password <span class="req">*</span></label>
+              <input id="signup-password" name="password" type="password" required />
+            </div>
+            <div class="field">
+              <label for="signup-confirm">Confirm password <span class="req">*</span></label>
+              <input id="signup-confirm" name="confirmPassword" type="password" required />
+            </div>
+          </div>
+          <div class="field">
+            <label for="signup-phone">Phone number <span class="req">*</span></label>
+            <input id="signup-phone" name="phoneNumber" type="tel" required />
+          </div>
+          <div class="checkbox-block">
+            <label for="signup-terms">
+              <input id="signup-terms" type="checkbox" required />
+              <span>I agree to the Terms of Use and Privacy Policy. <span class="req">*</span></span>
+            </label>
+          </div>
+          <div class="cta-row">
+            <button class="btn btn-primary" type="submit">Create Account</button>
+          </div>
+          <p>Already have an account? <a href="login.html">Sign in</a></p>
+        </form>
+      </div>
+    </section>
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>
