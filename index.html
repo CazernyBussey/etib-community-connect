@@ -1,0 +1,183 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>ETIB Community Connect Directory</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <header class="site-header">
+    <div class="container header-row">
+      <a class="brand" href="index.html">
+        <img src="assets/etib-logo.png" alt="Even Though I’m Blind (ETIB) logo" />
+        <span class="brand-text">
+          <strong>ETIB Community Connect Directory</strong>
+          <span>Connecting the blind and visually impaired community to trusted businesses</span>
+        </span>
+      </a>
+
+      <nav class="site-nav" aria-label="Directory site navigation">
+        <ul>
+          <li><a href="index.html" aria-current="page">Directory</a></li>
+          <li><a href="advertise.html">Advertise</a></li>
+          <li><a href="add-business.html">Add Business</a></li>
+          <li><a href="login.html">Sign In</a></li>
+          <li><a href="owner-dashboard.html">Dashboard</a></li>
+          <li><a href="admin-dashboard.html">Admin</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <section class="hero">
+      <div class="container">
+      <div class="hero-grid panel">
+          <img src="assets/etib-logo.png" alt="Even Though I’m Blind (ETIB) logo" />
+          <div>
+            <h1>ETIB Community Connect Directory</h1>
+            <p class="tagline">Connecting the blind and visually impaired community to trusted businesses</p>
+            <p>This directory connects the blind and visually impaired community with trusted businesses that are either blind or visually impaired-owned, or businesses that actively provide services designed for blind and visually impaired individuals.</p>
+            <p class="small">Find accessible, community-aligned businesses you can contact directly by phone, text, email, or website. No payments. Just trusted connections.</p>
+
+            <div class="cta-row" aria-label="Primary calls to action">
+              <a class="btn btn-primary" href="#browse">Browse Directory</a>
+              <a class="btn btn-secondary" href="add-business.html">Add Your Business</a>
+              <a class="btn" href="login.html">Sign In</a>
+              <a class="btn btn-ghost" href="legal.html#support">Contact ETIB</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="browse" class="container" aria-labelledby="browseHeading" data-directory-app>
+      <div class="filters panel" aria-label="Search and filter listings">
+        <h2 id="browseHeading">Browse listings</h2>
+
+        <div class="filter-grid">
+          <div class="field" style="grid-column: span 2;">
+            <label for="search">Search by business name, service, or keyword</label>
+            <input id="search" name="search" type="search" placeholder="Example: technology support, legal, tutoring" />
+          </div>
+
+          <div class="field">
+            <label for="filter-category">Category</label>
+            <select id="filter-category" name="category">
+              <option value="">All categories</option>
+              <option>Healthcare</option>
+              <option>Transportation</option>
+              <option>Legal Services</option>
+              <option>Education and Tutoring</option>
+              <option>Technology Support</option>
+              <option>Accessibility Consulting</option>
+              <option>Home Services</option>
+              <option>Financial Services</option>
+              <option>Employment and Career Services</option>
+              <option>Coaching and Counseling</option>
+              <option>Creative Services</option>
+              <option>Retail and Products</option>
+              <option>Nonprofit and Community Support</option>
+              <option>Entertainment and Media</option>
+              <option>Other</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="filter-type">Listing type</label>
+            <select id="filter-type" name="listingType">
+              <option value="">All types</option>
+              <option>Blind-Owned / Visually Impaired-Owned</option>
+              <option>Community Service Provider</option>
+              <option>Both</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="filter-location">Location (city, state, or remote)</label>
+            <input id="filter-location" name="location" type="text" placeholder="Example: NY or remote" />
+          </div>
+
+          <div class="field">
+            <label for="filter-contact">Contact method</label>
+            <select id="filter-contact" name="contactMethod">
+              <option value="">Any contact method</option>
+              <option>Call</option>
+              <option>Text</option>
+              <option>Email</option>
+              <option>Website</option>
+            </select>
+          </div>
+
+          <div class="inline-actions">
+            <button class="btn" id="resetFilters" type="button">Clear Filters</button>
+          </div>
+        </div>
+      </div>
+
+      <section class="panel" aria-labelledby="featuredHeading" style="padding:14px; margin-bottom: 12px;">
+        <h2 id="featuredHeading" class="section-title">Featured businesses</h2>
+        <p class="small">Optional featured rotation area for ETIB partners and community-recommended providers. This is a placeholder for the MVP.</p>
+        <div class="badge-row" aria-label="Trust labels examples">
+          <span class="badge gold">Blind-Owned</span>
+          <span class="badge blue">Community Service Provider</span>
+          <span class="badge green">Verified Contact</span>
+          <span class="badge">Remote Accessible</span>
+          <span class="badge">Nonprofit Partner</span>
+        </div>
+      </section>
+
+      <div class="results-top" aria-live="polite">
+        <p id="resultCount">0 listings found</p>
+        <a class="btn btn-secondary" href="add-business.html">Add Your Business</a>
+      </div>
+
+      <section id="directoryResults" class="cards" aria-label="Business listing results"></section>
+
+      <nav class="pagination" aria-label="Pagination">
+        <button class="btn" type="button" aria-current="page">1</button>
+        <button class="btn" type="button">2</button>
+        <button class="btn" type="button">3</button>
+        <button class="btn" type="button">Load More</button>
+      </nav>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-grid">
+      <section aria-labelledby="foot-about">
+        <h2 id="foot-about">About this directory</h2>
+        <p class="small">ETIB Community Connect Directory is a mission-driven connection hub. No payments are processed. Users connect directly with providers by phone, text, email, or website.</p>
+        <p class="small">ETIB Community Connect Directory provides a community directory for informational and connection purposes only. ETIB does not process payments or guarantee third-party services. Users should contact providers directly to confirm service details and accessibility needs.</p>
+      </section>
+
+      <nav aria-labelledby="foot-legal">
+        <h2 id="foot-legal">Legal and support</h2>
+        <ul>
+          <li><a href="legal.html#terms">Terms of Use</a></li>
+          <li><a href="legal.html#privacy">Privacy Policy</a></li>
+          <li><a href="legal.html#accessibility">Accessibility Statement</a></li>
+          <li><a href="legal.html#standards">Community Listing Standards</a></li>
+          <li><a href="legal.html#support">Contact and Support</a></li>
+        </ul>
+      </nav>
+
+      <section aria-labelledby="foot-a11y">
+        <h2 id="foot-a11y">Accessibility</h2>
+        <ul>
+          <li class="small">Full keyboard navigation</li>
+          <li class="small">VoiceOver-friendly labels and forms</li>
+          <li class="small">Clear heading hierarchy and semantic HTML</li>
+          <li class="small">High contrast and visible focus states</li>
+        </ul>
+      </section>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
