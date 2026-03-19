@@ -21,7 +21,7 @@ Open: `http://localhost:8080`
 3. Render will detect `render.yaml`.
 4. Set env vars:
    - `JWT_SECRET` (or leave auto-generated from render.yaml)
-   - `ADMIN_EMAIL` = `eventhoughimblind@gmail.com`
+   - `ADMIN_EMAIL` = `etib@eventhoughimblind.com`
 5. Deploy.
 
 ## Important notes
