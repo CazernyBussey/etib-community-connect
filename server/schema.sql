@@ -57,6 +57,17 @@ CREATE TABLE IF NOT EXISTS reports (
   FOREIGN KEY(listing_id) REFERENCES listings(id) ON DELETE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS admin_audit_logs (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  admin_user_id INTEGER NOT NULL,
+  action TEXT NOT NULL,
+  target_type TEXT NOT NULL,
+  target_id INTEGER,
+  meta_json TEXT,
+  created_at TEXT NOT NULL DEFAULT (datetime('now')),
+  FOREIGN KEY(admin_user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
 CREATE INDEX IF NOT EXISTS idx_listings_status ON listings(status);
 CREATE INDEX IF NOT EXISTS idx_listings_category ON listings(category);
 CREATE INDEX IF NOT EXISTS idx_listings_city_state ON listings(city, state);

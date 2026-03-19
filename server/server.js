@@ -9,6 +9,7 @@ import fs from "fs";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import nodemailer from "nodemailer";
+import rateLimit from "express-rate-limit";
 
 dotenv.config();
 
@@ -25,6 +26,9 @@ const SMTP_SECURE = String(process.env.SMTP_SECURE || "false") === "true";
 const SMTP_USER = process.env.SMTP_USER || "";
 const SMTP_PASS = process.env.SMTP_PASS || "";
 const SMTP_FROM = process.env.SMTP_FROM || "ETIB Community Connect <no-reply@eventhoughimblind.com>";
+
+const AUTH_RATE_WINDOW_MS = Number(process.env.AUTH_RATE_WINDOW_MS || 15 * 60 * 1000);
+const AUTH_RATE_MAX = Number(process.env.AUTH_RATE_MAX || 10);
 
 const dbPath = path.join(__dirname, "etib.db");
 const schemaPath = path.join(__dirname, "schema.sql");
@@ -96,6 +100,14 @@ app.use(helmet());
 app.use(cors());
 app.use(express.json({ limit: "1mb" }));
 
+const authLimiter = rateLimit({
+  windowMs: AUTH_RATE_WINDOW_MS,
+  max: AUTH_RATE_MAX,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: "Too many authentication attempts. Please try again later." }
+});
+
 function signToken(user) {
   return jwt.sign(
     { sub: user.id, role: user.role, email: user.email },
@@ -137,12 +149,34 @@ function validateMissionFit(listingType, supportsText) {
   return typeOk && supportOk;
 }
 
-app.post("/api/auth/signup", async (req, res) => {
+function validEmail(value) {
+  const email = String(value || "").trim();
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+function validPhone(value) {
+  const digits = String(value || "").replace(/\D/g, "");
+  return digits.length >= 10 && digits.length <= 15;
+}
+
+async function logAdminAction({ adminUserId, action, targetType, targetId = null, meta = null }) {
+  await run(
+    `INSERT INTO admin_audit_logs (admin_user_id, action, target_type, target_id, meta_json)
+     VALUES (?, ?, ?, ?, ?)`,
+    [adminUserId, action, targetType, targetId, meta ? JSON.stringify(meta) : null]
+  ).catch(() => {});
+}
+
+app.post("/api/auth/signup", authLimiter, async (req, res) => {
   try {
     const { fullName, email, phone, password } = req.body || {};
     if (!fullName || !email || !phone || !password) return res.status(400).json({ error: "Missing required fields" });
 
     const emailNorm = String(email).toLowerCase().trim();
+    if (!validEmail(emailNorm)) return res.status(400).json({ error: "Invalid email format" });
+    if (!validPhone(phone)) return res.status(400).json({ error: "Invalid phone format" });
+    if (String(password).length < 10) return res.status(400).json({ error: "Password must be at least 10 characters" });
+
     const passwordHash = await bcrypt.hash(String(password), 10);
 
     await run(
@@ -161,7 +195,7 @@ app.post("/api/auth/signup", async (req, res) => {
   }
 });
 
-app.post("/api/auth/login", async (req, res) => {
+app.post("/api/auth/login", authLimiter, async (req, res) => {
   try {
     const { email, password } = req.body || {};
     if (!email || !password) return res.status(400).json({ error: "Missing email or password" });
@@ -238,6 +272,8 @@ app.post("/api/listings", authRequired, async (req, res) => {
   if (!validateMissionFit(String(b.listingType), String(b.supportsBvi))) {
     return res.status(400).json({ error: "Mission fit not met." });
   }
+  if (!validEmail(b.businessEmail)) return res.status(400).json({ error: "Invalid business email" });
+  if (!validPhone(b.phone)) return res.status(400).json({ error: "Invalid business phone" });
 
   const result = await run(
     `INSERT INTO listings (
@@ -364,6 +400,14 @@ app.patch("/api/admin/listings/:id", authRequired, adminRequired, async (req, re
     [String(status), adminNote ? String(adminNote).trim() : null, req.user.sub, id]
   );
 
+  await logAdminAction({
+    adminUserId: req.user.sub,
+    action: `listing_status_${String(status)}`,
+    targetType: "listing",
+    targetId: id,
+    meta: { adminNote: adminNote ? String(adminNote).trim() : null }
+  });
+
   const to = listing.owner_email || listing.business_email;
   const business = listing.business_name;
   const notePart = adminNote ? `\n\nAdmin note:\n${adminNote}` : "";
@@ -411,6 +455,18 @@ app.get("/api/admin/reports", authRequired, adminRequired, async (req, res) => {
      ORDER BY datetime(r.created_at) DESC LIMIT 200`
   );
   res.json({ reports: rows });
+});
+
+app.get("/api/admin/audit-logs", authRequired, adminRequired, async (req, res) => {
+  const rows = await all(
+    `SELECT a.id, a.admin_user_id, a.action, a.target_type, a.target_id, a.meta_json, a.created_at,
+            u.full_name as admin_name, u.email as admin_email
+     FROM admin_audit_logs a
+     LEFT JOIN users u ON u.id = a.admin_user_id
+     ORDER BY datetime(a.created_at) DESC
+     LIMIT 500`
+  );
+  res.json({ logs: rows });
 });
 
 app.get("/api/health", (req, res) => {

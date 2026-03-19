@@ -22,6 +22,8 @@ Open: `http://localhost:8080`
 4. Set env vars:
    - `JWT_SECRET` (or leave auto-generated from render.yaml)
    - `ADMIN_EMAIL` = `etib@eventhoughimblind.com`
+   - `AUTH_RATE_WINDOW_MS` = `900000`
+   - `AUTH_RATE_MAX` = `10`
 5. Deploy.
 
 ## Important notes

@@ -12,3 +12,7 @@ services:
         generateValue: true
       - key: ADMIN_EMAIL
         sync: false
+      - key: AUTH_RATE_WINDOW_MS
+        value: "900000"
+      - key: AUTH_RATE_MAX
+        value: "10"
