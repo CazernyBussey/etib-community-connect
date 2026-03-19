@@ -32,11 +32,12 @@
       node = document.createElement("p");
       node.setAttribute("data-status", "1");
       node.setAttribute("role", "status");
+      node.setAttribute("aria-live", "polite");
       node.style.marginTop = "10px";
       form.appendChild(node);
     }
     node.textContent = text;
-    node.style.color = isError ? "#b42318" : "#0f5132";
+    node.style.color = isError ? "#ffb4b4" : "#9ee3b5";
   }
 
   // Signup
@@ -78,8 +79,35 @@
   // Add business
   const addForm = document.querySelector("form") && document.getElementById("biz-name") ? document.querySelector("form") : null;
   if (addForm) {
+    function validateAddBusinessForm() {
+      const requiredIds = [
+        "biz-name", "owner-name", "biz-email", "biz-phone", "listing-type",
+        "biz-category", "support-blind", "accessibility-details", "primary-contact", "city", "state"
+      ];
+      for (const id of requiredIds) {
+        const el = document.getElementById(id);
+        if (!el || !String(el.value || "").trim()) {
+          el?.focus();
+          return `Please complete: ${id.replace(/-/g, " ")}`;
+        }
+      }
+
+      const supportText = document.getElementById("support-blind")?.value?.trim() || "";
+      if (supportText.length < 20) return "Please explain support details in at least 20 characters.";
+
+      if (!document.getElementById("a11y-commit")?.checked) return "Please confirm mission-alignment checkbox.";
+      if (!document.getElementById("terms-commit")?.checked) return "Please accept Terms and Privacy checkbox.";
+
+      return "";
+    }
+
     addForm.addEventListener("submit", async (e) => {
       e.preventDefault();
+
+      const validationError = validateAddBusinessForm();
+      if (validationError) return announce(addForm, validationError, true);
+
+      const supportText = document.getElementById("support-blind")?.value?.trim() || "";
       const payload = {
         businessName: document.getElementById("biz-name")?.value?.trim(),
         ownerContactName: document.getElementById("owner-name")?.value?.trim(),
@@ -87,9 +115,9 @@
         phone: document.getElementById("biz-phone")?.value?.trim(),
         listingType: document.getElementById("listing-type")?.value,
         category: document.getElementById("biz-category")?.value,
-        shortSummary: (document.getElementById("support-blind")?.value || "").trim().slice(0, 170),
-        fullDescription: document.getElementById("support-blind")?.value?.trim(),
-        supportsBvi: document.getElementById("support-blind")?.value?.trim(),
+        shortSummary: supportText.slice(0, 170),
+        fullDescription: supportText,
+        supportsBvi: supportText,
         accessibilityDetails: document.getElementById("accessibility-details")?.value?.trim(),
         primaryContactMethod: document.getElementById("primary-contact")?.value,
         city: document.getElementById("city")?.value?.trim(),
@@ -265,23 +293,42 @@
         "Rejected": "rejected"
       };
       const status = encodeURIComponent(statusMap[statusRaw] || "");
-      const out = await api(`/api/admin/listings?status=${status}&q=${q}`);
-      const tbody = document.querySelector("tbody");
-      if (!tbody) return;
-      tbody.innerHTML = (out.listings || []).map((l) => `
-        <tr>
-          <td>${l.business_name}<br><small>${l.owner_email || ""}</small></td>
-          <td>${l.listing_type}</td>
-          <td>${l.category}</td>
-          <td><span class="status">${l.status}</span></td>
-          <td>${l.last_updated || ""}</td>
-          <td>
-            <button class="btn btn-primary" data-action="approved" data-id="${l.id}">Approve</button>
-            <button class="btn" data-action="needs_changes" data-id="${l.id}">Needs Changes</button>
-            <button class="btn btn-danger" data-action="rejected" data-id="${l.id}">Reject</button>
-          </td>
-        </tr>
-      `).join("") || '<tr><td colspan="6">No matching submissions.</td></tr>';
+
+      const [listingsOut, usersOut] = await Promise.all([
+        api(`/api/admin/listings?status=${status}&q=${q}`),
+        api(`/api/admin/users`)
+      ]);
+
+      const tbody = document.querySelector("table tbody");
+      if (tbody) {
+        tbody.innerHTML = (listingsOut.listings || []).map((l) => `
+          <tr>
+            <td>${l.business_name}<br><small>${l.owner_email || ""}</small></td>
+            <td>${l.listing_type}</td>
+            <td>${l.category}</td>
+            <td><span class="status">${l.status}</span></td>
+            <td>${l.last_updated || ""}</td>
+            <td>
+              <button class="btn btn-primary" data-action="approved" data-id="${l.id}">Approve</button>
+              <button class="btn" data-action="needs_changes" data-id="${l.id}">Needs Changes</button>
+              <button class="btn btn-danger" data-action="rejected" data-id="${l.id}">Reject</button>
+            </td>
+          </tr>
+        `).join("") || '<tr><td colspan="6">No matching submissions.</td></tr>';
+      }
+
+      const usersBody = document.getElementById("admin-users-body");
+      if (usersBody) {
+        usersBody.innerHTML = (usersOut.users || []).map((u) => `
+          <tr>
+            <td>${u.full_name || ""}</td>
+            <td>${u.email || ""}</td>
+            <td>${u.phone || ""}</td>
+            <td>${u.role || "owner"}</td>
+            <td>${u.created_at || ""}</td>
+          </tr>
+        `).join("") || '<tr><td colspan="5">No users found.</td></tr>';
+      }
     }
 
     document.addEventListener("click", async (e) => {

@@ -1,4 +1,3 @@
-<!-- add-business.html: Form page for adding business listings -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,6 +8,7 @@
 </head>
 <body>
   <a class="skip-link" href="#main-content">Skip to main content</a>
+
   <header class="site-header">
     <div class="container header-row">
       <a class="brand" href="index.html">
@@ -30,39 +30,44 @@
       </nav>
     </div>
   </header>
+
   <main id="main-content">
     <section class="container">
       <div class="panel" style="padding:16px; margin: 18px 0;">
         <h1>Add your business</h1>
         <p>Join the ETIB Community Connect Directory by submitting your business listing. To be approved, your business must be blind/visually impaired-owned or specifically provide services for blind and visually impaired individuals. All listings are reviewed by ETIB before going live.</p>
         <div class="notice">
-          <strong>Important project rule:</strong> Every listing must be either blind or visually impaired-owned, or a business that specifically serves blind and visually impaired individuals.
+          <strong>Important project rule:</strong> Every listing must be either blind and visually impaired-owned, or specifically serve blind and visually impaired users.
         </div>
       </div>
-      <form class="form-layout" novalidate>
+
+      <form class="form-layout" novalidate aria-describedby="submit-help">
+        <p id="submit-help" class="small">Fields marked with * are required.</p>
+
         <section class="panel form-section">
           <h2>Business basics</h2>
           <div class="form-grid-2">
             <div class="field">
               <label for="biz-name">Business name <span class="req">*</span></label>
-              <input id="biz-name" name="businessName" type="text" required />
+              <input id="biz-name" name="businessName" type="text" autocomplete="organization" required />
             </div>
             <div class="field">
               <label for="owner-name">Owner or contact name <span class="req">*</span></label>
-              <input id="owner-name" name="ownerName" type="text" required />
+              <input id="owner-name" name="ownerName" type="text" autocomplete="name" required />
             </div>
           </div>
           <div class="form-grid-2">
             <div class="field">
               <label for="biz-email">Business email <span class="req">*</span></label>
-              <input id="biz-email" name="businessEmail" type="email" required />
+              <input id="biz-email" name="businessEmail" type="email" autocomplete="email" required />
             </div>
             <div class="field">
               <label for="biz-phone">Phone number <span class="req">*</span></label>
-              <input id="biz-phone" name="phoneNumber" type="tel" required />
+              <input id="biz-phone" name="phoneNumber" type="tel" autocomplete="tel" required />
             </div>
           </div>
         </section>
+
         <section class="panel form-section">
           <h2>Mission fit and category</h2>
           <div class="field">
@@ -104,6 +109,7 @@
             <textarea id="accessibility-details" name="accessibilitySupport" required></textarea>
           </div>
         </section>
+
         <section class="panel form-section">
           <h2>Contact and service area</h2>
           <div class="form-grid-2">
@@ -125,148 +131,21 @@
           <div class="form-grid-2">
             <div class="field">
               <label for="city">City <span class="req">*</span></label>
-              <input id="city" name="city" type="text" required />
-      <!-- add-business.html: Form page for adding business listings -->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Add Business | ETIB Directory</title>
-  <link rel="stylesheet" href="styles.css" />
-</head>
-<body>
-  <a class="skip-link" href="#main-content">Skip to main content</a>
-  <header class="site-header">
-    <div class="container header-row">
-      <a class="brand" href="index.html">
-        <img src="assets/etib-logo.png" alt="Even Though I’m Blind (ETIB) logo" />
-        <span class="brand-text">
-          <strong>ETIB Community Connect Directory</strong>
-          <span>Connecting the blind and visually impaired community to trusted businesses</span>
-        </span>
-      </a>
-      <nav class="site-nav" aria-label="Directory site navigation">
-        <ul>
-          <li><a href="index.html">Directory</a></li>
-          <li><a href="advertise.html">Advertise</a></li>
-          <li><a href="add-business.html" aria-current="page">Add Business</a></li>
-          <li><a href="login.html">Sign In</a></li>
-          <li><a href="owner-dashboard.html">Dashboard</a></li>
-          <li><a href="admin-dashboard.html">Admin</a></li>
-        </ul>
-      </nav>
-    </div>
-  </header>
-  <main id="main-content">
-    <section class="container">
-      <div class="panel" style="padding:16px; margin: 18px 0;">
-        <h1>Add your business</h1>
-        <p>Join the ETIB Community Connect Directory by submitting your business listing. To be approved, your business must be blind/visually impaired-owned or specifically provide services for blind and visually impaired individuals. All listings are reviewed by ETIB before going live.</p>
-        <div class="notice">
-          <strong>Important project rule:</strong> Every listing must be either blind or visually impaired-owned, or a business that specifically serves blind and visually impaired individuals.
-        </div>
-      </div>
-      <form class="form-layout" novalidate>
-        <section class="panel form-section">
-          <h2>Business basics</h2>
-          <div class="form-grid-2">
-            <div class="field">
-              <label for="biz-name">Business name <span class="req">*</span></label>
-              <input id="biz-name" name="businessName" type="text" required />
-            </div>
-            <div class="field">
-              <label for="owner-name">Owner or contact name <span class="req">*</span></label>
-              <input id="owner-name" name="ownerName" type="text" required />
-            </div>
-          </div>
-          <div class="form-grid-2">
-            <div class="field">
-              <label for="biz-email">Business email <span class="req">*</span></label>
-              <input id="biz-email" name="businessEmail" type="email" required />
-            </div>
-            <div class="field">
-              <label for="biz-phone">Phone number <span class="req">*</span></label>
-              <input id="biz-phone" name="phoneNumber" type="tel" required />
-            </div>
-          </div>
-        </section>
-        <section class="panel form-section">
-          <h2>Mission fit and category</h2>
-          <div class="field">
-            <label for="listing-type">Listing type <span class="req">*</span></label>
-            <select id="listing-type" name="listingType" required>
-              <option value="">Select listing type</option>
-              <option>Blind-Owned / Visually Impaired-Owned</option>
-              <option>Community Service Provider</option>
-              <option>Both</option>
-            </select>
-          </div>
-          <div class="field">
-            <label for="biz-category">Business category <span class="req">*</span></label>
-            <select id="biz-category" name="businessCategory" required>
-              <option value="">Select a category</option>
-              <option>Healthcare</option>
-              <option>Transportation</option>
-              <option>Legal Services</option>
-              <option>Education and Tutoring</option>
-              <option>Technology Support</option>
-              <option>Accessibility Consulting</option>
-              <option>Home Services</option>
-              <option>Financial Services</option>
-              <option>Employment and Career Services</option>
-              <option>Coaching and Counseling</option>
-              <option>Creative Services</option>
-              <option>Retail and Products</option>
-              <option>Nonprofit and Community Support</option>
-              <option>Entertainment and Media</option>
-              <option>Other</option>
-            </select>
-          </div>
-          <div class="field">
-            <label for="support-blind">How your business supports the blind and visually impaired community <span class="req">*</span></label>
-            <textarea id="support-blind" name="supportBlindCommunity" required></textarea>
-          </div>
-          <div class="field">
-            <label for="accessibility-details">Accessibility support details <span class="req">*</span></label>
-            <textarea id="accessibility-details" name="accessibilitySupport" required></textarea>
-          </div>
-        </section>
-        <section class="panel form-section">
-          <h2>Contact and service area</h2>
-          <div class="form-grid-2">
-            <div class="field">
-              <label for="primary-contact">Primary contact method <span class="req">*</span></label>
-              <select id="primary-contact" name="primaryContactMethod" required>
-                <option value="">Choose contact method</option>
-                <option>Call</option>
-                <option>Text</option>
-                <option>Email</option>
-                <option>Website</option>
-              </select>
-            </div>
-            <div class="field">
-              <label for="website">Website URL</label>
-              <input id="website" name="websiteUrl" type="url" placeholder="https://example.com" />
-            </div>
-          </div>
-          <div class="form-grid-2">
-            <div class="field">
-              <label for="city">City <span class="req">*</span></label>
-              <input id="city" name="city" type="text" required />
+              <input id="city" name="city" type="text" autocomplete="address-level2" required />
             </div>
             <div class="field">
               <label for="state">State <span class="req">*</span></label>
-              <input id="state" name="state" type="text" required />
+              <input id="state" name="state" type="text" autocomplete="address-level1" required />
             </div>
           </div>
         </section>
+
         <section class="panel form-section">
           <h2>Required agreements</h2>
           <div class="checkbox-block">
             <label for="a11y-commit">
               <input id="a11y-commit" type="checkbox" required />
-              <span>I confirm that this business is either blind/visually impaired-owned or provides services specifically for blind and visually impaired individuals, and I agree to provide accessible communication and service support. <span class="req">*</span></span>
+              <span>I confirm this business is mission-aligned and will provide accessible communication support. <span class="req">*</span></span>
             </label>
           </div>
           <div class="checkbox-block">
@@ -276,44 +155,13 @@
             </label>
           </div>
           <div class="cta-row">
-            <button class="btn" type="button">Save Draft (future)</button>
             <button class="btn btn-primary" type="submit">Submit for Review</button>
           </div>
         </section>
       </form>
     </section>
   </main>
-  <script src="script.js"></script>
-</body>
-</html>      </div>
-            <div class="field">
-              <label for="state">State <span class="req">*</span></label>
-              <input id="state" name="state" type="text" required />
-            </div>
-          </div>
-        </section>
-        <section class="panel form-section">
-          <h2>Required agreements</h2>
-          <div class="checkbox-block">
-            <label for="a11y-commit">
-              <input id="a11y-commit" type="checkbox" required />
-              <span>I confirm that this business is either blind/visually impaired-owned or provides services specifically for blind and visually impaired individuals, and I agree to provide accessible communication and service support. <span class="req">*</span></span>
-            </label>
-          </div>
-          <div class="checkbox-block">
-            <label for="terms-commit">
-              <input id="terms-commit" type="checkbox" required />
-              <span>I agree to the Terms of Use and Privacy Policy. <span class="req">*</span></span>
-            </label>
-          </div>
-          <div class="cta-row">
-            <button class="btn" type="button">Save Draft (future)</button>
-            <button class="btn btn-primary" type="submit">Submit for Review</button>
-          </div>
-        </section>
-      </form>
-    </section>
-  </main>
+
   <script src="script.js"></script>
 </body>
 </html>

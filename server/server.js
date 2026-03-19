@@ -382,8 +382,26 @@ app.patch("/api/admin/listings/:id", authRequired, adminRequired, async (req, re
 });
 
 app.get("/api/admin/users", authRequired, adminRequired, async (req, res) => {
-  const rows = await all("SELECT id, full_name, email, phone, role, created_at FROM users ORDER BY datetime(created_at) DESC LIMIT 200");
+  const rows = await all("SELECT id, full_name, email, phone, role, created_at FROM users ORDER BY datetime(created_at) DESC LIMIT 1000");
   res.json({ users: rows });
+});
+
+app.get("/api/admin/export/users.csv", authRequired, adminRequired, async (req, res) => {
+  const rows = await all("SELECT id, full_name, email, phone, role, created_at FROM users ORDER BY datetime(created_at) DESC");
+  const header = ["id", "full_name", "email", "phone", "role", "created_at"];
+  const escapeCsv = (value) => {
+    const s = String(value ?? "");
+    if (/[",\n]/.test(s)) return `"${s.replace(/"/g, '""')}"`;
+    return s;
+  };
+  const csv = [
+    header.join(","),
+    ...rows.map((r) => header.map((k) => escapeCsv(r[k])).join(","))
+  ].join("\n");
+
+  res.setHeader("Content-Type", "text/csv; charset=utf-8");
+  res.setHeader("Content-Disposition", "attachment; filename=etib-users.csv");
+  res.send(csv);
 });
 
 app.get("/api/admin/reports", authRequired, adminRequired, async (req, res) => {
