@@ -1,4 +1,3 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,7 +12,7 @@
   <header class="site-header">
     <div class="container header-row">
       <a class="brand" href="index.html">
-        <img src="assets/etib-logo.png" alt="Even Though I’m Blind (ETIB) logo" />
+        <img src="assets/etib-logo.png" alt="Even Though I’m Blind Directory logo" />
         <span class="brand-text">
           <strong>ETIB Community Connect Directory</strong>
           <span>Connecting the blind and visually impaired community to trusted businesses</span>
@@ -21,11 +20,12 @@
       </a>
 
       <nav class="site-nav" aria-label="Directory site navigation">
-        <ul>
+        <ul id="siteNavList">
           <li><a href="index.html" aria-current="page">Directory</a></li>
           <li><a href="advertise.html">Advertise</a></li>
-          <li><a href="add-business.html">Add Business</a></li>
+          <li><a href="login.html?redirect=add-business.html">Add Business</a></li>
           <li><a href="login.html">Sign In</a></li>
+          <li><a href="signup.html">Sign Up</a></li>
           <li><a href="owner-dashboard.html">Dashboard</a></li>
           <li><a href="admin-dashboard.html">Admin</a></li>
         </ul>
@@ -36,17 +36,17 @@
   <main id="main-content">
     <section class="hero">
       <div class="container">
-      <div class="hero-grid panel">
-          <img src="assets/etib-logo.png" alt="Even Though I’m Blind (ETIB) logo" />
+        <div class="hero-grid panel">
+          <img src="assets/etib-logo.png" alt="Even Though I’m Blind Directory logo" />
           <div>
             <h1>ETIB Community Connect Directory</h1>
             <p class="tagline">Connecting the blind and visually impaired community to trusted businesses</p>
             <p>This directory connects the blind and visually impaired community with trusted businesses that are either blind or visually impaired-owned, or businesses that actively provide services designed for blind and visually impaired individuals.</p>
-            <p class="small">Find accessible, community-aligned businesses you can contact directly by phone, text, email, or website. No payments. Just trusted connections.</p>
+            <p class="small">Find accessible, community-aligned businesses you can contact directly by phone, text, email, or website. No marketplace clutter. Just trusted connections.</p>
 
             <div class="cta-row" aria-label="Primary calls to action">
               <a class="btn btn-primary" href="#browse">Browse Directory</a>
-              <a class="btn btn-secondary" href="add-business.html">Add Your Business</a>
+              <a class="btn btn-secondary" href="login.html?redirect=add-business.html">Sign In to Add Your Business</a>
               <a class="btn" href="login.html">Sign In</a>
               <a class="btn btn-ghost" href="legal.html#support">Contact ETIB</a>
               <a class="btn" href="mailto:etib@eventhoughimblind.com">Email ETIB</a>
@@ -57,6 +57,16 @@
     </section>
 
     <section id="browse" class="container" aria-labelledby="browseHeading" data-directory-app>
+      <section class="panel" aria-labelledby="featuredHeading" style="padding:14px; margin-bottom: 12px;">
+        <h2 id="featuredHeading" class="section-title">Featured businesses</h2>
+        <p class="small">Highlighted ETIB-approved businesses selected by admin.</p>
+        <div id="featuredListings" class="cards" aria-label="Featured business listings">
+          <div class="panel" style="padding:14px;">
+            <p role="status">Loading featured businesses...</p>
+          </div>
+        </div>
+      </section>
+
       <div class="filters panel" aria-label="Search and filter listings">
         <h2 id="browseHeading">Browse listings</h2>
 
@@ -120,30 +130,15 @@
         </div>
       </div>
 
-      <section class="panel" aria-labelledby="featuredHeading" style="padding:14px; margin-bottom: 12px;">
-        <h2 id="featuredHeading" class="section-title">Featured businesses</h2>
-        <p class="small">Optional featured rotation area for ETIB partners and community-recommended providers. This is a placeholder for the MVP.</p>
-        <div class="badge-row" aria-label="Trust labels examples">
-          <span class="badge gold">Blind-Owned</span>
-          <span class="badge blue">Community Service Provider</span>
-          <span class="badge green">Verified Contact</span>
-          <span class="badge">Remote Accessible</span>
-          <span class="badge">Nonprofit Partner</span>
-        </div>
-      </section>
-
       <div class="results-top" aria-live="polite">
         <p id="resultCount">0 listings found</p>
-        <a class="btn btn-secondary" href="add-business.html">Add Your Business</a>
+        <a class="btn btn-secondary" href="login.html?redirect=add-business.html">Sign In to Submit a Business</a>
       </div>
 
       <section id="directoryResults" class="cards" aria-label="Business listing results"></section>
 
       <nav class="pagination" aria-label="Pagination">
         <button class="btn" type="button" aria-current="page">1</button>
-        <button class="btn" type="button">2</button>
-        <button class="btn" type="button">3</button>
-        <button class="btn" type="button">Load More</button>
       </nav>
     </section>
   </main>
@@ -168,12 +163,11 @@
       </nav>
 
       <section aria-labelledby="foot-contact">
-        <h2 id="foot-contact">Contact ETIB (Nonprofit)</h2>
+        <h2 id="foot-contact">Contact ETIB</h2>
         <ul>
           <li class="small">Email: <a href="mailto:etib@eventhoughimblind.com">etib@eventhoughimblind.com</a></li>
           <li class="small">Phone: <a href="tel:9108535247">910-853-5247</a></li>
           <li class="small">Website: <a href="https://eventhoughimblind.com/" target="_blank" rel="noopener">eventhoughimblind.com</a></li>
-          <li class="small">For partnerships, support, and accessibility requests, contact ETIB directly.</li>
         </ul>
       </section>
     </div>
