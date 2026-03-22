@@ -58,12 +58,13 @@ async function sendMail({ to, subject, text }) {
 
 function run(sql, params = []) {
   return new Promise((resolve, reject) => {
-    db.run(sql, params, function (err) {
+    db.run(sql, params, function onRun(err) {
       if (err) reject(err);
       else resolve({ lastID: this.lastID, changes: this.changes });
     });
   });
 }
+
 function get(sql, params = []) {
   return new Promise((resolve, reject) => {
     db.get(sql, params, (err, row) => {
@@ -72,6 +73,7 @@ function get(sql, params = []) {
     });
   });
 }
+
 function all(sql, params = []) {
   return new Promise((resolve, reject) => {
     db.all(sql, params, (err, rows) => {
@@ -86,12 +88,20 @@ async function initDb() {
   await run("PRAGMA foreign_keys = ON;");
   for (const stmt of schema.split(";")) {
     const s = stmt.trim();
-    if (s) await run(s + ";");
+    if (s) await run(`${s};`);
   }
 
-  // Safe additive migration
   await run("ALTER TABLE listings ADD COLUMN moderated_by_user_id INTEGER").catch(() => {});
   await run("ALTER TABLE listings ADD COLUMN moderated_at TEXT").catch(() => {});
+  await run("ALTER TABLE listings ADD COLUMN is_featured INTEGER NOT NULL DEFAULT 0").catch(() => {});
+  await run("ALTER TABLE listings ADD COLUMN featured_rank INTEGER").catch(() => {});
+  await run("ALTER TABLE listings ADD COLUMN listen_summary TEXT").catch(() => {});
+  await run("CREATE INDEX IF NOT EXISTS idx_listings_featured_rank ON listings(is_featured, featured_rank)").catch(() => {});
+  await run(`
+    CREATE UNIQUE INDEX IF NOT EXISTS idx_unique_featured_rank
+    ON listings(featured_rank)
+    WHERE is_featured = 1 AND featured_rank IS NOT NULL
+  `).catch(() => {});
 }
 await initDb();
 
@@ -170,12 +180,16 @@ async function logAdminAction({ adminUserId, action, targetType, targetId = null
 app.post("/api/auth/signup", authLimiter, async (req, res) => {
   try {
     const { fullName, email, phone, password } = req.body || {};
-    if (!fullName || !email || !phone || !password) return res.status(400).json({ error: "Missing required fields" });
+    if (!fullName || !email || !phone || !password) {
+      return res.status(400).json({ error: "Missing required fields" });
+    }
 
     const emailNorm = String(email).toLowerCase().trim();
     if (!validEmail(emailNorm)) return res.status(400).json({ error: "Invalid email format" });
     if (!validPhone(phone)) return res.status(400).json({ error: "Invalid phone format" });
-    if (String(password).length < 10) return res.status(400).json({ error: "Password must be at least 10 characters" });
+    if (String(password).length < 10) {
+      return res.status(400).json({ error: "Password must be at least 10 characters" });
+    }
 
     const passwordHash = await bcrypt.hash(String(password), 10);
 
@@ -216,6 +230,27 @@ app.post("/api/auth/login", authLimiter, async (req, res) => {
   }
 });
 
+app.get("/api/featured-listings", async (req, res) => {
+  const rows = await all(
+    `SELECT l.id, l.business_name, l.listing_type, l.category, l.city, l.state, l.short_summary,
+            l.phone, l.text_number, l.business_email, l.website_url, l.featured_rank,
+            COALESCE(ROUND((
+              SELECT AVG(r.rating) FROM reviews r
+              WHERE r.listing_id = l.id AND r.status='approved'
+            ), 1), NULL) AS average_rating,
+            COALESCE((
+              SELECT COUNT(*) FROM reviews r
+              WHERE r.listing_id = l.id AND r.status='approved'
+            ), 0) AS review_count
+     FROM listings l
+     WHERE l.status='approved' AND l.is_featured=1 AND l.featured_rank BETWEEN 1 AND 5
+     ORDER BY l.featured_rank ASC, datetime(l.last_updated) DESC
+     LIMIT 5`
+  );
+
+  res.json({ listings: rows });
+});
+
 app.get("/api/listings", async (req, res) => {
   const q = String(req.query.q || "").trim().toLowerCase();
   const category = String(req.query.category || "").trim();
@@ -223,33 +258,62 @@ app.get("/api/listings", async (req, res) => {
   const location = String(req.query.location || "").trim().toLowerCase();
   const contact = String(req.query.contact || "").trim().toLowerCase();
 
-  let where = "WHERE status='approved'";
+  let where = "WHERE l.status='approved'";
   const params = [];
 
-  if (category) { where += " AND category=?"; params.push(category); }
-  if (listingType) {
-    if (listingType === "Both") where += " AND listing_type='Both'";
-    else { where += " AND (listing_type=? OR listing_type='Both')"; params.push(listingType); }
+  if (category) {
+    where += " AND l.category=?";
+    params.push(category);
   }
+
+  if (listingType) {
+    if (listingType === "Both") {
+      where += " AND l.listing_type='Both'";
+    } else {
+      where += " AND (l.listing_type=? OR l.listing_type='Both')";
+      params.push(listingType);
+    }
+  }
+
   if (q) {
-    where += " AND (lower(business_name) LIKE ? OR lower(short_summary) LIKE ? OR lower(full_description) LIKE ? OR lower(category) LIKE ?)";
+    where += ` AND (
+      lower(l.business_name) LIKE ? OR
+      lower(l.short_summary) LIKE ? OR
+      lower(l.full_description) LIKE ? OR
+      lower(l.category) LIKE ?
+    )`;
     const like = `%${q}%`;
     params.push(like, like, like, like);
   }
+
   if (location) {
-    where += " AND (lower(city || ' ' || state || ' ' || service_area_type) LIKE ?)";
+    where += " AND lower(l.city || ' ' || l.state || ' ' || l.service_area_type) LIKE ?";
     params.push(`%${location}%`);
   }
+
   if (contact) {
-    if (contact === "call") where += " AND phone IS NOT NULL AND trim(phone) <> ''";
-    if (contact === "text") where += " AND text_number IS NOT NULL AND trim(text_number) <> ''";
-    if (contact === "email") where += " AND business_email IS NOT NULL AND trim(business_email) <> ''";
-    if (contact === "website") where += " AND website_url IS NOT NULL AND trim(website_url) <> ''";
+    if (contact === "call") where += " AND l.phone IS NOT NULL AND trim(l.phone) <> ''";
+    if (contact === "text") where += " AND l.text_number IS NOT NULL AND trim(l.text_number) <> ''";
+    if (contact === "email") where += " AND l.business_email IS NOT NULL AND trim(l.business_email) <> ''";
+    if (contact === "website") where += " AND l.website_url IS NOT NULL AND trim(l.website_url) <> ''";
   }
 
   const rows = await all(
-    `SELECT id, business_name, listing_type, category, city, state, service_area_type, short_summary, primary_contact_method
-     FROM listings ${where} ORDER BY datetime(last_updated) DESC LIMIT 100`,
+    `SELECT l.id, l.business_name, l.listing_type, l.category, l.city, l.state, l.service_area_type,
+            l.short_summary, l.listen_summary, l.primary_contact_method,
+            l.phone, l.text_number, l.business_email, l.website_url, l.is_featured, l.featured_rank,
+            COALESCE(ROUND((
+              SELECT AVG(r.rating) FROM reviews r
+              WHERE r.listing_id = l.id AND r.status='approved'
+            ), 1), NULL) AS average_rating,
+            COALESCE((
+              SELECT COUNT(*) FROM reviews r
+              WHERE r.listing_id = l.id AND r.status='approved'
+            ), 0) AS review_count
+     FROM listings l
+     ${where}
+     ORDER BY l.is_featured DESC, l.featured_rank ASC, datetime(l.last_updated) DESC
+     LIMIT 100`,
     params
   );
 
@@ -264,25 +328,28 @@ app.post("/api/listings", authRequired, async (req, res) => {
     "supportsBvi", "accessibilityDetails",
     "primaryContactMethod", "city", "state", "serviceAreaType", "hours"
   ];
+
   for (const key of required) {
     if (!b[key] || String(b[key]).trim() === "") {
       return res.status(400).json({ error: `Missing: ${key}` });
     }
   }
+
   if (!validateMissionFit(String(b.listingType), String(b.supportsBvi))) {
     return res.status(400).json({ error: "Mission fit not met." });
   }
+
   if (!validEmail(b.businessEmail)) return res.status(400).json({ error: "Invalid business email" });
   if (!validPhone(b.phone)) return res.status(400).json({ error: "Invalid business phone" });
 
   const result = await run(
     `INSERT INTO listings (
       owner_user_id, business_name, owner_contact_name, business_email, phone, text_number, website_url,
-      listing_type, category, short_summary, full_description, supports_bvi, accessibility_details,
+      listing_type, category, short_summary, full_description, listen_summary, supports_bvi, accessibility_details,
       primary_contact_method, city, state, service_area_type, hours, languages,
       remote_details, inperson_notes, social_links, certifications, testimonial,
-      status, admin_note, last_updated
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending', NULL, datetime('now'))`,
+      status, admin_note, is_featured, featured_rank, last_updated
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending', NULL, 0, NULL, datetime('now'))`,
     [
       req.user.sub,
       String(b.businessName).trim(),
@@ -295,6 +362,7 @@ app.post("/api/listings", authRequired, async (req, res) => {
       String(b.category).trim(),
       String(b.shortSummary).trim(),
       String(b.fullDescription).trim(),
+      b.listenSummary ? String(b.listenSummary).trim() : null,
       String(b.supportsBvi).trim(),
       String(b.accessibilityDetails).trim(),
       String(b.primaryContactMethod).trim(),
@@ -326,35 +394,138 @@ app.get("/api/listings/:id", async (req, res) => {
 
   const row = await get(
     `SELECT id, business_name, owner_contact_name, business_email, phone, text_number, website_url,
-            listing_type, category, short_summary, full_description, supports_bvi, accessibility_details,
+            listing_type, category, short_summary, full_description, listen_summary, supports_bvi, accessibility_details,
             primary_contact_method, city, state, service_area_type, hours, languages,
-            remote_details, inperson_notes, social_links, certifications, testimonial, status, last_updated
-     FROM listings WHERE id=? AND status='approved'`,
+            remote_details, inperson_notes, social_links, certifications, testimonial,
+            status, last_updated, is_featured, featured_rank
+     FROM listings
+     WHERE id=? AND status='approved'`,
     [id]
   );
 
   if (!row) return res.status(404).json({ error: "Listing not found" });
-  return res.json({ listing: row });
+
+  const ratingSummary = await get(
+    `SELECT COUNT(*) AS review_count, ROUND(AVG(rating), 1) AS average_rating
+     FROM reviews
+     WHERE listing_id=? AND status='approved'`,
+    [id]
+  );
+
+  return res.json({
+    listing: row,
+    reviewsSummary: {
+      reviewCount: ratingSummary?.review_count || 0,
+      averageRating: ratingSummary?.average_rating || null
+    }
+  });
 });
 
-// Owner data
+app.post("/api/listings/:id/reviews", async (req, res) => {
+  const listingId = Number(req.params.id);
+  if (!Number.isInteger(listingId) || listingId <= 0) {
+    return res.status(400).json({ error: "Invalid listing id" });
+  }
+
+  const listing = await get(
+    "SELECT id, business_name, status FROM listings WHERE id=? AND status='approved'",
+    [listingId]
+  );
+  if (!listing) return res.status(404).json({ error: "Listing not found" });
+
+  const { reviewerName, reviewerEmail, rating, reviewText } = req.body || {};
+
+  if (!reviewerName || String(reviewerName).trim().length < 2) {
+    return res.status(400).json({ error: "Reviewer name is required" });
+  }
+
+  const ratingNum = Number(rating);
+  if (!Number.isInteger(ratingNum) || ratingNum < 1 || ratingNum > 5) {
+    return res.status(400).json({ error: "Rating must be 1 through 5" });
+  }
+
+  if (!reviewText || String(reviewText).trim().length < 20) {
+    return res.status(400).json({ error: "Review must be at least 20 characters" });
+  }
+
+  if (reviewerEmail && !validEmail(reviewerEmail)) {
+    return res.status(400).json({ error: "Invalid reviewer email" });
+  }
+
+  const result = await run(
+    `INSERT INTO reviews (listing_id, reviewer_name, reviewer_email, rating, review_text, status)
+     VALUES (?, ?, ?, ?, ?, 'pending')`,
+    [
+      listingId,
+      String(reviewerName).trim(),
+      reviewerEmail ? String(reviewerEmail).trim() : null,
+      ratingNum,
+      String(reviewText).trim()
+    ]
+  );
+
+  await sendMail({
+    to: ADMIN_EMAIL,
+    subject: `New ETIB review pending moderation: ${listing.business_name}`,
+    text: `A new review was submitted for "${listing.business_name}" and is pending moderation. Review ID: ${result.lastID}`
+  });
+
+  res.json({ ok: true, reviewId: result.lastID, status: "pending" });
+});
+
+app.get("/api/listings/:id/reviews", async (req, res) => {
+  const listingId = Number(req.params.id);
+  if (!Number.isInteger(listingId) || listingId <= 0) {
+    return res.status(400).json({ error: "Invalid listing id" });
+  }
+
+  const reviews = await all(
+    `SELECT id, reviewer_name, rating, review_text, created_at
+     FROM reviews
+     WHERE listing_id=? AND status='approved'
+     ORDER BY datetime(approved_at) DESC, datetime(created_at) DESC
+     LIMIT 100`,
+    [listingId]
+  );
+
+  const summary = await get(
+    `SELECT COUNT(*) AS review_count, ROUND(AVG(rating), 1) AS average_rating
+     FROM reviews
+     WHERE listing_id=? AND status='approved'`,
+    [listingId]
+  );
+
+  res.json({
+    reviews,
+    summary: {
+      reviewCount: summary?.review_count || 0,
+      averageRating: summary?.average_rating || null
+    }
+  });
+});
+
 app.get("/api/owner/listings", authRequired, async (req, res) => {
   const rows = await all(
-    `SELECT id, business_name, category, listing_type, status, admin_note, last_updated
-     FROM listings WHERE owner_user_id=?
+    `SELECT id, business_name, category, listing_type, status, admin_note, is_featured, featured_rank, last_updated
+     FROM listings
+     WHERE owner_user_id=?
      ORDER BY datetime(last_updated) DESC`,
     [req.user.sub]
   );
   res.json({ listings: rows });
 });
 
-// Admin APIs
 app.get("/api/admin/listings", authRequired, adminRequired, async (req, res) => {
   const status = String(req.query.status || "").trim();
   const q = String(req.query.q || "").trim().toLowerCase();
   const params = [];
   let where = "WHERE 1=1";
-  if (status) { where += " AND l.status=?"; params.push(status); }
+
+  if (status) {
+    where += " AND l.status=?";
+    params.push(status);
+  }
+
   if (q) {
     where += " AND (lower(l.business_name) LIKE ? OR lower(l.owner_contact_name) LIKE ? OR lower(l.business_email) LIKE ?)";
     const like = `%${q}%`;
@@ -364,6 +535,15 @@ app.get("/api/admin/listings", authRequired, adminRequired, async (req, res) => 
   const rows = await all(
     `SELECT l.id, l.business_name, l.owner_contact_name, l.business_email, l.phone, l.category, l.listing_type,
             l.status, l.admin_note, l.last_updated, l.created_at, l.short_summary, l.supports_bvi,
+            l.is_featured, l.featured_rank,
+            COALESCE(ROUND((
+              SELECT AVG(r.rating) FROM reviews r
+              WHERE r.listing_id = l.id AND r.status='approved'
+            ), 1), NULL) AS average_rating,
+            COALESCE((
+              SELECT COUNT(*) FROM reviews r
+              WHERE r.listing_id = l.id AND r.status='approved'
+            ), 0) AS review_count,
             u.full_name AS owner_name, u.email AS owner_email
      FROM listings l
      LEFT JOIN users u ON u.id = l.owner_user_id
@@ -413,46 +593,250 @@ app.patch("/api/admin/listings/:id", authRequired, adminRequired, async (req, re
   const notePart = adminNote ? `\n\nAdmin note:\n${adminNote}` : "";
   let subject = `ETIB listing update: ${business}`;
   let text = `Your listing \"${business}\" status is now: ${status}.`;
+
   if (status === "approved") {
-    text = `Great news — your ETIB listing \"${business}\" was approved and is now live in the directory.`;
+    subject = `Your ETIB listing was approved: ${business}`;
+    text =
+`Great news.
+
+Your ETIB Community Connect Directory listing \"${business}\" has been approved and is now live.
+
+You can now be discovered through the directory by community members looking for trusted businesses and services.
+
+${notePart ? notePart.trim() : ""}
+
+Thank you for being part of the ETIB Community Connect Directory.
+
+ETIB
+Even Though I'm Blind`;
   } else if (status === "needs_changes") {
-    text = `Your ETIB listing \"${business}\" needs changes before approval.`;
+    subject = `Changes needed for your ETIB listing: ${business}`;
+    text =
+`Your ETIB listing \"${business}\" needs changes before approval.${notePart}
+
+Please review the note above and update your information accordingly.
+
+ETIB
+Even Though I'm Blind`;
   } else if (status === "rejected") {
-    text = `Your ETIB listing \"${business}\" was not approved at this time.`;
+    subject = `Update on your ETIB listing: ${business}`;
+    text =
+`Your ETIB listing \"${business}\" was not approved at this time.${notePart}
+
+You may contact ETIB if you have questions about the decision.
+
+ETIB
+Even Though I'm Blind`;
   }
-  await sendMail({ to, subject, text: text + notePart });
+
+  let emailSent = false;
+  try {
+    emailSent = await sendMail({ to, subject, text });
+  } catch {
+    emailSent = false;
+  }
+
+  await logAdminAction({
+    adminUserId: req.user.sub,
+    action: emailSent ? "listing_notification_sent" : "listing_notification_failed",
+    targetType: "listing",
+    targetId: id,
+    meta: { status, to }
+  });
+
+  return res.json({ ok: true, emailSent });
+});
+
+app.patch("/api/admin/listings/:id/feature", authRequired, adminRequired, async (req, res) => {
+  const id = Number(req.params.id);
+  if (!Number.isInteger(id) || id <= 0) {
+    return res.status(400).json({ error: "Invalid id" });
+  }
+
+  const { isFeatured, featuredRank } = req.body || {};
+
+  const listing = await get(
+    `SELECT id, business_name, status, is_featured, featured_rank
+     FROM listings
+     WHERE id=?`,
+    [id]
+  );
+
+  if (!listing) return res.status(404).json({ error: "Listing not found" });
+  if (listing.status !== "approved") {
+    return res.status(400).json({ error: "Only approved listings can be featured" });
+  }
+
+  const wantFeatured = Number(isFeatured) === 1;
+
+  if (!wantFeatured) {
+    await run(
+      `UPDATE listings
+       SET is_featured=0,
+           featured_rank=NULL,
+           last_updated=datetime('now')
+       WHERE id=?`,
+      [id]
+    );
+
+    await logAdminAction({
+      adminUserId: req.user.sub,
+      action: "listing_feature_removed",
+      targetType: "listing",
+      targetId: id,
+      meta: { businessName: listing.business_name }
+    });
+
+    return res.json({ ok: true });
+  }
+
+  const rank = Number(featuredRank);
+  if (!Number.isInteger(rank) || rank < 1 || rank > 5) {
+    return res.status(400).json({ error: "featuredRank must be 1 through 5" });
+  }
+
+  await run("BEGIN TRANSACTION");
+  try {
+    await run(
+      `UPDATE listings
+       SET is_featured=0,
+           featured_rank=NULL,
+           last_updated=datetime('now')
+       WHERE featured_rank=? AND is_featured=1 AND id<>?`,
+      [rank, id]
+    );
+
+    await run(
+      `UPDATE listings
+       SET is_featured=1,
+           featured_rank=?,
+           last_updated=datetime('now')
+       WHERE id=?`,
+      [rank, id]
+    );
+
+    await run("COMMIT");
+  } catch {
+    await run("ROLLBACK").catch(() => {});
+    return res.status(500).json({ error: "Could not update featured placement" });
+  }
+
+  await logAdminAction({
+    adminUserId: req.user.sub,
+    action: "listing_feature_set",
+    targetType: "listing",
+    targetId: id,
+    meta: { businessName: listing.business_name, featuredRank: rank }
+  });
 
   return res.json({ ok: true });
 });
 
 app.get("/api/admin/users", authRequired, adminRequired, async (req, res) => {
-  const rows = await all("SELECT id, full_name, email, phone, role, created_at FROM users ORDER BY datetime(created_at) DESC LIMIT 1000");
+  const rows = await all(
+    "SELECT id, full_name, email, phone, role, created_at FROM users ORDER BY datetime(created_at) DESC LIMIT 1000"
+  );
   res.json({ users: rows });
 });
 
-app.get("/api/admin/export/users.csv", authRequired, adminRequired, async (req, res) => {
-  const rows = await all("SELECT id, full_name, email, phone, role, created_at FROM users ORDER BY datetime(created_at) DESC");
-  const header = ["id", "full_name", "email", "phone", "role", "created_at"];
-  const escapeCsv = (value) => {
-    const s = String(value ?? "");
-    if (/[",\n]/.test(s)) return `"${s.replace(/"/g, '""')}"`;
-    return s;
-  };
-  const csv = [
-    header.join(","),
-    ...rows.map((r) => header.map((k) => escapeCsv(r[k])).join(","))
-  ].join("\n");
+app.get("/api/admin/reviews", authRequired, adminRequired, async (req, res) => {
+  const status = String(req.query.status || "").trim();
+  const q = String(req.query.q || "").trim().toLowerCase();
 
-  res.setHeader("Content-Type", "text/csv; charset=utf-8");
-  res.setHeader("Content-Disposition", "attachment; filename=etib-users.csv");
-  res.send(csv);
+  let where = "WHERE 1=1";
+  const params = [];
+
+  if (status) {
+    where += " AND r.status=?";
+    params.push(status);
+  }
+
+  if (q) {
+    where += " AND (lower(l.business_name) LIKE ? OR lower(r.reviewer_name) LIKE ? OR lower(r.review_text) LIKE ?)";
+    const like = `%${q}%`;
+    params.push(like, like, like);
+  }
+
+  const rows = await all(
+    `SELECT r.id, r.listing_id, r.reviewer_name, r.reviewer_email, r.rating, r.review_text,
+            r.status, r.admin_note, r.created_at, r.approved_at,
+            l.business_name
+     FROM reviews r
+     LEFT JOIN listings l ON l.id = r.listing_id
+     ${where}
+     ORDER BY datetime(r.created_at) DESC
+     LIMIT 300`,
+    params
+  );
+
+  res.json({ reviews: rows });
+});
+
+app.patch("/api/admin/reviews/:id", authRequired, adminRequired, async (req, res) => {
+  const id = Number(req.params.id);
+  if (!Number.isInteger(id) || id <= 0) {
+    return res.status(400).json({ error: "Invalid review id" });
+  }
+
+  const { status, adminNote } = req.body || {};
+  const valid = ["pending", "approved", "rejected"];
+  if (!valid.includes(String(status))) {
+    return res.status(400).json({ error: "Invalid status" });
+  }
+
+  const review = await get(
+    `SELECT r.id, r.reviewer_email, r.reviewer_name, r.rating, r.review_text, r.listing_id,
+            l.business_name
+     FROM reviews r
+     LEFT JOIN listings l ON l.id=r.listing_id
+     WHERE r.id=?`,
+    [id]
+  );
+
+  if (!review) return res.status(404).json({ error: "Review not found" });
+
+  await run(
+    `UPDATE reviews
+     SET status=?,
+         admin_note=?,
+         moderated_by_user_id=?,
+         approved_at=CASE WHEN ?='approved' THEN datetime('now') ELSE approved_at END
+     WHERE id=?`,
+    [
+      String(status),
+      adminNote ? String(adminNote).trim() : null,
+      req.user.sub,
+      String(status),
+      id
+    ]
+  );
+
+  await logAdminAction({
+    adminUserId: req.user.sub,
+    action: `review_status_${String(status)}`,
+    targetType: "review",
+    targetId: id,
+    meta: { adminNote: adminNote ? String(adminNote).trim() : null }
+  });
+
+  const to = review.reviewer_email;
+  if (to) {
+    let subject = "Your ETIB review update";
+    let text = `Your review for \"${review.business_name}\" is now: ${status}.`;
+    if (adminNote) text += `\n\nAdmin note:\n${adminNote}`;
+    await sendMail({ to, subject, text });
+  }
+
+  res.json({ ok: true });
 });
 
 app.get("/api/admin/reports", authRequired, adminRequired, async (req, res) => {
   const rows = await all(
     `SELECT r.id, r.listing_id, r.reporter_email, r.reason, r.created_at, l.business_name
-     FROM reports r LEFT JOIN listings l ON l.id=r.listing_id
-     ORDER BY datetime(r.created_at) DESC LIMIT 200`
+     FROM reports r
+     LEFT JOIN listings l ON l.id=r.listing_id
+     ORDER BY datetime(r.created_at) DESC
+     LIMIT 200`
   );
   res.json({ reports: rows });
 });
@@ -460,7 +844,7 @@ app.get("/api/admin/reports", authRequired, adminRequired, async (req, res) => {
 app.get("/api/admin/audit-logs", authRequired, adminRequired, async (req, res) => {
   const rows = await all(
     `SELECT a.id, a.admin_user_id, a.action, a.target_type, a.target_id, a.meta_json, a.created_at,
-            u.full_name as admin_name, u.email as admin_email
+            u.full_name AS admin_name, u.email AS admin_email
      FROM admin_audit_logs a
      LEFT JOIN users u ON u.id = a.admin_user_id
      ORDER BY datetime(a.created_at) DESC
