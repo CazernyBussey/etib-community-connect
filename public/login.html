@@ -1,4 +1,3 @@
-<!-- login.html: Sign in page for providers -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,18 +11,19 @@
   <header class="site-header">
     <div class="container header-row">
       <a class="brand" href="index.html">
-        <img src="assets/etib-logo.png" alt="Even Though I’m Blind (ETIB) logo" />
+        <img src="assets/etib-logo.png" alt="Even Though Iâ€™m Blind Directory logo" />
         <span class="brand-text">
           <strong>ETIB Community Connect Directory</strong>
           <span>Connecting the blind and visually impaired community to trusted businesses</span>
         </span>
       </a>
       <nav class="site-nav" aria-label="Directory site navigation">
-        <ul>
+        <ul id="siteNavList">
           <li><a href="index.html">Directory</a></li>
           <li><a href="advertise.html">Advertise</a></li>
-          <li><a href="add-business.html">Add Business</a></li>
+          <li><a href="login.html?redirect=add-business.html">Add Business</a></li>
           <li><a href="login.html" aria-current="page">Sign In</a></li>
+          <li><a href="signup.html">Sign Up</a></li>
           <li><a href="owner-dashboard.html">Dashboard</a></li>
           <li><a href="admin-dashboard.html">Admin</a></li>
         </ul>
@@ -47,7 +47,7 @@
             <button class="btn btn-primary" type="submit">Sign In</button>
           </div>
           <p><a href="password-reset.html">Forgot password?</a></p>
-          <p>Don’t have an account? <a href="signup.html">Sign up</a></p>
+          <p>Donâ€™t have an account? <a href="signup.html">Sign up</a></p>
         </form>
       </div>
     </section>
