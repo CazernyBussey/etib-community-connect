@@ -12,18 +12,19 @@
   <header class="site-header">
     <div class="container header-row">
       <a class="brand" href="index.html">
-        <img src="assets/etib-logo.png" alt="Even Though I’m Blind (ETIB) logo" />
+        <img src="assets/etib-logo.png" alt="Even Though Iâ€™m Blind Directory logo" />
         <span class="brand-text">
           <strong>ETIB Community Connect Directory</strong>
           <span>Connecting the blind and visually impaired community to trusted businesses</span>
         </span>
       </a>
       <nav class="site-nav" aria-label="Directory site navigation">
-        <ul>
+        <ul id="siteNavList">
           <li><a href="index.html">Directory</a></li>
           <li><a href="advertise.html">Advertise</a></li>
           <li><a href="add-business.html" aria-current="page">Add Business</a></li>
           <li><a href="login.html">Sign In</a></li>
+          <li><a href="signup.html">Sign Up</a></li>
           <li><a href="owner-dashboard.html">Dashboard</a></li>
           <li><a href="admin-dashboard.html">Admin</a></li>
         </ul>
@@ -35,7 +36,7 @@
     <section class="container">
       <div class="panel" style="padding:16px; margin: 18px 0;">
         <h1>Add your business</h1>
-        <p>Join the ETIB Community Connect Directory by submitting your business listing. To be approved, your business must be blind/visually impaired-owned or specifically provide services for blind and visually impaired individuals. All listings are reviewed by ETIB before going live.</p>
+        <p>Join the ETIB Community Connect Directory by submitting your business listing. To be approved, your business must be blind or visually impaired-owned, or specifically provide services for blind and visually impaired individuals. All listings are reviewed by ETIB before going live.</p>
         <div class="notice">
           <strong>Important project rule:</strong> Every listing must be either blind and visually impaired-owned, or specifically serve blind and visually impaired users.
         </div>
@@ -107,6 +108,11 @@
           <div class="field">
             <label for="accessibility-details">Accessibility support details <span class="req">*</span></label>
             <textarea id="accessibility-details" name="accessibilitySupport" required></textarea>
+          </div>
+          <div class="field">
+            <label for="listen-summary">Optional spoken listing summary</label>
+            <textarea id="listen-summary" name="listenSummary" aria-describedby="listen-summary-help"></textarea>
+            <p id="listen-summary-help" class="small">Optional. This text can be read aloud to users through the Hear This Listing button.</p>
           </div>
         </section>
 
