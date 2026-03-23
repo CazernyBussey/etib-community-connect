@@ -13,6 +13,7 @@
       <a class="brand" href="index.html">
         <img src="assets/etib-logo.png" alt="Even Though I’m Blind Directory logo" />
         <span class="brand-text">
+          <!-- Only the site title is included here to avoid repeating the tagline -->
           <strong>ETIB Community Connect Directory</strong>
         </span>
       </a>
@@ -20,7 +21,6 @@
         <ul id="siteNavList">
           <li><a href="index.html">Directory</a></li>
           <li><a href="advertise.html">Advertise</a></li>
-          <!-- Removed Add Business, Sign In, and Sign Up nav items to simplify the signup page -->
           <li><a href="owner-dashboard.html">Dashboard</a></li>
           <li><a href="admin-dashboard.html">Admin</a></li>
         </ul>
@@ -31,8 +31,18 @@
     <section class="container">
       <div class="panel" style="padding:16px; margin: 18px 0;">
         <h1>Create your account</h1>
+        <!-- Signup form collects first and last name along with email and password -->
         <form class="form-layout" novalidate>
-          <!-- Simplified sign-up fields: only email, password and confirm password -->
+          <div class="form-grid-2">
+            <div class="field">
+              <label for="signup-first-name">First name <span class="req">*</span></label>
+              <input id="signup-first-name" name="firstName" type="text" required />
+            </div>
+            <div class="field">
+              <label for="signup-last-name">Last name <span class="req">*</span></label>
+              <input id="signup-last-name" name="lastName" type="text" required />
+            </div>
+          </div>
           <div class="field">
             <label for="signup-email">Email <span class="req">*</span></label>
             <input id="signup-email" name="email" type="email" required />
@@ -40,10 +50,6 @@
           <div class="field">
             <label for="signup-password">Password <span class="req">*</span></label>
             <input id="signup-password" name="password" type="password" required />
-          </div>
-          <div class="field">
-            <label for="signup-confirm">Confirm password <span class="req">*</span></label>
-            <input id="signup-confirm" name="confirmPassword" type="password" required />
           </div>
           <div class="cta-row">
             <button class="btn btn-primary" type="submit">Create Account</button>

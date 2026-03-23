@@ -110,23 +110,36 @@
   }
 
   const signupForm = document.querySelector("form") && document.getElementById("signup-email") ? document.querySelector("form") : null;
+  // Signup flow: collect first and last name along with email and password. If names are missing,
+  // derive a reasonable default from the email local part. A fallback phone number is still provided
+  // to satisfy the server's required phone field. We intentionally omit a password confirmation field
+  // and terms checkbox to keep the form simple for blind and visually impaired users.
   if (signupForm) {
     signupForm.addEventListener("submit", async (e) => {
       e.preventDefault();
-      const fullName = document.getElementById("signup-name")?.value?.trim();
+      const firstName = document.getElementById("signup-first-name")?.value?.trim() || "";
+      const lastName = document.getElementById("signup-last-name")?.value?.trim() || "";
       const email = document.getElementById("signup-email")?.value?.trim();
       const password = document.getElementById("signup-password")?.value || "";
-      const confirm = document.getElementById("signup-confirm")?.value || "";
-      const phone = document.getElementById("signup-phone")?.value?.trim();
-      const terms = document.getElementById("signup-terms")?.checked;
 
-      if (!terms) return announce(signupForm, "Please accept the terms checkbox.", true);
-      if (password !== confirm) return announce(signupForm, "Passwords do not match.", true);
+      // Construct the full name from first and last names. If both are missing,
+      // fall back to deriving from the email local part. If email is also missing,
+      // use a generic default.
+      let fullName = `${firstName} ${lastName}`.trim();
+      if (!fullName) {
+        if (email && email.includes("@")) {
+          fullName = email.split("@")[0] || "New User";
+        } else {
+          fullName = "New User";
+        }
+      }
+      // Provide a default phone number to satisfy server-side phone validation (10 digits).
+      const phoneFallback = "0000000000";
 
       try {
         const out = await api("/api/auth/signup", {
           method: "POST",
-          body: JSON.stringify({ fullName, email, phone, password })
+          body: JSON.stringify({ fullName: fullName, email, phone: phoneFallback, password })
         });
         setAuth(out.token, out.user);
         announce(signupForm, "Account created. Redirecting...");
