@@ -13,43 +13,52 @@
       <a class="brand" href="index.html">
         <img src="assets/etib-logo.png" alt="Even Though I’m Blind Directory logo" />
         <span class="brand-text">
-          <!-- Only the site title is included here to avoid repeating the tagline -->
           <strong>ETIB Community Connect Directory</strong>
+          <span>Accessible sign in for members and administrators</span>
         </span>
       </a>
       <nav class="site-nav" aria-label="Directory site navigation">
         <ul id="siteNavList">
-          <!-- Keep only essential navigation links to declutter the sign in page -->
           <li><a href="index.html">Directory</a></li>
           <li><a href="advertise.html">Advertise</a></li>
+          <li><a href="add-business.html">Add Business</a></li>
+          <li><a href="signup.html">Sign Up</a></li>
           <li><a href="owner-dashboard.html">Dashboard</a></li>
           <li><a href="admin-dashboard.html">Admin</a></li>
         </ul>
       </nav>
     </div>
   </header>
+
   <main id="main-content">
     <section class="container">
-      <div class="panel" style="padding:16px; margin: 18px 0;">
-        <h1>Sign In</h1>
-        <form class="form-layout" novalidate>
+      <div class="panel" style="padding:16px; margin:18px 0; max-width:720px;">
+        <h1>Sign in to your account</h1>
+        <p>Use the email and password for your ETIB Community Connect account. After sign in, owners go to their member dashboard and administrators go to the admin dashboard automatically.</p>
+        <form class="form-layout" id="login-form" novalidate aria-describedby="login-help login-status">
+          <p id="login-help" class="small">All fields marked required must be completed.</p>
           <div class="field">
             <label for="login-email">Email <span class="req">*</span></label>
-            <input id="login-email" name="email" type="email" required />
+            <input id="login-email" name="email" type="email" autocomplete="email username" required aria-describedby="login-email-help" />
+            <p id="login-email-help" class="small">Enter the email address used for your account.</p>
           </div>
           <div class="field">
             <label for="login-password">Password <span class="req">*</span></label>
-            <input id="login-password" name="password" type="password" required />
+            <input id="login-password" name="password" type="password" autocomplete="current-password" required aria-describedby="login-password-help" />
+            <p id="login-password-help" class="small">Enter your current account password.</p>
           </div>
           <div class="cta-row">
             <button class="btn btn-primary" type="submit">Sign In</button>
+            <a class="btn" href="forgot-password.html">Forgot password?</a>
           </div>
-          <!-- Only include the sign up link for new users. Removed the forgot password link to simplify the form -->
+          <p id="login-status" class="small" role="status" aria-live="polite"></p>
           <p>Don’t have an account? <a href="signup.html">Sign up</a></p>
         </form>
       </div>
     </section>
   </main>
+
   <script src="script.js"></script>
+  <script src="auth-accessibility.js"></script>
 </body>
 </html>
