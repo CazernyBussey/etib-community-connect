@@ -30,8 +30,13 @@ const SMTP_FROM = process.env.SMTP_FROM || "ETIB Community Connect <no-reply@eve
 const AUTH_RATE_WINDOW_MS = Number(process.env.AUTH_RATE_WINDOW_MS || 15 * 60 * 1000);
 const AUTH_RATE_MAX = Number(process.env.AUTH_RATE_MAX || 10);
 
-const dbPath = path.join(__dirname, "etib.db");
+const persistentDbPath = process.env.DB_PATH || (process.env.RENDER_DISK_MOUNT_PATH ? path.join(process.env.RENDER_DISK_MOUNT_PATH, "etib.db") : "");
+const dbPath = persistentDbPath || path.join(__dirname, "etib.db");
 const schemaPath = path.join(__dirname, "schema.sql");
+
+if (persistentDbPath) {
+  fs.mkdirSync(path.dirname(persistentDbPath), { recursive: true });
+}
 
 sqlite3.verbose();
 const db = new sqlite3.Database(dbPath);
@@ -526,7 +531,7 @@ app.get("/api/admin/audit-logs", authRequired, adminRequired, async (req, res) =
 });
 
 app.get("/api/health", (req, res) => {
-  res.json({ ok: true, mailer: !!mailer });
+  res.json({ ok: true, mailer: !!mailer, dbPath });
 });
 
 const publicDir = path.join(__dirname, "..", "public");
