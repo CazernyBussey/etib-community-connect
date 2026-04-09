@@ -86,6 +86,9 @@ function all(sql, params = []) {
 async function initDb() {
   const schema = fs.readFileSync(schemaPath, "utf-8");
   await run("PRAGMA foreign_keys = ON;");
+  await run("PRAGMA journal_mode = WAL;").catch(() => {});
+  await run("PRAGMA busy_timeout = 5000;").catch(() => {});
+
   for (const stmt of schema.split(";")) {
     const s = stmt.trim();
     if (s) await run(`${s};`);
@@ -96,12 +99,17 @@ async function initDb() {
   await run("ALTER TABLE listings ADD COLUMN is_featured INTEGER NOT NULL DEFAULT 0").catch(() => {});
   await run("ALTER TABLE listings ADD COLUMN featured_rank INTEGER").catch(() => {});
   await run("ALTER TABLE listings ADD COLUMN listen_summary TEXT").catch(() => {});
+  await run("ALTER TABLE users ADD COLUMN status TEXT NOT NULL DEFAULT 'pending'").catch(() => {});
+  await run("ALTER TABLE users ADD COLUMN approved_at TEXT").catch(() => {});
+  await run("ALTER TABLE users ADD COLUMN approved_by_user_id INTEGER").catch(() => {});
+  await run("ALTER TABLE users ADD COLUMN is_hidden INTEGER NOT NULL DEFAULT 0").catch(() => {});
   await run("CREATE INDEX IF NOT EXISTS idx_listings_featured_rank ON listings(is_featured, featured_rank)").catch(() => {});
   await run(`
     CREATE UNIQUE INDEX IF NOT EXISTS idx_unique_featured_rank
     ON listings(featured_rank)
     WHERE is_featured = 1 AND featured_rank IS NOT NULL
   `).catch(() => {});
+  await run("CREATE INDEX IF NOT EXISTS idx_users_status_hidden ON users(status, is_hidden)").catch(() => {});
 }
 await initDb();
 
@@ -150,7 +158,7 @@ function adminRequired(req, res, next) {
 async function ensureAdminRole(email) {
   if (!email || !ADMIN_EMAIL) return;
   if (email.toLowerCase().trim() !== ADMIN_EMAIL) return;
-  await run("UPDATE users SET role='admin' WHERE lower(email)=lower(?)", [email]);
+  await run("UPDATE users SET role='admin', status='approved', approved_at=datetime('now') WHERE lower(email)=lower(?)", [email]);
 }
 
 function validateMissionFit(listingType, supportsText) {
@@ -194,15 +202,28 @@ app.post("/api/auth/signup", authLimiter, async (req, res) => {
     const passwordHash = await bcrypt.hash(String(password), 10);
 
     await run(
-      "INSERT INTO users (full_name, email, phone, password_hash, role) VALUES (?, ?, ?, ?, 'owner')",
+      "INSERT INTO users (full_name, email, phone, password_hash, role, status, approved_at, approved_by_user_id, is_hidden) VALUES (?, ?, ?, ?, 'owner', 'pending', NULL, NULL, 0)",
       [String(fullName).trim(), emailNorm, String(phone).trim(), passwordHash]
     );
 
     await ensureAdminRole(emailNorm);
-    const user = await get("SELECT id, full_name, email, role FROM users WHERE email=?", [emailNorm]);
+    const user = await get("SELECT id, full_name, email, role, status FROM users WHERE email=?", [emailNorm]);
     const token = signToken(user);
 
-    return res.json({ token, user });
+    const adminEmailSent = await sendMail({
+      to: ADMIN_EMAIL,
+      subject: "New ETIB user signup pending review",
+      text:
+`A new user just signed up for ETIB Community Connect.
+
+Name: ${user.full_name}
+Email: ${user.email}
+Status: ${user.status}
+
+Please review this user in the admin dashboard.`
+    });
+
+    return res.json({ token, user, adminEmailSent });
   } catch (e) {
     if (String(e).includes("UNIQUE")) return res.status(409).json({ error: "Email already exists" });
     return res.status(500).json({ error: "Server error" });
@@ -215,14 +236,14 @@ app.post("/api/auth/login", authLimiter, async (req, res) => {
     if (!email || !password) return res.status(400).json({ error: "Missing email or password" });
 
     const emailNorm = String(email).toLowerCase().trim();
-    const user = await get("SELECT * FROM users WHERE email=?", [emailNorm]);
+    const user = await get("SELECT * FROM users WHERE email=? AND COALESCE(is_hidden, 0)=0", [emailNorm]);
     if (!user) return res.status(401).json({ error: "Invalid credentials" });
 
     const ok = await bcrypt.compare(String(password), user.password_hash);
     if (!ok) return res.status(401).json({ error: "Invalid credentials" });
 
     await ensureAdminRole(emailNorm);
-    const refreshed = await get("SELECT id, full_name, email, role FROM users WHERE email=?", [emailNorm]);
+    const refreshed = await get("SELECT id, full_name, email, role, status FROM users WHERE email=?", [emailNorm]);
     const token = signToken(refreshed);
     return res.json({ token, user: refreshed });
   } catch {
@@ -512,7 +533,7 @@ app.get("/api/owner/listings", authRequired, async (req, res) => {
      ORDER BY datetime(last_updated) DESC`,
     [req.user.sub]
   );
-  res.json({ listings: rows });
+  res.json({ listings: rows, userStatus: req.user.status || "pending" });
 });
 
 app.get("/api/admin/listings", authRequired, adminRequired, async (req, res) => {
@@ -534,7 +555,8 @@ app.get("/api/admin/listings", authRequired, adminRequired, async (req, res) => 
 
   const rows = await all(
     `SELECT l.id, l.business_name, l.owner_contact_name, l.business_email, l.phone, l.category, l.listing_type,
-            l.status, l.admin_note, l.last_updated, l.created_at, l.short_summary, l.supports_bvi,
+            l.status, l.admin_note, l.last_updated, l.created_at, l.short_summary, l.full_description,
+            l.supports_bvi, l.accessibility_details, l.city, l.state, l.website_url,
             l.is_featured, l.featured_rank,
             COALESCE(ROUND((
               SELECT AVG(r.rating) FROM reviews r
@@ -544,11 +566,11 @@ app.get("/api/admin/listings", authRequired, adminRequired, async (req, res) => 
               SELECT COUNT(*) FROM reviews r
               WHERE r.listing_id = l.id AND r.status='approved'
             ), 0) AS review_count,
-            u.full_name AS owner_name, u.email AS owner_email
+            u.full_name AS owner_name, u.email AS owner_email, u.phone AS owner_phone, u.status AS owner_status
      FROM listings l
      LEFT JOIN users u ON u.id = l.owner_user_id
      ${where}
-     ORDER BY datetime(l.created_at) DESC
+     ORDER BY CASE WHEN l.status='pending' THEN 0 ELSE 1 END, datetime(l.created_at) DESC
      LIMIT 200`,
     params
   );
@@ -733,10 +755,113 @@ app.patch("/api/admin/listings/:id/feature", authRequired, adminRequired, async 
 });
 
 app.get("/api/admin/users", authRequired, adminRequired, async (req, res) => {
+  const status = String(req.query.status || "").trim();
+  const q = String(req.query.q || "").trim().toLowerCase();
+  const includeHidden = String(req.query.includeHidden || "").trim() === "1";
+
+  let where = "WHERE 1=1";
+  const params = [];
+
+  if (!includeHidden) {
+    where += " AND COALESCE(u.is_hidden, 0)=0";
+  }
+
+  if (status) {
+    where += " AND u.status=?";
+    params.push(status);
+  }
+
+  if (q) {
+    where += " AND (lower(u.full_name) LIKE ? OR lower(u.email) LIKE ? OR lower(u.phone) LIKE ?)";
+    const like = `%${q}%`;
+    params.push(like, like, like);
+  }
+
   const rows = await all(
-    "SELECT id, full_name, email, phone, role, created_at FROM users ORDER BY datetime(created_at) DESC LIMIT 1000"
+    `SELECT u.id, u.full_name, u.email, u.phone, u.role, u.status, u.created_at, u.approved_at,
+            COALESCE(u.is_hidden, 0) AS is_hidden,
+            approver.full_name AS approved_by_name,
+            COALESCE((SELECT COUNT(*) FROM listings l WHERE l.owner_user_id = u.id), 0) AS listing_count,
+            COALESCE((SELECT COUNT(*) FROM listings l WHERE l.owner_user_id = u.id AND l.status='pending'), 0) AS pending_listing_count,
+            COALESCE((SELECT COUNT(*) FROM listings l WHERE l.owner_user_id = u.id AND l.status='approved'), 0) AS approved_listing_count
+     FROM users u
+     LEFT JOIN users approver ON approver.id = u.approved_by_user_id
+     ${where}
+     ORDER BY CASE WHEN u.status='pending' THEN 0 WHEN u.status='approved' THEN 1 ELSE 2 END,
+              datetime(u.created_at) DESC
+     LIMIT 1000`,
+    params
   );
-  res.json({ users: rows });
+
+  const summary = await get(
+    `SELECT
+       COALESCE(SUM(CASE WHEN status='pending' AND COALESCE(is_hidden,0)=0 THEN 1 ELSE 0 END), 0) AS pending_users,
+       COALESCE(SUM(CASE WHEN status='approved' AND COALESCE(is_hidden,0)=0 THEN 1 ELSE 0 END), 0) AS approved_users,
+       COALESCE(SUM(CASE WHEN status='rejected' AND COALESCE(is_hidden,0)=0 THEN 1 ELSE 0 END), 0) AS rejected_users,
+       COALESCE(SUM(CASE WHEN COALESCE(is_hidden,0)=1 THEN 1 ELSE 0 END), 0) AS hidden_users
+     FROM users`
+  );
+
+  res.json({ users: rows, summary });
+});
+
+app.patch("/api/admin/users/:id/status", authRequired, adminRequired, async (req, res) => {
+  const id = Number(req.params.id);
+  if (!Number.isInteger(id) || id <= 0) {
+    return res.status(400).json({ error: "Invalid user id" });
+  }
+
+  const { status, hideAfterReject } = req.body || {};
+  const valid = ["pending", "approved", "rejected"];
+  if (!valid.includes(String(status))) {
+    return res.status(400).json({ error: "Invalid user status" });
+  }
+
+  const user = await get(
+    "SELECT id, full_name, email, role, status, COALESCE(is_hidden, 0) AS is_hidden FROM users WHERE id=?",
+    [id]
+  );
+  if (!user) return res.status(404).json({ error: "User not found" });
+  if (user.role === "admin") return res.status(400).json({ error: "Admin users cannot be moderated here" });
+
+  const hideUser = String(status) === "rejected" && Number(hideAfterReject) === 1 ? 1 : 0;
+
+  await run(
+    `UPDATE users
+     SET status=?,
+         approved_at=CASE WHEN ?='approved' THEN datetime('now') ELSE approved_at END,
+         approved_by_user_id=CASE WHEN ?='approved' THEN ? ELSE approved_by_user_id END,
+         is_hidden=CASE WHEN ?='rejected' THEN ? ELSE COALESCE(is_hidden, 0) END
+     WHERE id=?`,
+    [String(status), String(status), String(status), req.user.sub, String(status), hideUser, id]
+  );
+
+  let emailSent = false;
+  if (String(status) === "approved") {
+    emailSent = await sendMail({
+      to: user.email,
+      subject: "Your ETIB account has been approved",
+      text:
+`Hello ${user.full_name},
+
+Your ETIB Community Connect account has been approved.
+
+You can sign in and continue submitting and managing your business information.
+
+ETIB
+Even Though I'm Blind`
+    });
+  }
+
+  await logAdminAction({
+    adminUserId: req.user.sub,
+    action: `user_status_${String(status)}`,
+    targetType: "user",
+    targetId: id,
+    meta: { email: user.email, emailSent, hideUser }
+  });
+
+  res.json({ ok: true, emailSent, hidden: hideUser === 1 });
 });
 
 app.get("/api/admin/reviews", authRequired, adminRequired, async (req, res) => {
