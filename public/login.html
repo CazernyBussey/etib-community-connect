@@ -35,27 +35,22 @@
       <div class="panel" style="padding:16px; margin:18px 0; max-width:720px;">
         <h1>Sign in to your account</h1>
         <p>Use the email and password for your ETIB Community Connect account. After sign in, owners go to their member dashboard and administrators go to the admin dashboard automatically.</p>
-
         <form class="form-layout" id="login-form" novalidate aria-describedby="login-help login-status">
           <p id="login-help" class="small">All fields marked required must be completed.</p>
-
           <div class="field">
             <label for="login-email">Email <span class="req">*</span></label>
             <input id="login-email" name="email" type="email" autocomplete="email username" required aria-describedby="login-email-help" />
             <p id="login-email-help" class="small">Enter the email address used for your account.</p>
           </div>
-
           <div class="field">
             <label for="login-password">Password <span class="req">*</span></label>
             <input id="login-password" name="password" type="password" autocomplete="current-password" required aria-describedby="login-password-help" />
             <p id="login-password-help" class="small">Enter your current account password.</p>
           </div>
-
           <div class="cta-row">
             <button class="btn btn-primary" type="submit">Sign In</button>
             <a class="btn" href="forgot-password.html">Forgot password?</a>
           </div>
-
           <p id="login-status" class="small" role="status" aria-live="polite"></p>
           <p>Don’t have an account? <a href="signup.html">Sign up</a></p>
         </form>
@@ -64,5 +59,6 @@
   </main>
 
   <script src="script.js"></script>
+  <script src="auth-accessibility.js"></script>
 </body>
 </html>
