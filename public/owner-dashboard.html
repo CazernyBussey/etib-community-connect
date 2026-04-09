@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Owner Dashboard | ETIB Directory</title>
+  <title>Member Dashboard | ETIB Directory</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -11,10 +11,10 @@
   <header class="site-header">
     <div class="container header-row">
       <a class="brand" href="index.html">
-        <img src="assets/etib-logo.png" alt="Even Though Iâ€™m Blind Directory logo" />
+        <img src="assets/etib-logo.png" alt="Even Though I’m Blind Directory logo" />
         <span class="brand-text">
           <strong>ETIB Community Connect Directory</strong>
-          <span>Connecting the blind and visually impaired community to trusted businesses</span>
+          <span>Accessible member dashboard</span>
         </span>
       </a>
       <nav class="site-nav" aria-label="Directory site navigation">
@@ -34,17 +34,25 @@
   <main id="main-content">
     <section class="container" style="margin-top:18px;">
       <div class="panel" style="padding:16px;">
-        <h1>Your business dashboard</h1>
-        <p>Manage your listing information, status, and account details.</p>
+        <h1>Your member dashboard</h1>
+        <p id="member-dashboard-status" role="status" aria-live="polite">Loading your account details.</p>
         <div class="cta-row">
           <a class="btn btn-secondary" href="add-business.html">Submit another business</a>
         </div>
       </div>
 
       <section class="panel" style="padding:14px; margin-top:12px;">
+        <h2>Your account status</h2>
+        <div id="member-account-summary">
+          <p>Loading account summary…</p>
+        </div>
+      </section>
+
+      <section class="panel" style="padding:14px; margin-top:12px;">
         <h2>Your submitted listings</h2>
         <div class="table-wrap">
           <table>
+            <caption>Your business listings and their review status</caption>
             <thead>
               <tr>
                 <th>Business</th>
@@ -58,7 +66,7 @@
             </thead>
             <tbody id="owner-listings-body">
               <tr>
-                <td colspan="7">Loading listingsâ€¦</td>
+                <td colspan="7">Loading listings…</td>
               </tr>
             </tbody>
           </table>
