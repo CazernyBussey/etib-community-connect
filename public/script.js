@@ -57,7 +57,7 @@
       .replace(/&/g, "&amp;")
       .replace(/</g, "&lt;")
       .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
+      .replace(/\"/g, "&quot;")
       .replace(/'/g, "&#039;");
   }
 
@@ -110,10 +110,6 @@
   }
 
   const signupForm = document.querySelector("form") && document.getElementById("signup-email") ? document.querySelector("form") : null;
-  // Signup flow: collect first and last name along with email and password. If names are missing,
-  // derive a reasonable default from the email local part. A fallback phone number is still provided
-  // to satisfy the server's required phone field. We intentionally omit a password confirmation field
-  // and terms checkbox to keep the form simple for blind and visually impaired users.
   if (signupForm) {
     signupForm.addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -122,9 +118,6 @@
       const email = document.getElementById("signup-email")?.value?.trim();
       const password = document.getElementById("signup-password")?.value || "";
 
-      // Construct the full name from first and last names. If both are missing,
-      // fall back to deriving from the email local part. If email is also missing,
-      // use a generic default.
       let fullName = `${firstName} ${lastName}`.trim();
       if (!fullName) {
         if (email && email.includes("@")) {
@@ -133,7 +126,6 @@
           fullName = "New User";
         }
       }
-      // Provide a default phone number to satisfy server-side phone validation (10 digits).
       const phoneFallback = "0000000000";
 
       try {
@@ -277,6 +269,25 @@
     const resultsWrap = document.getElementById("directoryResults");
     const resultCount = document.getElementById("resultCount");
 
+    let searchDebounceTimer = null;
+    let currentListingsController = null;
+    let latestListingsRequestId = 0;
+
+    function setResultsStatus(text, isError = false) {
+      if (!resultCount) return;
+      resultCount.textContent = text;
+      resultCount.setAttribute("role", "status");
+      resultCount.setAttribute("aria-live", "polite");
+      resultCount.style.color = isError ? "#ffb4b4" : "";
+    }
+
+    function setLoadingState() {
+      if (resultsWrap) {
+        resultsWrap.innerHTML = `<div class="panel" style="padding:14px"><p role="status">Searching businesses now…</p></div>`;
+      }
+      setResultsStatus("Searching businesses now…");
+    }
+
     function applyFiltersFromUrl() {
       const params = new URLSearchParams(window.location.search);
       if (searchInput) searchInput.value = params.get("q") || "";
@@ -374,29 +385,60 @@
 
     async function applyFilters() {
       syncFiltersToUrl();
+      latestListingsRequestId += 1;
+      const requestId = latestListingsRequestId;
+
+      if (currentListingsController) {
+        currentListingsController.abort();
+      }
+      currentListingsController = new AbortController();
+
+      setLoadingState();
+
       const q = encodeURIComponent(searchInput?.value?.trim() || "");
       const category = encodeURIComponent(categorySelect?.value || "");
       const listingType = encodeURIComponent(typeSelect?.value || "");
       const location = encodeURIComponent(locationInput?.value?.trim() || "");
       const contact = encodeURIComponent((contactSelect?.value || "").toLowerCase());
       const url = `/api/listings?q=${q}&category=${category}&listingType=${listingType}&location=${location}&contact=${contact}`;
+
       try {
-        const out = await api(url, { method: "GET", headers: {} });
+        const out = await api(url, {
+          method: "GET",
+          headers: {},
+          signal: currentListingsController.signal
+        });
+        if (requestId !== latestListingsRequestId) return;
+
         const rows = out.listings || [];
         resultsWrap.innerHTML = rows.length
           ? rows.map(renderCard).join("")
           : `<div class="panel" style="padding:14px"><p role="status">No listings match your filters yet.</p></div>`;
-        if (resultCount) {
-          resultCount.textContent = `${rows.length} listing${rows.length === 1 ? "" : "s"} found`;
-        }
-      } catch {
+
+        setResultsStatus(`${rows.length} listing${rows.length === 1 ? "" : "s"} found`);
+      } catch (err) {
+        if (err.name === "AbortError") return;
+        if (requestId !== latestListingsRequestId) return;
         resultsWrap.innerHTML = `<div class="panel" style="padding:14px"><p role="status">Could not load listings right now.</p></div>`;
+        setResultsStatus("Could not load listings right now.", true);
       }
     }
 
-    [searchInput, categorySelect, typeSelect, locationInput, contactSelect].forEach((el) => {
+    function scheduleApplyFilters() {
+      window.clearTimeout(searchDebounceTimer);
+      searchDebounceTimer = window.setTimeout(() => {
+        applyFilters();
+      }, 300);
+    }
+
+    [categorySelect, typeSelect, contactSelect].forEach((el) => {
       if (!el) return;
-      el.addEventListener("input", applyFilters);
+      el.addEventListener("change", applyFilters);
+    });
+
+    [searchInput, locationInput].forEach((el) => {
+      if (!el) return;
+      el.addEventListener("input", scheduleApplyFilters);
       el.addEventListener("change", applyFilters);
     });
 
