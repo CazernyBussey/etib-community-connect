@@ -10,6 +10,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import nodemailer from "nodemailer";
 import rateLimit from "express-rate-limit";
+import { registerListingEditRoutes } from "./listing-edit-routes.js";
 
 dotenv.config();
 
@@ -266,6 +267,19 @@ app.post("/api/auth/login", authLimiter, async (req, res) => {
   }
 });
 
+registerListingEditRoutes(app, {
+  authRequired,
+  adminRequired,
+  get,
+  run,
+  sendMail,
+  logAdminAction,
+  validEmail,
+  validPhone,
+  validateMissionFit,
+  ADMIN_EMAIL
+});
+
 app.get("/api/featured-listings", async (req, res) => {
   const rows = await all(
     `SELECT l.id, l.business_name, l.listing_type, l.category, l.city, l.state, l.short_summary,
@@ -411,16 +425,16 @@ app.patch("/api/admin/listings/:id", authRequired, adminRequired, async (req, re
   const business = listing.business_name;
   const notePart = adminNote ? `\n\nAdmin note:\n${adminNote}` : "";
   let subject = `ETIB listing update: ${business}`;
-  let text = `Your listing \"${business}\" status is now: ${status}.`;
+  let text = `Your listing "${business}" status is now: ${status}.`;
   if (status === "approved") {
     subject = `Your ETIB listing was approved: ${business}`;
-    text = `Great news.\n\nYour ETIB Community Connect Directory listing \"${business}\" has been approved and is now live.\n\nYou can now be discovered through the directory by community members looking for trusted businesses and services.\n\n${notePart ? notePart.trim() : ""}\n\nThank you for being part of the ETIB Community Connect Directory.\n\nETIB\nEven Though I'm Blind`;
+    text = `Great news.\n\nYour ETIB Community Connect Directory listing "${business}" has been approved and is now live.\n\nYou can now be discovered through the directory by community members looking for trusted businesses and services.\n\n${notePart ? notePart.trim() : ""}\n\nThank you for being part of the ETIB Community Connect Directory.\n\nETIB\nEven Though I'm Blind`;
   } else if (status === "needs_changes") {
     subject = `Changes needed for your ETIB listing: ${business}`;
-    text = `Your ETIB listing \"${business}\" needs changes before approval.${notePart}\n\nPlease review the note above and update your information accordingly.\n\nETIB\nEven Though I'm Blind`;
+    text = `Your ETIB listing "${business}" needs changes before approval.${notePart}\n\nPlease review the note above and update your information accordingly.\n\nETIB\nEven Though I'm Blind`;
   } else if (status === "rejected") {
     subject = `Update on your ETIB listing: ${business}`;
-    text = `Your ETIB listing \"${business}\" was not approved at this time.${notePart}\n\nYou may contact ETIB if you have questions about the decision.\n\nETIB\nEven Though I'm Blind`;
+    text = `Your ETIB listing "${business}" was not approved at this time.${notePart}\n\nYou may contact ETIB if you have questions about the decision.\n\nETIB\nEven Though I'm Blind`;
   }
   let emailSent = false;
   try { emailSent = await sendMail({ to, subject, text }); } catch { emailSent = false; }
@@ -513,7 +527,7 @@ app.patch("/api/admin/reviews/:id", authRequired, adminRequired, async (req, res
   const to = review.reviewer_email;
   if (to) {
     let subject = "Your ETIB review update";
-    let text = `Your review for \"${review.business_name}\" is now: ${status}.`;
+    let text = `Your review for "${review.business_name}" is now: ${status}.`;
     if (adminNote) text += `\n\nAdmin note:\n${adminNote}`;
     await sendMail({ to, subject, text });
   }
