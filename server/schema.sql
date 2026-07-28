@@ -7,7 +7,12 @@ CREATE TABLE IF NOT EXISTS users (
   phone TEXT NOT NULL,
   password_hash TEXT NOT NULL,
   role TEXT NOT NULL DEFAULT 'owner',
-  created_at TEXT NOT NULL DEFAULT (datetime('now'))
+  status TEXT NOT NULL DEFAULT 'pending',
+  approved_at TEXT,
+  approved_by_user_id INTEGER,
+  is_hidden INTEGER NOT NULL DEFAULT 0,
+  created_at TEXT NOT NULL DEFAULT (datetime('now')),
+  FOREIGN KEY(approved_by_user_id) REFERENCES users(id) ON DELETE SET NULL
 );
 
 CREATE TABLE IF NOT EXISTS listings (
@@ -92,6 +97,16 @@ CREATE TABLE IF NOT EXISTS admin_audit_logs (
   FOREIGN KEY(admin_user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS password_reset_tokens (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id INTEGER NOT NULL,
+  token_hash TEXT NOT NULL UNIQUE,
+  expires_at TEXT NOT NULL,
+  used_at TEXT,
+  created_at TEXT NOT NULL DEFAULT (datetime('now')),
+  FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
 CREATE INDEX IF NOT EXISTS idx_listings_status ON listings(status);
 CREATE INDEX IF NOT EXISTS idx_listings_category ON listings(category);
 CREATE INDEX IF NOT EXISTS idx_listings_city_state ON listings(city, state);
@@ -103,3 +118,5 @@ WHERE is_featured = 1 AND featured_rank IS NOT NULL;
 
 CREATE INDEX IF NOT EXISTS idx_reviews_listing_status ON reviews(listing_id, status);
 CREATE INDEX IF NOT EXISTS idx_reviews_rating ON reviews(rating);
+CREATE INDEX IF NOT EXISTS idx_password_reset_user_active
+ON password_reset_tokens(user_id, used_at, expires_at);

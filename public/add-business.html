@@ -4,6 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Add Business | ETIB Directory</title>
+  <meta name="description" content="Submit or update a business listing for the accessible ETIB Community Connect Directory." />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -12,7 +13,7 @@
   <header class="site-header">
     <div class="container header-row">
       <a class="brand" href="index.html">
-        <img src="assets/etib-logo.png" alt="Even Though I’m Blind Directory logo" />
+        <img src="assets/etib-logo.webp" alt="" width="427" height="512" />
         <span class="brand-text">
           <strong>ETIB Community Connect Directory</strong>
           <span>Connecting the blind and visually impaired community to trusted businesses</span>
@@ -35,14 +36,14 @@
   <main id="main-content">
     <section class="container">
       <div class="panel" style="padding:16px; margin: 18px 0;">
-        <h1>Add your business</h1>
-        <p>Join the ETIB Community Connect Directory by submitting your business listing. To be approved, your business must be blind or visually impaired-owned, or specifically provide services for blind and visually impaired individuals. All listings are reviewed by ETIB before going live.</p>
+        <h1 id="business-form-heading">Add your business</h1>
+        <p id="business-form-intro">Join the ETIB Community Connect Directory by submitting your business listing. To be approved, your business must be blind or visually impaired-owned, or specifically provide services for blind and visually impaired individuals. All listings are reviewed by ETIB before going live.</p>
         <div class="notice">
           <strong>Important project rule:</strong> Every listing must be either blind and visually impaired-owned, or specifically serve blind and visually impaired users.
         </div>
       </div>
 
-      <form class="form-layout" novalidate aria-describedby="submit-help">
+      <form class="form-layout" id="business-form" aria-describedby="submit-help business-status">
         <p id="submit-help" class="small">Fields marked with * are required.</p>
 
         <section class="panel form-section">
@@ -50,22 +51,27 @@
           <div class="form-grid-2">
             <div class="field">
               <label for="biz-name">Business name <span class="req">*</span></label>
-              <input id="biz-name" name="businessName" type="text" autocomplete="organization" required />
+              <input id="biz-name" name="businessName" type="text" autocomplete="organization" maxlength="140" required />
             </div>
             <div class="field">
               <label for="owner-name">Owner or contact name <span class="req">*</span></label>
-              <input id="owner-name" name="ownerName" type="text" autocomplete="name" required />
+              <input id="owner-name" name="ownerName" type="text" autocomplete="name" maxlength="120" required />
             </div>
           </div>
           <div class="form-grid-2">
             <div class="field">
               <label for="biz-email">Business email <span class="req">*</span></label>
-              <input id="biz-email" name="businessEmail" type="email" autocomplete="email" required />
+              <input id="biz-email" name="businessEmail" type="email" autocomplete="email" maxlength="254" required />
             </div>
             <div class="field">
               <label for="biz-phone">Phone number <span class="req">*</span></label>
-              <input id="biz-phone" name="phoneNumber" type="tel" autocomplete="tel" required />
+              <input id="biz-phone" name="phoneNumber" type="tel" autocomplete="tel" inputmode="tel" minlength="10" maxlength="30" required />
             </div>
+          </div>
+          <div class="field">
+            <label for="text-number">Text message number</label>
+            <input id="text-number" name="textNumber" type="tel" autocomplete="tel" inputmode="tel" maxlength="30" aria-describedby="text-number-help" />
+            <p id="text-number-help" class="field-help">Required only when Text is selected as the primary contact method.</p>
           </div>
         </section>
 
@@ -102,16 +108,25 @@
             </select>
           </div>
           <div class="field">
+            <label for="short-summary">Short directory summary <span class="req">*</span></label>
+            <textarea id="short-summary" name="shortSummary" minlength="20" maxlength="220" aria-describedby="short-summary-help" required></textarea>
+            <p id="short-summary-help" class="field-help">Use 20 to 220 characters. This appears on the directory results card.</p>
+          </div>
+          <div class="field">
+            <label for="full-description">Full business description <span class="req">*</span></label>
+            <textarea id="full-description" name="fullDescription" minlength="40" maxlength="5000" required></textarea>
+          </div>
+          <div class="field">
             <label for="support-blind">How your business supports the blind and visually impaired community <span class="req">*</span></label>
-            <textarea id="support-blind" name="supportBlindCommunity" required></textarea>
+            <textarea id="support-blind" name="supportBlindCommunity" minlength="20" maxlength="3000" required></textarea>
           </div>
           <div class="field">
             <label for="accessibility-details">Accessibility support details <span class="req">*</span></label>
-            <textarea id="accessibility-details" name="accessibilitySupport" required></textarea>
+            <textarea id="accessibility-details" name="accessibilitySupport" minlength="20" maxlength="3000" required></textarea>
           </div>
           <div class="field">
             <label for="listen-summary">Optional spoken listing summary</label>
-            <textarea id="listen-summary" name="listenSummary" aria-describedby="listen-summary-help"></textarea>
+            <textarea id="listen-summary" name="listenSummary" maxlength="1500" aria-describedby="listen-summary-help"></textarea>
             <p id="listen-summary-help" class="small">Optional. This text can be read aloud to users through the Hear This Listing button.</p>
           </div>
         </section>
@@ -131,7 +146,7 @@
             </div>
             <div class="field">
               <label for="website">Website URL</label>
-              <input id="website" name="websiteUrl" type="url" placeholder="https://example.com" />
+              <input id="website" name="websiteUrl" type="url" inputmode="url" maxlength="2048" placeholder="https://example.com" />
             </div>
           </div>
           <div class="form-grid-2">
@@ -143,6 +158,53 @@
               <label for="state">State <span class="req">*</span></label>
               <input id="state" name="state" type="text" autocomplete="address-level1" required />
             </div>
+          </div>
+          <div class="form-grid-2">
+            <div class="field">
+              <label for="service-area-type">Service area type <span class="req">*</span></label>
+              <select id="service-area-type" name="serviceAreaType" required>
+                <option value="">Choose a service area</option>
+                <option>Local</option>
+                <option>Regional</option>
+                <option>Nationwide</option>
+                <option>Remote</option>
+                <option>Hybrid</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="hours">Business hours <span class="req">*</span></label>
+              <input id="hours" name="hours" type="text" maxlength="500" placeholder="Example: Monday through Friday, 9 AM to 5 PM" required />
+            </div>
+          </div>
+          <div class="field">
+            <label for="languages">Languages supported</label>
+            <input id="languages" name="languages" type="text" maxlength="500" placeholder="Example: English, Spanish, ASL" />
+          </div>
+        </section>
+
+        <section class="panel form-section">
+          <h2>Optional service details</h2>
+          <p class="field-help">Add only the details that help community members understand and safely contact your business.</p>
+          <div class="field">
+            <label for="remote-details">Remote service details</label>
+            <textarea id="remote-details" name="remoteDetails" maxlength="2000"></textarea>
+          </div>
+          <div class="field">
+            <label for="inperson-notes">In-person accessibility notes</label>
+            <textarea id="inperson-notes" name="inpersonNotes" maxlength="2000"></textarea>
+          </div>
+          <div class="field">
+            <label for="social-links">Social media links</label>
+            <textarea id="social-links" name="socialLinks" maxlength="2000" aria-describedby="social-links-help"></textarea>
+            <p id="social-links-help" class="field-help">Enter one full web address per line.</p>
+          </div>
+          <div class="field">
+            <label for="certifications">Certifications or credentials</label>
+            <textarea id="certifications" name="certifications" maxlength="2000"></textarea>
+          </div>
+          <div class="field">
+            <label for="testimonial">Optional testimonial</label>
+            <textarea id="testimonial" name="testimonial" maxlength="2000"></textarea>
           </div>
         </section>
 
@@ -157,18 +219,18 @@
           <div class="checkbox-block">
             <label for="terms-commit">
               <input id="terms-commit" type="checkbox" required />
-              <span>I agree to the Terms of Use and Privacy Policy. <span class="req">*</span></span>
+              <span>I agree to the <a href="legal.html#terms">Terms of Use</a> and acknowledge the <a href="legal.html#privacy">Privacy Policy</a>. <span class="req">*</span></span>
             </label>
           </div>
           <div class="cta-row">
-            <button class="btn btn-primary" type="submit">Submit for Review</button>
+            <button class="btn btn-primary" id="business-submit" type="submit">Submit for Review</button>
           </div>
+          <p id="business-status" class="small" data-status role="status" aria-live="polite" aria-atomic="true"></p>
         </section>
       </form>
     </section>
   </main>
 
-  <script src="script.js"></script>
-  <script src="edit-business.js"></script>
+  <script src="script.js" defer></script>
 </body>
 </html>

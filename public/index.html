@@ -4,6 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>ETIB Community Connect Directory</title>
+  <meta name="description" content="Find trusted blind-owned, visually impaired-owned, and accessibility-focused businesses through the ETIB Community Connect Directory." />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -12,7 +13,7 @@
   <header class="site-header">
     <div class="container header-row">
       <a class="brand" href="index.html">
-        <img src="assets/etib-logo.png" alt="Even Though I’m Blind Directory logo" />
+        <img src="assets/etib-logo.webp" alt="" width="427" height="512" />
         <span class="brand-text">
           <strong>ETIB Community Connect Directory</strong>
         </span>
@@ -22,7 +23,9 @@
         <ul id="siteNavList">
           <li><a href="index.html" aria-current="page">Directory</a></li>
           <li><a href="advertise.html">Advertise</a></li>
-          <!-- Removed Add Business, Sign In, and Sign Up from nav to streamline navigation -->
+          <li><a href="add-business.html">Add Business</a></li>
+          <li><a href="login.html">Sign In</a></li>
+          <li><a href="signup.html">Sign Up</a></li>
           <li><a href="owner-dashboard.html">Dashboard</a></li>
           <li><a href="admin-dashboard.html">Admin</a></li>
         </ul>
@@ -34,14 +37,14 @@
     <section class="hero">
       <div class="container">
         <div class="hero-grid panel">
-          <img src="assets/etib-logo.png" alt="Even Though I’m Blind Directory logo" />
+          <img src="assets/etib-logo.webp" alt="" width="427" height="512" />
           <div>
             <h1>ETIB Community Connect Directory</h1>
             <p class="tagline">Connecting the blind and visually impaired community to trusted businesses</p>
             <p>This directory connects the blind and visually impaired community with trusted businesses that are either blind or visually impaired-owned, or businesses that actively provide services designed for blind and visually impaired individuals.</p>
             <p class="small">Find accessible, community-aligned businesses you can contact directly by phone, text, email, or website. No marketplace clutter. Just trusted connections.</p>
 
-            <div class="cta-row" aria-label="Primary calls to action">
+            <div class="cta-row" role="group" aria-label="Primary calls to action">
               <a class="btn btn-primary" href="#browse">Browse Directory</a>
               <a class="btn btn-secondary" href="signup.html?redirect=add-business.html">Sign Up to Submit Your Business</a>
               <a class="btn" href="login.html">Sign In</a>
@@ -54,21 +57,21 @@
     </section>
 
     <section id="browse" class="container" aria-labelledby="browseHeading" data-directory-app>
-      <section class="panel" aria-labelledby="featuredHeading" style="padding:14px; margin-bottom: 12px;">
+      <section class="panel section-panel" aria-labelledby="featuredHeading">
         <h2 id="featuredHeading" class="section-title">Featured businesses</h2>
         <p class="small">Highlighted ETIB-approved businesses selected by admin.</p>
-        <div id="featuredListings" class="cards" aria-label="Featured business listings">
-          <div class="panel" style="padding:14px;">
-            <p role="status">Loading featured businesses...</p>
+        <div id="featuredListings" class="cards" aria-busy="true">
+          <div class="panel empty-state">
+            <p>Loading featured businesses...</p>
           </div>
         </div>
       </section>
 
-      <div class="filters panel" aria-label="Search and filter listings">
+      <div class="filters panel" role="search" aria-labelledby="browseHeading">
         <h2 id="browseHeading">Browse listings</h2>
 
         <div class="filter-grid">
-          <div class="field" style="grid-column: span 2;">
+          <div class="field span-2">
             <label for="search">Search by business name, service, or keyword</label>
             <input id="search" name="search" type="search" placeholder="Example: technology support, legal, tutoring" />
           </div>
@@ -114,10 +117,10 @@
             <label for="filter-contact">Contact method</label>
             <select id="filter-contact" name="contactMethod">
               <option value="">Any contact method</option>
-              <option>Call</option>
-              <option>Text</option>
-              <option>Email</option>
-              <option>Website</option>
+              <option value="call">Call</option>
+              <option value="text">Text</option>
+              <option value="email">Email</option>
+              <option value="website">Website</option>
             </select>
           </div>
 
@@ -127,15 +130,22 @@
         </div>
       </div>
 
-      <div class="results-top" aria-live="polite">
-        <p id="resultCount">0 listings found</p>
+      <div class="results-top">
+        <p id="resultCount" data-status role="status" aria-live="polite" aria-atomic="true" tabindex="-1">Searching businesses now.</p>
         <a class="btn btn-secondary" href="signup.html?redirect=add-business.html">Sign Up to Submit a Business</a>
       </div>
 
-      <section id="directoryResults" class="cards" aria-label="Business listing results"></section>
+      <p id="directorySpeechStatus" data-status role="status" aria-live="polite" aria-atomic="true"></p>
+      <div class="cta-row">
+        <button class="btn" id="stopDirectorySpeech" type="button">Stop Spoken Audio</button>
+      </div>
 
-      <nav class="pagination" aria-label="Pagination">
-        <button class="btn" type="button" aria-current="page">1</button>
+      <section id="directoryResults" class="cards" aria-label="Business listing results" aria-busy="true"></section>
+
+      <nav class="pagination" id="paginationNav" aria-label="Directory result pages" hidden>
+        <button class="btn" id="previousPage" type="button">Previous Page</button>
+        <span class="pagination-status" id="paginationStatus" aria-live="polite">Page 1 of 1</span>
+        <button class="btn" id="nextPage" type="button">Next Page</button>
       </nav>
     </section>
   </main>
@@ -164,17 +174,12 @@
         <ul>
           <li class="small">Email: <a href="mailto:etib@eventhoughimblind.com">etib@eventhoughimblind.com</a></li>
           <li class="small">Phone: <a href="tel:9108535247">910-853-5247</a></li>
-          <li class="small">Website: <a href="https://eventhoughimblind.com/" target="_blank" rel="noopener">eventhoughimblind.com</a></li>
+          <li class="small">Website: <a href="https://eventhoughimblind.com/">eventhoughimblind.com</a></li>
         </ul>
       </section>
     </div>
   </footer>
 
-  <div class="etib-float-wrap" aria-label="Quick contact ETIB">
-    <a class="etib-float-btn primary" href="mailto:etib@eventhoughimblind.com" aria-label="Email ETIB">Email ETIB</a>
-    <a class="etib-float-btn" href="tel:9108535247" aria-label="Call ETIB">Call ETIB</a>
-  </div>
-
-  <script src="script.js"></script>
+  <script src="script.js" defer></script>
 </body>
 </html>

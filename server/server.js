@@ -1,18 +1,22 @@
 import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
-import cors from "cors";
 import helmet from "helmet";
 import dotenv from "dotenv";
-import sqlite3 from "sqlite3";
+import { DatabaseSync } from "node:sqlite";
 import fs from "fs";
+import crypto from "crypto";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import nodemailer from "nodemailer";
 import rateLimit from "express-rate-limit";
-import { registerListingEditRoutes } from "./listing-edit-routes.js";
+import {
+  normalizeListingPayload,
+  registerListingEditRoutes,
+  validateListingPayload
+} from "./listing-edit-routes.js";
 
-dotenv.config();
+dotenv.config({ quiet: true });
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -20,6 +24,12 @@ const __dirname = path.dirname(__filename);
 const PORT = process.env.PORT || 8080;
 const JWT_SECRET = process.env.JWT_SECRET || "replace-me";
 const ADMIN_EMAIL = (process.env.ADMIN_EMAIL || "").toLowerCase().trim();
+const NODE_ENV = process.env.NODE_ENV || "development";
+const PUBLIC_BASE_URL = String(process.env.PUBLIC_BASE_URL || "").trim();
+const PASSWORD_RESET_WINDOW_MINUTES = Math.min(
+  120,
+  Math.max(15, Number(process.env.PASSWORD_RESET_WINDOW_MINUTES || 60))
+);
 
 const SMTP_HOST = process.env.SMTP_HOST || "";
 const SMTP_PORT = Number(process.env.SMTP_PORT || 587);
@@ -31,6 +41,10 @@ const SMTP_FROM = process.env.SMTP_FROM || "ETIB Community Connect <no-reply@eve
 const AUTH_RATE_WINDOW_MS = Number(process.env.AUTH_RATE_WINDOW_MS || 15 * 60 * 1000);
 const AUTH_RATE_MAX = Number(process.env.AUTH_RATE_MAX || 10);
 
+if (NODE_ENV === "production" && (JWT_SECRET === "replace-me" || JWT_SECRET.length < 32)) {
+  throw new Error("JWT_SECRET must be a strong production secret");
+}
+
 const persistentDbPath = process.env.DB_PATH || (process.env.RENDER_DISK_MOUNT_PATH ? path.join(process.env.RENDER_DISK_MOUNT_PATH, "etib.db") : "");
 const dbPath = persistentDbPath || path.join(__dirname, "etib.db");
 const schemaPath = path.join(__dirname, "schema.sql");
@@ -39,8 +53,7 @@ if (persistentDbPath) {
   fs.mkdirSync(path.dirname(persistentDbPath), { recursive: true });
 }
 
-sqlite3.verbose();
-const db = new sqlite3.Database(dbPath);
+const db = new DatabaseSync(dbPath);
 
 let mailer = null;
 if (SMTP_HOST && SMTP_USER && SMTP_PASS) {
@@ -48,57 +61,52 @@ if (SMTP_HOST && SMTP_USER && SMTP_PASS) {
     host: SMTP_HOST,
     port: SMTP_PORT,
     secure: SMTP_SECURE,
-    auth: { user: SMTP_USER, pass: SMTP_PASS }
+    auth: { user: SMTP_USER, pass: SMTP_PASS },
+    disableFileAccess: true,
+    disableUrlAccess: true
   });
 }
 
 async function sendMail({ to, subject, text }) {
   if (!mailer || !to) return false;
   try {
-    await mailer.sendMail({ from: SMTP_FROM, to, subject, text });
+    await mailer.sendMail({
+      from: SMTP_FROM,
+      to,
+      subject: String(subject || "").replace(/[\r\n]+/g, " ").slice(0, 200),
+      text: String(text || ""),
+      disableFileAccess: true,
+      disableUrlAccess: true
+    });
     return true;
   } catch {
     return false;
   }
 }
 
-function run(sql, params = []) {
-  return new Promise((resolve, reject) => {
-    db.run(sql, params, function onRun(err) {
-      if (err) reject(err);
-      else resolve({ lastID: this.lastID, changes: this.changes });
-    });
-  });
+async function run(sql, params = []) {
+  const result = db.prepare(sql).run(...params);
+  return {
+    lastID: Number(result.lastInsertRowid || 0),
+    changes: Number(result.changes || 0)
+  };
 }
 
-function get(sql, params = []) {
-  return new Promise((resolve, reject) => {
-    db.get(sql, params, (err, row) => {
-      if (err) reject(err);
-      else resolve(row);
-    });
-  });
+async function get(sql, params = []) {
+  return db.prepare(sql).get(...params);
 }
 
-function all(sql, params = []) {
-  return new Promise((resolve, reject) => {
-    db.all(sql, params, (err, rows) => {
-      if (err) reject(err);
-      else resolve(rows);
-    });
-  });
+async function all(sql, params = []) {
+  return db.prepare(sql).all(...params);
 }
 
 async function initDb() {
   const schema = fs.readFileSync(schemaPath, "utf-8");
-  await run("PRAGMA foreign_keys = ON;");
-  await run("PRAGMA journal_mode = WAL;").catch(() => {});
-  await run("PRAGMA busy_timeout = 5000;").catch(() => {});
-
-  for (const stmt of schema.split(";")) {
-    const s = stmt.trim();
-    if (s) await run(`${s};`);
-  }
+  db.exec("PRAGMA foreign_keys = ON;");
+  try { db.exec("PRAGMA journal_mode = WAL;"); } catch {}
+  try { db.exec("PRAGMA synchronous = NORMAL;"); } catch {}
+  try { db.exec("PRAGMA busy_timeout = 5000;"); } catch {}
+  db.exec(schema);
 
   await run("ALTER TABLE listings ADD COLUMN moderated_by_user_id INTEGER").catch(() => {});
   await run("ALTER TABLE listings ADD COLUMN moderated_at TEXT").catch(() => {});
@@ -116,13 +124,33 @@ async function initDb() {
     WHERE is_featured = 1 AND featured_rank IS NOT NULL
   `).catch(() => {});
   await run("CREATE INDEX IF NOT EXISTS idx_users_status_hidden ON users(status, is_hidden)").catch(() => {});
+  await run(`
+    CREATE TABLE IF NOT EXISTS password_reset_tokens (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      user_id INTEGER NOT NULL,
+      token_hash TEXT NOT NULL UNIQUE,
+      expires_at TEXT NOT NULL,
+      used_at TEXT,
+      created_at TEXT NOT NULL DEFAULT (datetime('now')),
+      FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
+    )
+  `).catch(() => {});
+  await run("CREATE INDEX IF NOT EXISTS idx_password_reset_user_active ON password_reset_tokens(user_id, used_at, expires_at)").catch(() => {});
 }
 await initDb();
 
 const app = express();
-app.use(helmet());
-app.use(cors());
-app.use(express.json({ limit: "1mb" }));
+app.set("trust proxy", 1);
+app.disable("x-powered-by");
+app.use(helmet({
+  crossOriginResourcePolicy: { policy: "same-origin" },
+  referrerPolicy: { policy: "strict-origin-when-cross-origin" }
+}));
+app.use(express.json({ limit: "128kb" }));
+app.use("/api", (req, res, next) => {
+  res.set("Cache-Control", "no-store");
+  next();
+});
 
 const authLimiter = rateLimit({
   windowMs: AUTH_RATE_WINDOW_MS,
@@ -130,6 +158,14 @@ const authLimiter = rateLimit({
   standardHeaders: true,
   legacyHeaders: false,
   message: { error: "Too many authentication attempts. Please try again later." }
+});
+
+const publicWriteLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000,
+  max: 20,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: "Too many submissions from this connection. Please try again later." }
 });
 
 function signToken(user) {
@@ -140,19 +176,37 @@ function signToken(user) {
   );
 }
 
-function authRequired(req, res, next) {
+async function authRequired(req, res, next) {
   const header = req.headers.authorization || "";
   const parts = header.split(" ");
   if (parts.length !== 2 || parts[0] !== "Bearer") {
     return res.status(401).json({ error: "Missing token" });
   }
+  let payload;
   try {
-    const payload = jwt.verify(parts[1], JWT_SECRET);
-    req.user = payload;
-    next();
+    payload = jwt.verify(parts[1], JWT_SECRET);
   } catch {
     return res.status(401).json({ error: "Invalid token" });
   }
+
+  const currentUser = await get(
+    `SELECT id, full_name, email, role, status, COALESCE(is_hidden, 0) AS is_hidden
+     FROM users WHERE id=?`,
+    [payload.sub]
+  );
+  if (!currentUser) return res.status(401).json({ error: "Account no longer exists" });
+  if (currentUser.is_hidden || currentUser.status === "rejected") {
+    return res.status(403).json({ error: "This account is not active. Contact ETIB for support." });
+  }
+
+  req.user = {
+    sub: currentUser.id,
+    fullName: currentUser.full_name,
+    email: currentUser.email,
+    role: currentUser.role,
+    status: currentUser.status
+  };
+  return next();
 }
 
 function adminRequired(req, res, next) {
@@ -161,18 +215,9 @@ function adminRequired(req, res, next) {
   next();
 }
 
-async function ensureAdminRole(email) {
-  if (!email || !ADMIN_EMAIL) return;
-  if (email.toLowerCase().trim() !== ADMIN_EMAIL) return;
-  await run(
-    "UPDATE users SET role='admin', status='approved', approved_at=datetime('now'), is_hidden=0 WHERE lower(email)=lower(?)",
-    [email]
-  );
-}
-
 function validEmail(value) {
   const email = String(value || "").trim();
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  return email.length <= 254 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
 
 function validPhone(value) {
@@ -180,10 +225,35 @@ function validPhone(value) {
   return digits.length >= 10 && digits.length <= 15;
 }
 
+function validWebUrl(value) {
+  const raw = String(value || "").trim();
+  if (!raw || raw.length > 2048 || /\s/.test(raw)) return false;
+  try {
+    const parsed = new URL(raw);
+    return ["http:", "https:"].includes(parsed.protocol) && !parsed.username && !parsed.password && !!parsed.hostname;
+  } catch {
+    return false;
+  }
+}
+
 function validateMissionFit(listingType, supportsText) {
   const typeOk = ["Blind-Owned / Visually Impaired-Owned", "Community Service Provider", "Both"].includes(listingType);
   const supportOk = typeof supportsText === "string" && supportsText.trim().length >= 20;
   return typeOk && supportOk;
+}
+
+function getPublicBaseUrl(req) {
+  if (PUBLIC_BASE_URL) {
+    try {
+      const configured = new URL(PUBLIC_BASE_URL);
+      if (["http:", "https:"].includes(configured.protocol)) return configured;
+    } catch {}
+  }
+  return new URL(`${req.protocol}://${req.get("host")}`);
+}
+
+function hashResetToken(token) {
+  return crypto.createHash("sha256").update(String(token)).digest("hex");
 }
 
 async function logAdminAction({ adminUserId, action, targetType, targetId = null, meta = null }) {
@@ -202,20 +272,24 @@ app.post("/api/auth/signup", authLimiter, async (req, res) => {
     }
 
     const emailNorm = String(email).toLowerCase().trim();
+    const fullNameNorm = String(fullName).trim();
+    const phoneNorm = String(phone).trim();
+    if (fullNameNorm.length < 2 || fullNameNorm.length > 120 || /[\r\n\u0000-\u001F]/.test(fullNameNorm)) {
+      return res.status(400).json({ error: "Name must be between 2 and 120 characters" });
+    }
     if (!validEmail(emailNorm)) return res.status(400).json({ error: "Invalid email format" });
-    if (!validPhone(phone)) return res.status(400).json({ error: "Invalid phone format" });
-    if (String(password).length < 10) {
-      return res.status(400).json({ error: "Password must be at least 10 characters" });
+    if (!validPhone(phoneNorm)) return res.status(400).json({ error: "Invalid phone format" });
+    if (String(password).length < 10 || String(password).length > 128) {
+      return res.status(400).json({ error: "Password must be between 10 and 128 characters" });
     }
 
     const passwordHash = await bcrypt.hash(String(password), 10);
 
     await run(
       "INSERT INTO users (full_name, email, phone, password_hash, role, status, approved_at, approved_by_user_id, is_hidden) VALUES (?, ?, ?, ?, 'owner', 'pending', NULL, NULL, 0)",
-      [String(fullName).trim(), emailNorm, String(phone).trim(), passwordHash]
+      [fullNameNorm, emailNorm, phoneNorm, passwordHash]
     );
 
-    await ensureAdminRole(emailNorm);
     const user = await get("SELECT id, full_name, email, role, status FROM users WHERE email=?", [emailNorm]);
     const token = signToken(user);
 
@@ -232,7 +306,7 @@ Status: ${user.status}
 Please review this user in the admin dashboard.`
     });
 
-    return res.json({ token, user, adminEmailSent });
+    return res.status(201).json({ token, user, adminEmailSent });
   } catch (e) {
     if (String(e).includes("UNIQUE")) return res.status(409).json({ error: "Email already exists" });
     return res.status(500).json({ error: "Server error" });
@@ -243,15 +317,14 @@ app.post("/api/auth/login", authLimiter, async (req, res) => {
   try {
     const { email, password } = req.body || {};
     if (!email || !password) return res.status(400).json({ error: "Missing email or password" });
+    if (String(password).length > 128) return res.status(400).json({ error: "Invalid credentials" });
 
     const emailNorm = String(email).toLowerCase().trim();
-    await ensureAdminRole(emailNorm);
-
-    const user = await get(
-      "SELECT * FROM users WHERE lower(email)=lower(?) AND (COALESCE(is_hidden, 0)=0 OR lower(email)=lower(?))",
-      [emailNorm, ADMIN_EMAIL || emailNorm]
-    );
+    const user = await get("SELECT * FROM users WHERE lower(email)=lower(?)", [emailNorm]);
     if (!user) return res.status(401).json({ error: "Invalid credentials" });
+    if (Number(user.is_hidden) === 1 || user.status === "rejected") {
+      return res.status(401).json({ error: "Invalid credentials" });
+    }
 
     const ok = await bcrypt.compare(String(password), user.password_hash);
     if (!ok) return res.status(401).json({ error: "Invalid credentials" });
@@ -267,6 +340,107 @@ app.post("/api/auth/login", authLimiter, async (req, res) => {
   }
 });
 
+app.get("/api/auth/me", authRequired, async (req, res) => {
+  res.json({
+    user: {
+      id: req.user.sub,
+      full_name: req.user.fullName,
+      email: req.user.email,
+      role: req.user.role,
+      status: req.user.status
+    }
+  });
+});
+
+app.post("/api/auth/forgot-password", authLimiter, async (req, res) => {
+  const genericMessage = "If that email exists in our system, a password reset link has been sent.";
+  const emailNorm = String(req.body?.email || "").toLowerCase().trim();
+  if (!validEmail(emailNorm)) return res.json({ message: genericMessage });
+
+  const user = await get(
+    `SELECT id, full_name, email FROM users
+     WHERE lower(email)=lower(?) AND COALESCE(is_hidden, 0)=0 AND status<>'rejected'`,
+    [emailNorm]
+  );
+  if (!user) return res.json({ message: genericMessage });
+
+  const token = crypto.randomBytes(32).toString("hex");
+  const tokenHash = hashResetToken(token);
+  const expiresAt = new Date(Date.now() + PASSWORD_RESET_WINDOW_MINUTES * 60 * 1000).toISOString();
+  await run("DELETE FROM password_reset_tokens WHERE user_id=? OR datetime(expires_at) <= datetime('now')", [user.id]);
+  await run(
+    "INSERT INTO password_reset_tokens (user_id, token_hash, expires_at) VALUES (?, ?, ?)",
+    [user.id, tokenHash, expiresAt]
+  );
+
+  const resetUrl = new URL("reset-password.html", getPublicBaseUrl(req));
+  resetUrl.searchParams.set("token", token);
+  await sendMail({
+    to: user.email,
+    subject: "Reset your ETIB Community Connect password",
+    text:
+`Hello ${user.full_name},
+
+Use this secure link to reset your ETIB Community Connect password:
+${resetUrl.toString()}
+
+This link expires in ${PASSWORD_RESET_WINDOW_MINUTES} minutes and can be used once.
+
+If you did not request this change, you can ignore this email.
+
+ETIB
+Even Though I'm Blind`
+  });
+
+  const response = { message: genericMessage };
+  if (NODE_ENV === "test" && process.env.TEST_EXPOSE_RESET_TOKEN === "1") {
+    response.testToken = token;
+  }
+  return res.json(response);
+});
+
+app.post("/api/auth/reset-password", authLimiter, async (req, res) => {
+  const token = String(req.body?.token || "").trim();
+  const password = String(req.body?.password || "");
+  if (!/^[a-f0-9]{64}$/i.test(token)) return res.status(400).json({ error: "This reset link is invalid or expired" });
+  if (password.length < 10 || password.length > 128) {
+    return res.status(400).json({ error: "Password must be between 10 and 128 characters" });
+  }
+
+  const tokenHash = hashResetToken(token);
+  const record = await get(
+    `SELECT id, user_id FROM password_reset_tokens
+     WHERE token_hash=? AND used_at IS NULL AND datetime(expires_at) > datetime('now')`,
+    [tokenHash]
+  );
+  if (!record) return res.status(400).json({ error: "This reset link is invalid or expired" });
+
+  const passwordHash = await bcrypt.hash(password, 10);
+  await run("BEGIN IMMEDIATE TRANSACTION");
+  try {
+    const marked = await run(
+      `UPDATE password_reset_tokens SET used_at=datetime('now')
+       WHERE id=? AND used_at IS NULL AND datetime(expires_at) > datetime('now')`,
+      [record.id]
+    );
+    if (!marked.changes) {
+      await run("ROLLBACK");
+      return res.status(400).json({ error: "This reset link is invalid or expired" });
+    }
+    await run("UPDATE users SET password_hash=? WHERE id=?", [passwordHash, record.user_id]);
+    await run(
+      "UPDATE password_reset_tokens SET used_at=COALESCE(used_at, datetime('now')) WHERE user_id=?",
+      [record.user_id]
+    );
+    await run("COMMIT");
+  } catch (error) {
+    await run("ROLLBACK").catch(() => {});
+    throw error;
+  }
+
+  return res.json({ message: "Your password has been updated. You can now sign in." });
+});
+
 registerListingEditRoutes(app, {
   authRequired,
   adminRequired,
@@ -276,6 +450,7 @@ registerListingEditRoutes(app, {
   logAdminAction,
   validEmail,
   validPhone,
+  validWebUrl,
   validateMissionFit,
   ADMIN_EMAIL
 });
@@ -301,11 +476,13 @@ app.get("/api/featured-listings", async (req, res) => {
 });
 
 app.get("/api/listings", async (req, res) => {
-  const q = String(req.query.q || "").trim().toLowerCase();
+  const q = String(req.query.q || "").trim().toLowerCase().slice(0, 200);
   const category = String(req.query.category || "").trim();
   const listingType = String(req.query.listingType || "").trim();
-  const location = String(req.query.location || "").trim().toLowerCase();
+  const location = String(req.query.location || "").trim().toLowerCase().slice(0, 120);
   const contact = String(req.query.contact || "").trim().toLowerCase();
+  const requestedPage = Math.max(1, Number.parseInt(String(req.query.page || "1"), 10) || 1);
+  const pageSize = 24;
   let where = "WHERE l.status='approved'";
   const params = [];
 
@@ -325,6 +502,11 @@ app.get("/api/listings", async (req, res) => {
   if (contact === "email") where += " AND l.business_email IS NOT NULL AND trim(l.business_email) <> ''";
   if (contact === "website") where += " AND l.website_url IS NOT NULL AND trim(l.website_url) <> ''";
 
+  const countRow = await get(`SELECT COUNT(*) AS total FROM listings l ${where}`, params);
+  const total = Number(countRow?.total || 0);
+  const totalPages = Math.max(1, Math.ceil(total / pageSize));
+  const page = Math.min(requestedPage, totalPages);
+  const offset = (page - 1) * pageSize;
   const rows = await all(
     `SELECT l.id, l.business_name, l.listing_type, l.category, l.city, l.state, l.service_area_type,
             l.short_summary, l.listen_summary, l.primary_contact_method,
@@ -332,21 +514,25 @@ app.get("/api/listings", async (req, res) => {
             COALESCE(ROUND((SELECT AVG(r.rating) FROM reviews r WHERE r.listing_id = l.id AND r.status='approved'), 1), NULL) AS average_rating,
             COALESCE((SELECT COUNT(*) FROM reviews r WHERE r.listing_id = l.id AND r.status='approved'), 0) AS review_count
      FROM listings l ${where}
-     ORDER BY l.is_featured DESC, l.featured_rank ASC, datetime(l.last_updated) DESC LIMIT 100`,
-    params
+     ORDER BY l.is_featured DESC, l.featured_rank ASC, datetime(l.last_updated) DESC
+     LIMIT ? OFFSET ?`,
+    [...params, pageSize, offset]
   );
-  res.json({ listings: rows });
+  res.json({
+    listings: rows,
+    pagination: { page, pageSize, total, totalPages }
+  });
 });
 
 app.post("/api/listings", authRequired, async (req, res) => {
-  const b = req.body || {};
-  const required = ["businessName", "ownerContactName", "businessEmail", "phone", "listingType", "category", "shortSummary", "fullDescription", "supportsBvi", "accessibilityDetails", "primaryContactMethod", "city", "state", "serviceAreaType", "hours"];
-  for (const key of required) {
-    if (!b[key] || String(b[key]).trim() === "") return res.status(400).json({ error: `Missing: ${key}` });
-  }
-  if (!validateMissionFit(String(b.listingType), String(b.supportsBvi))) return res.status(400).json({ error: "Mission fit not met." });
-  if (!validEmail(b.businessEmail)) return res.status(400).json({ error: "Invalid business email" });
-  if (!validPhone(b.phone)) return res.status(400).json({ error: "Invalid business phone" });
+  const b = normalizeListingPayload(req.body || {});
+  const validationError = validateListingPayload(b, {
+    validEmail,
+    validPhone,
+    validWebUrl,
+    validateMissionFit
+  });
+  if (validationError) return res.status(400).json({ error: validationError });
 
   const result = await run(
     `INSERT INTO listings (
@@ -356,10 +542,15 @@ app.post("/api/listings", authRequired, async (req, res) => {
       remote_details, inperson_notes, social_links, certifications, testimonial,
       status, admin_note, is_featured, featured_rank, last_updated
     ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending', NULL, 0, NULL, datetime('now'))`,
-    [req.user.sub, String(b.businessName).trim(), String(b.ownerContactName).trim(), String(b.businessEmail).trim(), String(b.phone).trim(), b.textNumber ? String(b.textNumber).trim() : null, b.websiteUrl ? String(b.websiteUrl).trim() : null, String(b.listingType).trim(), String(b.category).trim(), String(b.shortSummary).trim(), String(b.fullDescription).trim(), b.listenSummary ? String(b.listenSummary).trim() : null, String(b.supportsBvi).trim(), String(b.accessibilityDetails).trim(), String(b.primaryContactMethod).trim(), String(b.city).trim(), String(b.state).trim(), String(b.serviceAreaType).trim(), String(b.hours).trim(), b.languages ? String(b.languages).trim() : null, b.remoteDetails ? String(b.remoteDetails).trim() : null, b.inpersonNotes ? String(b.inpersonNotes).trim() : null, b.socialLinks ? String(b.socialLinks).trim() : null, b.certifications ? String(b.certifications).trim() : null, b.testimonial ? String(b.testimonial).trim() : null]
+    [
+      req.user.sub, b.businessName, b.ownerContactName, b.businessEmail, b.phone, b.textNumber, b.websiteUrl,
+      b.listingType, b.category, b.shortSummary, b.fullDescription, b.listenSummary, b.supportsBvi,
+      b.accessibilityDetails, b.primaryContactMethod, b.city, b.state, b.serviceAreaType, b.hours,
+      b.languages, b.remoteDetails, b.inpersonNotes, b.socialLinks, b.certifications, b.testimonial
+    ]
   );
   await sendMail({ to: ADMIN_EMAIL, subject: "New ETIB Directory submission pending review", text: `A new listing was submitted and is pending review. Listing ID: ${result.lastID}` });
-  res.json({ ok: true, id: result.lastID, status: "pending" });
+  res.status(201).json({ ok: true, id: result.lastID, status: "pending" });
 });
 
 app.get("/api/listings/:id", async (req, res) => {
@@ -371,20 +562,28 @@ app.get("/api/listings/:id", async (req, res) => {
   return res.json({ listing: row, reviewsSummary: { reviewCount: ratingSummary?.review_count || 0, averageRating: ratingSummary?.average_rating || null } });
 });
 
-app.post("/api/listings/:id/reviews", async (req, res) => {
+app.post("/api/listings/:id/reviews", publicWriteLimiter, async (req, res) => {
   const listingId = Number(req.params.id);
   if (!Number.isInteger(listingId) || listingId <= 0) return res.status(400).json({ error: "Invalid listing id" });
   const listing = await get("SELECT id, business_name, status FROM listings WHERE id=? AND status='approved'", [listingId]);
   if (!listing) return res.status(404).json({ error: "Listing not found" });
   const { reviewerName, reviewerEmail, rating, reviewText } = req.body || {};
-  if (!reviewerName || String(reviewerName).trim().length < 2) return res.status(400).json({ error: "Reviewer name is required" });
+  const reviewerNameNorm = String(reviewerName || "").trim();
+  const reviewTextNorm = String(reviewText || "").trim();
+  if (reviewerNameNorm.length < 2 || reviewerNameNorm.length > 120 || /[\r\n\u0000-\u001F]/.test(reviewerNameNorm)) {
+    return res.status(400).json({ error: "Reviewer name must be between 2 and 120 characters" });
+  }
   const ratingNum = Number(rating);
   if (!Number.isInteger(ratingNum) || ratingNum < 1 || ratingNum > 5) return res.status(400).json({ error: "Rating must be 1 through 5" });
-  if (!reviewText || String(reviewText).trim().length < 20) return res.status(400).json({ error: "Review must be at least 20 characters" });
+  if (reviewTextNorm.length < 20 || reviewTextNorm.length > 2000) return res.status(400).json({ error: "Review must be between 20 and 2,000 characters" });
   if (reviewerEmail && !validEmail(reviewerEmail)) return res.status(400).json({ error: "Invalid reviewer email" });
-  const result = await run(`INSERT INTO reviews (listing_id, reviewer_name, reviewer_email, rating, review_text, status) VALUES (?, ?, ?, ?, ?, 'pending')`, [listingId, String(reviewerName).trim(), reviewerEmail ? String(reviewerEmail).trim() : null, ratingNum, String(reviewText).trim()]);
+  const result = await run(
+    `INSERT INTO reviews (listing_id, reviewer_name, reviewer_email, rating, review_text, status)
+     VALUES (?, ?, ?, ?, ?, 'pending')`,
+    [listingId, reviewerNameNorm, reviewerEmail ? String(reviewerEmail).trim().toLowerCase() : null, ratingNum, reviewTextNorm]
+  );
   await sendMail({ to: ADMIN_EMAIL, subject: `New ETIB review pending moderation: ${listing.business_name}`, text: `A new review was submitted for "${listing.business_name}" and is pending moderation. Review ID: ${result.lastID}` });
-  res.json({ ok: true, reviewId: result.lastID, status: "pending" });
+  res.status(201).json({ ok: true, reviewId: result.lastID, status: "pending" });
 });
 
 app.get("/api/listings/:id/reviews", async (req, res) => {
@@ -397,12 +596,25 @@ app.get("/api/listings/:id/reviews", async (req, res) => {
 
 app.get("/api/owner/listings", authRequired, async (req, res) => {
   const rows = await all(`SELECT id, business_name, category, listing_type, status, admin_note, is_featured, featured_rank, last_updated FROM listings WHERE owner_user_id=? ORDER BY datetime(last_updated) DESC`, [req.user.sub]);
-  res.json({ listings: rows, userStatus: req.user.status || "pending" });
+  res.json({
+    listings: rows,
+    owner: {
+      id: req.user.sub,
+      full_name: req.user.fullName,
+      email: req.user.email,
+      role: req.user.role,
+      status: req.user.status
+    },
+    userStatus: req.user.status || "pending"
+  });
 });
 
 app.get("/api/admin/listings", authRequired, adminRequired, async (req, res) => {
   const status = String(req.query.status || "").trim();
-  const q = String(req.query.q || "").trim().toLowerCase();
+  const q = String(req.query.q || "").trim().toLowerCase().slice(0, 200);
+  if (status && !["pending", "approved", "needs_changes", "rejected"].includes(status)) {
+    return res.status(400).json({ error: "Invalid status filter" });
+  }
   const params = [];
   let where = "WHERE 1=1";
   if (status) { where += " AND l.status=?"; params.push(status); }
@@ -417,6 +629,7 @@ app.patch("/api/admin/listings/:id", authRequired, adminRequired, async (req, re
   const { status, adminNote } = req.body || {};
   const valid = ["pending", "approved", "needs_changes", "rejected"];
   if (!valid.includes(String(status))) return res.status(400).json({ error: "Invalid status" });
+  if (adminNote && String(adminNote).trim().length > 2000) return res.status(400).json({ error: "Admin note is too long" });
   const listing = await get(`SELECT l.id, l.business_name, l.business_email, l.owner_user_id, u.email AS owner_email FROM listings l LEFT JOIN users u ON u.id=l.owner_user_id WHERE l.id=?`, [id]);
   if (!listing) return res.status(404).json({ error: "Not found" });
   await run(`UPDATE listings SET status=?, admin_note=?, moderated_by_user_id=?, moderated_at=datetime('now'), last_updated=datetime('now') WHERE id=?`, [String(status), adminNote ? String(adminNote).trim() : null, req.user.sub, id]);
@@ -472,7 +685,10 @@ app.patch("/api/admin/listings/:id/feature", authRequired, adminRequired, async 
 
 app.get("/api/admin/users", authRequired, adminRequired, async (req, res) => {
   const status = String(req.query.status || "").trim();
-  const q = String(req.query.q || "").trim().toLowerCase();
+  const q = String(req.query.q || "").trim().toLowerCase().slice(0, 200);
+  if (status && !["pending", "approved", "rejected"].includes(status)) {
+    return res.status(400).json({ error: "Invalid user status filter" });
+  }
   const includeHidden = String(req.query.includeHidden || "").trim() === "1";
   let where = "WHERE 1=1";
   const params = [];
@@ -494,7 +710,32 @@ app.patch("/api/admin/users/:id/status", authRequired, adminRequired, async (req
   if (!user) return res.status(404).json({ error: "User not found" });
   if (user.role === "admin") return res.status(400).json({ error: "Admin users cannot be moderated here" });
   const hideUser = String(status) === "rejected" && Number(hideAfterReject) === 1 ? 1 : 0;
-  await run(`UPDATE users SET status=?, approved_at=CASE WHEN ?='approved' THEN datetime('now') ELSE approved_at END, approved_by_user_id=CASE WHEN ?='approved' THEN ? ELSE approved_by_user_id END, is_hidden=CASE WHEN ?='rejected' THEN ? ELSE COALESCE(is_hidden, 0) END WHERE id=?`, [String(status), String(status), String(status), req.user.sub, String(status), hideUser, id]);
+  await run("BEGIN IMMEDIATE TRANSACTION");
+  try {
+    await run(
+      `UPDATE users
+       SET status=?,
+           approved_at=CASE WHEN ?='approved' THEN datetime('now') ELSE approved_at END,
+           approved_by_user_id=CASE WHEN ?='approved' THEN ? ELSE approved_by_user_id END,
+           is_hidden=CASE WHEN ?='rejected' THEN ? ELSE 0 END
+       WHERE id=?`,
+      [String(status), String(status), String(status), req.user.sub, String(status), hideUser, id]
+    );
+    if (String(status) === "rejected") {
+      await run(
+        `UPDATE listings
+         SET status='rejected', is_featured=0, featured_rank=NULL,
+             admin_note=COALESCE(admin_note, 'Owner account was rejected.'),
+             moderated_by_user_id=?, moderated_at=datetime('now'), last_updated=datetime('now')
+         WHERE owner_user_id=?`,
+        [req.user.sub, id]
+      );
+    }
+    await run("COMMIT");
+  } catch (error) {
+    await run("ROLLBACK").catch(() => {});
+    throw error;
+  }
   let emailSent = false;
   if (String(status) === "approved") {
     emailSent = await sendMail({ to: user.email, subject: "Your ETIB account has been approved", text: `Hello ${user.full_name},\n\nYour ETIB Community Connect account has been approved.\n\nYou can sign in and continue submitting and managing your business information.\n\nETIB\nEven Though I'm Blind` });
@@ -505,7 +746,10 @@ app.patch("/api/admin/users/:id/status", authRequired, adminRequired, async (req
 
 app.get("/api/admin/reviews", authRequired, adminRequired, async (req, res) => {
   const status = String(req.query.status || "").trim();
-  const q = String(req.query.q || "").trim().toLowerCase();
+  const q = String(req.query.q || "").trim().toLowerCase().slice(0, 200);
+  if (status && !["pending", "approved", "rejected"].includes(status)) {
+    return res.status(400).json({ error: "Invalid review status filter" });
+  }
   let where = "WHERE 1=1";
   const params = [];
   if (status) { where += " AND r.status=?"; params.push(status); }
@@ -520,6 +764,7 @@ app.patch("/api/admin/reviews/:id", authRequired, adminRequired, async (req, res
   const { status, adminNote } = req.body || {};
   const valid = ["pending", "approved", "rejected"];
   if (!valid.includes(String(status))) return res.status(400).json({ error: "Invalid status" });
+  if (adminNote && String(adminNote).trim().length > 2000) return res.status(400).json({ error: "Admin note is too long" });
   const review = await get(`SELECT r.id, r.reviewer_email, r.reviewer_name, r.rating, r.review_text, r.listing_id, l.business_name FROM reviews r LEFT JOIN listings l ON l.id=r.listing_id WHERE r.id=?`, [id]);
   if (!review) return res.status(404).json({ error: "Review not found" });
   await run(`UPDATE reviews SET status=?, admin_note=?, moderated_by_user_id=?, approved_at=CASE WHEN ?='approved' THEN datetime('now') ELSE approved_at END WHERE id=?`, [String(status), adminNote ? String(adminNote).trim() : null, req.user.sub, String(status), id]);
@@ -545,14 +790,52 @@ app.get("/api/admin/audit-logs", authRequired, adminRequired, async (req, res) =
 });
 
 app.get("/api/health", (req, res) => {
-  res.json({ ok: true, mailer: !!mailer, dbPath });
+  res.json({ ok: true });
 });
 
 const publicDir = path.join(__dirname, "..", "public");
-app.use(express.static(publicDir));
-app.get("*", (req, res) => {
-  res.sendFile(path.join(publicDir, "index.html"));
+app.use("/api", (req, res) => {
+  res.status(404).json({ error: "API route not found" });
 });
-app.listen(PORT, () => {
+app.use(express.static(publicDir, {
+  etag: true,
+  setHeaders(res, filePath) {
+    if (filePath.includes(`${path.sep}assets${path.sep}`)) {
+      res.setHeader("Cache-Control", "public, max-age=604800, immutable");
+    } else {
+      res.setHeader("Cache-Control", "no-cache");
+    }
+  }
+}));
+app.use((req, res, next) => {
+  const extension = path.extname(req.path).toLowerCase();
+  const isPageRequest = extension === "" || extension === ".html";
+  if (req.method !== "GET" || !isPageRequest || !req.accepts("html")) return next();
+  return res.status(404).sendFile(path.join(publicDir, "404.html"));
+});
+app.use((req, res) => {
+  res.status(404).type("text").send("Not found");
+});
+app.use((error, req, res, next) => {
+  if (res.headersSent) return next(error);
+  console.error("Unhandled request error", error);
+  const message = NODE_ENV === "production" ? "Server error" : String(error?.message || "Server error");
+  return res.status(500).json({ error: message });
+});
+
+const server = app.listen(PORT, () => {
   console.log(`ETIB Community Connect running on http://localhost:${PORT}`);
 });
+
+function shutdown() {
+  server.close(() => {
+    try { db.close(); } catch {}
+    process.exit(0);
+  });
+  setTimeout(() => process.exit(1), 5000).unref();
+}
+
+process.on("SIGTERM", shutdown);
+process.on("SIGINT", shutdown);
+
+export { app, db, server };

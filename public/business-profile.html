@@ -4,6 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Business Profile | ETIB Directory</title>
+  <meta name="description" content="Review accessible contact information, services, and community feedback for an ETIB-approved business." />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -11,7 +12,7 @@
   <header class="site-header">
     <div class="container header-row">
       <a class="brand" href="index.html">
-        <img src="assets/etib-logo.png" alt="Even Though I’m Blind Directory logo" />
+        <img src="assets/etib-logo.webp" alt="" width="427" height="512" />
         <span class="brand-text">
           <strong>ETIB Community Connect Directory</strong>
           <span>Connecting the blind and visually impaired community to trusted businesses</span>
@@ -34,11 +35,13 @@
     <section class="hero">
       <div class="container">
         <div class="hero-grid panel">
-          <img src="assets/etib-logo.png" alt="Even Though I’m Blind Directory logo" />
+          <img src="assets/etib-logo.webp" alt="" width="427" height="512" />
           <div>
             <h1 id="profileTitle">Loading business…</h1>
             <p class="tagline" id="profileTagline">Loading summary…</p>
             <div class="badge-row" id="profileBadges"></div>
+            <p id="profileStatus" data-status role="status" aria-live="polite" aria-atomic="true"></p>
+            <p id="speechStatus" data-status role="status" aria-live="polite" aria-atomic="true"></p>
           </div>
         </div>
       </div>
@@ -64,15 +67,16 @@
 
       <section class="panel" style="padding:16px; margin-bottom:14px;">
         <h2>Leave a review</h2>
-        <form id="reviewForm" class="form-layout" novalidate>
+        <form id="reviewForm" class="form-layout" aria-describedby="review-help reviewFormStatus">
+          <p id="review-help" class="field-help">Fields marked with an asterisk are required. Reviews are moderated before publication.</p>
           <div class="form-grid-2">
             <div class="field">
               <label for="reviewer-name">Your name <span class="req">*</span></label>
-              <input id="reviewer-name" name="reviewerName" type="text" required />
+              <input id="reviewer-name" name="reviewerName" type="text" autocomplete="name" minlength="2" maxlength="120" required />
             </div>
             <div class="field">
               <label for="reviewer-email">Your email</label>
-              <input id="reviewer-email" name="reviewerEmail" type="email" />
+              <input id="reviewer-email" name="reviewerEmail" type="email" autocomplete="email" maxlength="254" />
             </div>
           </div>
 
@@ -90,15 +94,15 @@
 
           <div class="field">
             <label for="review-text">Your review <span class="req">*</span></label>
-            <textarea id="review-text" name="reviewText" required></textarea>
+            <textarea id="review-text" name="reviewText" minlength="20" maxlength="2000" aria-describedby="review-text-help" required></textarea>
+            <p id="review-text-help" class="field-help">Write between 20 and 2,000 characters.</p>
           </div>
 
           <div class="cta-row">
             <button class="btn btn-primary" type="submit">Submit review</button>
           </div>
 
-          <p class="small">Reviews are moderated before they appear publicly.</p>
-          <p id="reviewFormStatus" class="small" role="status" aria-live="polite"></p>
+          <p id="reviewFormStatus" class="small" data-status role="status" aria-live="polite" aria-atomic="true"></p>
         </form>
       </section>
 
@@ -110,6 +114,6 @@
       </section>
     </section>
   </main>
-  <script src="script.js"></script>
+  <script src="script.js" defer></script>
 </body>
 </html>
