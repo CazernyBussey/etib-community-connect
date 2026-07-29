@@ -4,6 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Admin Dashboard | ETIB Directory</title>
+  <meta name="description" content="Moderate ETIB Community Connect users, listings, featured placements, and reviews." />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -12,7 +13,7 @@
   <header class="site-header">
     <div class="container header-row">
       <a class="brand" href="index.html">
-        <img src="assets/etib-logo.png" alt="Even Though I’m Blind Directory logo" />
+        <img src="assets/etib-logo.webp" alt="" width="427" height="512" />
         <span class="brand-text">
           <strong>ETIB Community Connect Directory</strong>
           <span>Connecting the blind and visually impaired community to trusted businesses</span>
@@ -40,6 +41,7 @@
         <div class="notice">
           <strong>Admin review note:</strong> Approve listings only if they clearly fit the mission and include complete accessible contact details.
         </div>
+        <p id="admin-dashboard-status" data-status role="status" aria-live="polite" aria-atomic="true">Loading the administration dashboard.</p>
       </div>
 
       <section class="panel" style="padding:14px; margin-top:12px;">
@@ -52,31 +54,31 @@
           <div class="field">
             <label for="admin-status">Status</label>
             <select id="admin-status">
-              <option>All statuses</option>
-              <option>Pending</option>
-              <option>Approved</option>
-              <option>Needs changes</option>
-              <option>Rejected</option>
+              <option value="">All statuses</option>
+              <option value="pending">Pending</option>
+              <option value="approved">Approved</option>
+              <option value="needs_changes">Needs changes</option>
+              <option value="rejected">Rejected</option>
             </select>
           </div>
         </div>
       </section>
 
       <section class="panel" style="padding:14px; margin-top:12px;">
-        <h2>Submission queue and featuring controls</h2>
-        <div class="table-wrap">
+        <h2 id="admin-listings-heading">Submission queue and featuring controls</h2>
+        <div class="table-wrap" tabindex="0" role="region" aria-labelledby="admin-listings-heading">
           <table>
             <caption>Listings awaiting moderation</caption>
             <thead>
               <tr>
-                <th>Business</th>
-                <th>Listing Type</th>
-                <th>Category</th>
-                <th>Status</th>
-                <th>Featured</th>
-                <th>Rating</th>
-                <th>Last Updated</th>
-                <th>Actions</th>
+                <th scope="col">Business</th>
+                <th scope="col">Listing Type</th>
+                <th scope="col">Category</th>
+                <th scope="col">Status</th>
+                <th scope="col">Featured</th>
+                <th scope="col">Rating</th>
+                <th scope="col">Last Updated</th>
+                <th scope="col">Actions</th>
               </tr>
             </thead>
             <tbody id="admin-listings-body">
@@ -89,23 +91,32 @@
       </section>
 
       <section class="panel" style="padding:14px; margin-top:12px;">
-        <h2>User records</h2>
+        <h2 id="admin-users-heading">User records</h2>
         <p class="small">All registered users and their emails are shown below for admin data management.</p>
-        <div class="table-wrap">
+        <div class="checkbox-block">
+          <label for="admin-include-hidden">
+            <input id="admin-include-hidden" type="checkbox" />
+            <span>Include hidden accounts</span>
+          </label>
+        </div>
+        <p id="admin-user-summary" class="small" aria-live="polite">Loading user totals.</p>
+        <div class="table-wrap" tabindex="0" role="region" aria-labelledby="admin-users-heading">
           <table>
             <caption>Registered users</caption>
             <thead>
               <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Phone</th>
-                <th>Role</th>
-                <th>Created</th>
+                <th scope="col">Name</th>
+                <th scope="col">Email</th>
+                <th scope="col">Phone</th>
+                <th scope="col">Role</th>
+                <th scope="col">Status</th>
+                <th scope="col">Created</th>
+                <th scope="col">Actions</th>
               </tr>
             </thead>
             <tbody id="admin-users-body">
               <tr>
-                <td colspan="5">Loading users…</td>
+                <td colspan="7">Loading users…</td>
               </tr>
             </tbody>
           </table>
@@ -113,20 +124,20 @@
       </section>
 
       <section class="panel" style="padding:14px; margin-top:12px;">
-        <h2>Review moderation</h2>
+        <h2 id="admin-reviews-heading">Review moderation</h2>
         <p class="small">Approve, reject, and manage consumer reviews before they go live.</p>
-        <div class="table-wrap">
+        <div class="table-wrap" tabindex="0" role="region" aria-labelledby="admin-reviews-heading">
           <table>
             <caption>Submitted reviews</caption>
             <thead>
               <tr>
-                <th>Business</th>
-                <th>Reviewer</th>
-                <th>Rating</th>
-                <th>Review</th>
-                <th>Status</th>
-                <th>Created</th>
-                <th>Actions</th>
+                <th scope="col">Business</th>
+                <th scope="col">Reviewer</th>
+                <th scope="col">Rating</th>
+                <th scope="col">Review</th>
+                <th scope="col">Status</th>
+                <th scope="col">Created</th>
+                <th scope="col">Actions</th>
               </tr>
             </thead>
             <tbody id="admin-reviews-body">
@@ -140,7 +151,43 @@
     </section>
   </main>
 
-  <script src="script.js"></script>
-  <script src="edit-business.js"></script>
+  <dialog id="adminActionDialog" aria-labelledby="adminActionHeading" aria-describedby="adminActionDescription">
+    <form id="adminActionForm" class="form-layout">
+      <h2 id="adminActionHeading" tabindex="-1">Confirm administrative action</h2>
+      <p id="adminActionDescription">Review the action before confirming.</p>
+
+      <div class="field" id="admin-note-field">
+        <label for="admin-action-note">Optional note</label>
+        <textarea id="admin-action-note" name="adminNote" maxlength="2000" aria-describedby="admin-note-help"></textarea>
+        <p id="admin-note-help" class="field-help">For listing decisions, this note is sent to the business owner.</p>
+      </div>
+
+      <div class="field" id="admin-rank-field" hidden>
+        <label for="admin-feature-rank">Featured placement</label>
+        <select id="admin-feature-rank" name="featuredRank">
+          <option value="1">Placement 1</option>
+          <option value="2">Placement 2</option>
+          <option value="3">Placement 3</option>
+          <option value="4">Placement 4</option>
+          <option value="5">Placement 5</option>
+        </select>
+      </div>
+
+      <div class="checkbox-block" id="admin-hide-field" hidden>
+        <label for="admin-hide-after-reject">
+          <input id="admin-hide-after-reject" name="hideAfterReject" type="checkbox" checked />
+          <span>Hide this rejected account from the active user table.</span>
+        </label>
+      </div>
+
+      <p data-status role="status" aria-live="polite" aria-atomic="true"></p>
+      <div class="cta-row">
+        <button class="btn btn-primary" id="adminConfirmButton" type="submit">Confirm Action</button>
+        <button class="btn" id="adminCancelButton" type="button">Cancel</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="script.js" defer></script>
 </body>
 </html>
