@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Find Trusted Businesses | ETIB Community Connect</title>
-  <meta name="description" content="Search ETIB-verified blind-owned, visually impaired-owned, and accessibility-focused businesses." />
+  <title>Browse Verified Businesses | ETIB Community Connect</title>
+  <meta name="description" content="Search or browse ETIB-verified blind-owned, visually impaired-owned, and accessibility-focused businesses one listing at a time." />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -30,87 +30,46 @@
   </header>
 
   <main id="main-content">
-    <section class="hero">
-      <div class="container hero-grid panel">
-        <img src="assets/etib-logo.webp" alt="" width="427" height="512" />
-        <div>
-          <p class="eyebrow">Even Though I'm Blind, Inc.</p>
-          <h1>Find trusted businesses serving the blind and visually impaired community</h1>
-          <p class="tagline">Search verified businesses and connect with them directly by phone, text, email, or website.</p>
-          <p id="catalogSummary" class="catalog-summary" data-status role="status" aria-live="polite">Loading the verified directory.</p>
-          <a class="btn btn-primary" href="#directory-search">Start your search</a>
-        </div>
+    <section class="simple-hero">
+      <div class="container">
+        <p class="eyebrow">ETIB Community Connect</p>
+        <h1>Find a business</h1>
+        <p class="tagline">Search or browse one verified business at a time.</p>
+        <p id="catalogSummary" class="catalog-summary" data-status role="status" aria-live="polite">Loading the verified directory.</p>
       </div>
     </section>
 
     <section id="directory-search" class="container directory-app" aria-labelledby="search-heading" data-directory-app>
-      <form id="directorySearchForm" class="filters panel" role="search" aria-describedby="search-help">
+      <form id="directorySearchForm" class="quick-search panel" role="search" aria-describedby="search-help">
         <h2 id="search-heading">Search the directory</h2>
-        <p id="search-help">Enter any word or use the optional filters. Search covers business names, services, descriptions, accessibility details, and locations.</p>
-
-        <div class="filter-grid">
-          <div class="field span-2">
-            <label for="search">What are you looking for?</label>
-            <input id="search" name="q" type="search" autocomplete="off" placeholder="Example: technology, transportation, advocacy" />
-          </div>
-
-          <div class="field">
-            <label for="filter-category">Category</label>
-            <select id="filter-category" name="category">
-              <option value="">All categories</option>
-            </select>
-          </div>
-
-          <div class="field">
-            <label for="filter-type">Business type</label>
-            <select id="filter-type" name="listingType">
-              <option value="">All business types</option>
-            </select>
-          </div>
-
-          <div class="field">
-            <label for="filter-location">Location or service area</label>
-            <input id="filter-location" name="location" type="search" autocomplete="address-level1" placeholder="Example: New York, nationwide, remote" />
-          </div>
-
-          <div class="field">
-            <label for="filter-contact">Available contact method</label>
-            <select id="filter-contact" name="contactMethod">
-              <option value="">Any contact method</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="inline-actions">
+        <label for="search">Business name, service, or location</label>
+        <div class="search-row">
+          <input id="search" name="q" type="search" autocomplete="off" placeholder="Example: advocacy or New York" />
           <button class="btn btn-primary" type="submit">Search businesses</button>
           <button class="btn" id="resetFilters" type="button">Clear search</button>
         </div>
+        <p id="search-help">Leave the search blank to browse every verified listing.</p>
       </form>
 
-      <section class="results-section" aria-labelledby="results-heading">
-        <div class="results-top">
-          <div>
-            <h2 id="results-heading">Business results</h2>
-            <p id="resultCount" data-status role="status" aria-live="polite" aria-atomic="true" tabindex="-1">Loading businesses.</p>
-          </div>
-          <button class="btn" id="stopDirectorySpeech" type="button" hidden>Stop spoken listing</button>
+      <section class="listing-viewer" aria-labelledby="results-heading">
+        <div class="viewer-heading">
+          <h2 id="results-heading">Business listing</h2>
+          <p id="resultCount" data-status role="status" aria-live="polite" aria-atomic="true" tabindex="-1">Loading a business.</p>
         </div>
-        <p id="directorySpeechStatus" data-status role="status" aria-live="polite" aria-atomic="true"></p>
-        <div id="directoryResults" class="cards" aria-busy="true">
+
+        <nav class="listing-controls" id="listingNavigator" aria-label="Browse business listings">
+          <button class="btn" id="previousBusiness" type="button" aria-controls="directoryResults" disabled>Previous</button>
+          <button class="btn btn-secondary" id="previewListing" type="button" aria-controls="directoryResults" disabled>Hear preview</button>
+          <button class="btn" id="nextBusiness" type="button" aria-controls="directoryResults" disabled>Next</button>
+        </nav>
+
+        <p id="directorySpeechStatus" class="speech-status" data-status role="status" aria-live="polite" aria-atomic="true"></p>
+        <div id="directoryResults" class="single-result" aria-busy="true">
           <div class="panel empty-state"><p>Loading verified businesses.</p></div>
         </div>
-        <nav class="pagination" id="paginationNav" aria-label="Business result pages" hidden>
-          <button class="btn" id="previousPage" type="button">Previous page</button>
-          <span class="pagination-status" id="paginationStatus" aria-live="polite">Page 1 of 1</span>
-          <button class="btn" id="nextPage" type="button">Next page</button>
-        </nav>
       </section>
 
-      <section class="panel trust-panel" aria-labelledby="managed-heading">
-        <h2 id="managed-heading">How listings are managed</h2>
-        <p>ETIB gathers, reviews, and publishes every business record. Businesses and visitors cannot upload or change listings directly. This keeps the public experience focused on finding reliable information.</p>
-        <p>If a published detail is incorrect, <a href="mailto:etib@eventhoughimblind.com?subject=ETIB%20Directory%20Correction">email ETIB to report the correction</a>.</p>
-      </section>
+      <p class="managed-note">ETIB verifies and updates every listing. Visitors cannot add or edit businesses. <a href="mailto:etib@eventhoughimblind.com?subject=ETIB%20Directory%20Correction">Report incorrect information</a>.</p>
     </section>
   </main>
 

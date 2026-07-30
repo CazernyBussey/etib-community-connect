@@ -156,6 +156,10 @@ test("the code-managed directory works end to end and blocks public writes", asy
   result = await request("/index.html", { accept: "text/html" });
   assert.equal(result.response.status, 200);
   assert.match(result.text, /Search businesses/);
+  assert.match(result.text, />Previous</);
+  assert.match(result.text, />Hear preview</);
+  assert.match(result.text, />Next</);
+  assert.match(result.text, /Visitors cannot add or edit businesses/);
   assert.doesNotMatch(result.text, /Add Business|Sign Up|Sign In|Dashboard/);
 
   result = await request("/api/does-not-exist");
