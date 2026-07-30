@@ -36,4 +36,15 @@ jobs:
         run: npm test
 
       - name: Audit dependencies
-        run: npm audit
+        run: |
+          for attempt in 1 2 3; do
+            if npm audit; then
+              exit 0
+            fi
+            if [ "$attempt" -eq 3 ]; then
+              echo "npm audit failed after 3 attempts."
+              exit 1
+            fi
+            echo "npm audit endpoint was unavailable; retrying attempt $((attempt + 1)) of 3."
+            sleep $((attempt * 5))
+          done
