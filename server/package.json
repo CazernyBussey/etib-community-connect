@@ -1,6 +1,6 @@
 {
   "name": "etib-community-connect",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "private": true,
   "type": "module",
   "main": "server.js",
@@ -10,19 +10,14 @@
   "scripts": {
     "start": "node server.js",
     "dev": "node --watch server.js",
-    "create-admin": "node create-admin.js",
-    "check": "node --check server.js && node --check create-admin.js && node --check listing-edit-routes.js && node --check ../public/script.js",
+    "validate:data": "node validate-data.js",
+    "check": "node --check server.js && node --check directory-data.js && node --check validate-data.js && node --check ../public/script.js",
     "check:html": "html-validate ../public/*.html",
-    "test": "npm run check && npm run check:html && node --test test/*.test.mjs"
+    "test": "npm run check && npm run validate:data && npm run check:html && node --test test/*.test.mjs"
   },
   "dependencies": {
-    "bcryptjs": "^3.0.3",
-    "dotenv": "^17.4.2",
     "express": "^5.2.1",
-    "express-rate-limit": "^8.6.1",
-    "helmet": "^8.3.0",
-    "jsonwebtoken": "^9.0.3",
-    "nodemailer": "^9.0.3"
+    "helmet": "^8.3.0"
   },
   "devDependencies": {
     "html-validate": "^11.6.0"

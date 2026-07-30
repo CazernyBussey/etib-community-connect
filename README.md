@@ -1,72 +1,71 @@
 # ETIB Community Connect Directory
 
-An accessibility-first business directory from Even Though I'm Blind, Inc. It connects blind and visually impaired community members with blind-owned, visually impaired-owned, and accessibility-focused businesses.
+An accessibility-first, read-only business search service from Even Though I'm Blind, Inc.
 
-## What works
+Public visitors can search verified businesses, review complete profiles, use optional spoken summaries, and contact businesses directly. They cannot create accounts, upload listings, edit records, or submit reviews.
 
-- Searchable, filterable, paginated public directory and featured placements
-- Detailed business profiles with direct contact options and optional spoken summaries
-- Account signup, sign-in, sign-out, and one-time password reset links
-- Authenticated business submission and owner editing
-- Owner dashboard with account status, listing status, and moderation notes
-- Admin dashboards for user, listing, review, and featured-placement moderation
-- Review submission and approval workflow
-- Email notifications when SMTP is configured
-- Persistent SQLite storage on the attached Render disk
+## Source of truth
+
+All public business information lives in:
+
+`server/data/businesses.json`
+
+ETIB gathers and verifies the information, updates that file through GitHub, and publishes the change through the normal review and deployment process. The server validates the complete catalog before it starts.
+
+Use these supporting files:
+
+- `BUSINESS-INTAKE-GUIDE.md`: internal questions and verification workflow
+- `server/data/business-template.json`: copyable record structure
+- `server/directory-data.js`: validation, filtering, sorting, and lookup rules
+
+## Public features
+
+- Keyword search across names, services, descriptions, accessibility details, and locations
+- Category, business-type, location, and contact-method filters
+- Shareable search URLs and accessible pagination
+- Featured placement within the single search-results experience
+- Detailed profiles with services, blind-community support, accessibility, location, hours, languages, and direct contact options
+- Optional browser speech playback
+- Legacy listing ID redirects through the read-only detail API
+
+## Read-only controls
+
+- The server exposes only `GET` and `HEAD` API operations
+- All API write methods return `405 Method Not Allowed`
+- Signup, sign-in, owner, admin, submission, password-reset, moderation, and review pages and routes have been removed
+- No production database, password, JWT, or SMTP configuration is required
 
 ## Accessibility
 
-The interface is designed toward WCAG 2.2 AA and includes:
+The interface is designed toward WCAG 2.2 AA with semantic landmarks, one clear page heading, explicit form labels, status announcements, strong focus, 44-pixel controls, high contrast, forced-colors support, reduced-motion support, keyboard operation, and screen-reader-friendly results.
 
-- Semantic landmarks, one clear page heading, skip links, and logical heading order
-- Explicit form labels, native constraints, accessible error/status announcements, and password visibility controls
-- Strong keyboard focus, 44-pixel controls, high-contrast colors, forced-colors support, and reduced-motion support
-- Named actions in repeated tables and cards, keyboard-accessible data tables, and an accessible admin confirmation dialog
-- Screen-reader-friendly filtering, pagination, loading states, and account/moderation status
-- Optional browser speech playback that supplements rather than replaces readable text
-
-Automated accessibility guardrails run with the test suite. Manual testing with current screen readers and real users should remain part of every release.
-
-## Technology
-
-- Front end: semantic HTML, CSS, and vanilla JavaScript in `public/`
-- Server: Node.js 24 and Express 5 in `server/`
-- Database: Node's built-in SQLite support
-- Security: Helmet headers, same-origin APIs, rate limits, bcrypt password hashes, expiring JWTs, and single-use hashed reset tokens
+Automated guardrails run with the test suite. Manual keyboard, zoom, forced-colors, and current screen-reader testing should remain part of every release.
 
 ## Local development
 
 ```bash
 cd server
-cp .env.example .env
-# Replace JWT_SECRET with a long random value.
 npm ci
 npm start
 ```
 
 Open `http://localhost:8080`.
 
-For working email notifications and password reset delivery, configure the SMTP variables documented in `.env.example`.
+## Add or update a business
 
-Create or rotate the administrator account only from a trusted server shell:
+1. Follow `BUSINESS-INTAKE-GUIDE.md`.
+2. Add or update the record in `server/data/businesses.json`.
+3. Update `catalogUpdated` and the business `lastVerified` date.
+4. Run:
 
-```bash
-cd server
-npm run create-admin
-```
+   ```bash
+   cd server
+   npm test
+   npm audit --omit=dev
+   ```
 
-The command uses `ADMIN_EMAIL`, `ADMIN_NAME`, and `ADMIN_PHONE`, then prints a generated temporary password once. Sign in immediately and replace it. Registering the configured email through the public form never grants administrator access.
-
-## Verification
-
-```bash
-cd server
-npm test
-npm audit --omit=dev
-```
-
-The end-to-end suite starts an isolated server and verifies signup, authentication, listing submission and approval, featured placement, reviews, owner editing, password reset, account moderation, security headers, and not-found behavior.
+5. Publish the reviewed change through GitHub.
 
 ## Deployment
 
-Render configuration is in `render.yaml`; detailed release and environment instructions are in [DEPLOYMENT.md](DEPLOYMENT.md).
+Render configuration is in `render.yaml`. See `DEPLOYMENT.md` for release and rollback instructions.

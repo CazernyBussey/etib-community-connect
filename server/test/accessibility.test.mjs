@@ -4,19 +4,25 @@ import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
 
-const serverDir = path.dirname(fileURLToPath(import.meta.url));
-const publicDir = path.resolve(serverDir, "..", "..", "public");
+const testDir = path.dirname(fileURLToPath(import.meta.url));
+const publicDir = path.resolve(testDir, "..", "..", "public");
 const htmlFiles = fs.readdirSync(publicDir).filter((name) => name.endsWith(".html")).sort();
 
-test("every page has the core keyboard and screen-reader structure", () => {
-  assert.ok(htmlFiles.length >= 10);
+test("every public page has the core keyboard and screen-reader structure", () => {
+  assert.deepEqual(htmlFiles, [
+    "404.html",
+    "advertise.html",
+    "business-profile.html",
+    "index.html",
+    "legal.html"
+  ]);
 
   for (const file of htmlFiles) {
     const html = fs.readFileSync(path.join(publicDir, file), "utf8");
     assert.match(html, /<html\s+lang="en"/i, `${file} needs a language`);
     assert.match(html, /class="[^"]*skip-link[^"]*"/i, `${file} needs a skip link`);
     assert.match(html, /<main\b[^>]*\bid="[^"]+"/i, `${file} needs an identified main landmark`);
-    assert.match(html, /<nav\b[^>]*\baria-label="[^"]+"/i, `${file} needs a named navigation landmark`);
+    assert.match(html, /<nav\b[^>]*\baria-label="[^"]+"/i, `${file} needs a named primary navigation`);
     assert.match(html, /<title>[^<]+<\/title>/i, `${file} needs a page title`);
 
     const h1Count = (html.match(/<h1\b/gi) || []).length;
@@ -57,22 +63,28 @@ test("every page has the core keyboard and screen-reader structure", () => {
   }
 });
 
-test("interactive pages expose status messages and avoid obsolete interaction patterns", () => {
+test("the public interface is search-only and exposes accessible status changes", () => {
   const combined = htmlFiles
     .map((file) => fs.readFileSync(path.join(publicDir, file), "utf8"))
     .join("\n");
   const script = fs.readFileSync(path.join(publicDir, "script.js"), "utf8");
 
-  assert.doesNotMatch(combined, /auth-accessibility\.js|edit-business\.js/);
+  assert.doesNotMatch(combined, /add-business|signup|sign up|login|sign in|owner-dashboard|admin-dashboard|password-reset|reviewForm/i);
   assert.doesNotMatch(combined, /target="_blank"/i);
   assert.doesNotMatch(script, /\b(?:alert|prompt|confirm)\s*\(/);
+  assert.doesNotMatch(script, /\bmethod\s*:\s*["'](?:POST|PUT|PATCH|DELETE)["']/i);
   assert.match(script, /function escapeHtml\(/);
   assert.match(script, /function safeWebsiteUrl\(/);
 
-  for (const file of ["login.html", "signup.html", "forgot-password.html", "reset-password.html", "add-business.html", "business-profile.html", "owner-dashboard.html", "admin-dashboard.html"]) {
+  for (const file of ["index.html", "business-profile.html"]) {
     const html = fs.readFileSync(path.join(publicDir, file), "utf8");
     assert.match(html, /\b(?:role="status"|aria-live="(?:polite|assertive)")/i, `${file} needs a live status region`);
   }
+
+  const index = fs.readFileSync(path.join(publicDir, "index.html"), "utf8");
+  assert.match(index, /role="search"/i);
+  assert.match(index, /Search businesses/);
+  assert.match(index, /Businesses and visitors cannot upload or change listings directly/);
 });
 
 test("styles include strong focus, contrast-mode, motion, and target-size support", () => {
@@ -81,4 +93,5 @@ test("styles include strong focus, contrast-mode, motion, and target-size suppor
   assert.match(css, /@media\s*\(prefers-reduced-motion:\s*reduce\)/);
   assert.match(css, /@media\s*\(forced-colors:\s*active\)/);
   assert.match(css, /--tap:\s*44px/);
+  assert.match(css, /\[hidden\]\s*\{[^}]*display:\s*none\s*!important/s);
 });

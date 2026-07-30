@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "catalogUpdated": "2026-07-30",
+  "businesses": [
+    {
+      "id": "etib-inc",
+      "legacyIds": [
+        1
+      ],
+      "name": "Even Though I'm Blind, Inc.",
+      "status": "active",
+      "featured": {
+        "enabled": true,
+        "rank": 1
+      },
+      "listingType": "Blind-Owned / Visually Impaired-Owned",
+      "categories": [
+        "Nonprofit and Community Support"
+      ],
+      "services": [
+        "Accessible media",
+        "Advocacy",
+        "Community outreach",
+        "Education",
+        "Podcasting",
+        "Radio",
+        "Storytelling"
+      ],
+      "summary": "Even Though I'm Blind, Inc. supports the blind and visually impaired community through accessible media, advocacy, storytelling, and community-centered opportunities.",
+      "description": "Even Though I'm Blind, Inc. supports the blind and visually impaired community by creating accessible media, advocacy, storytelling, and community-centered opportunities that amplify real voices and lived experiences. Through radio, podcasts, educational content, events, and outreach, ETIB promotes visibility, empowerment, inclusion, and leadership while helping reshape how the world understands blind and visually impaired people.",
+      "spokenSummary": "Even Though I'm Blind, Inc. is a nonprofit media and advocacy organization empowering the blind and visually impaired community through accessible storytelling, media, outreach, and inclusive opportunities.",
+      "blindCommunitySupport": "ETIB creates platforms where blind and visually impaired people can share their experiences, find useful information, build connections, and access opportunities without being framed through pity.",
+      "accessibility": "ETIB offers screen-reader-friendly digital platforms, audio-based media, clear communication, and accessibility-centered outreach designed to reduce barriers to information and participation.",
+      "contact": {
+        "name": "Cazerny Bussey",
+        "email": "etib@eventhoughimblind.com",
+        "phone": "9108535247",
+        "text": null,
+        "website": "https://eventhoughimblind.com/",
+        "preferredMethod": "Email",
+        "socialLinks": []
+      },
+      "location": {
+        "city": "Manhattan",
+        "region": "New York City",
+        "country": "United States",
+        "serviceArea": "Local",
+        "remoteAvailable": false,
+        "remoteDetails": null,
+        "inPersonNotes": null
+      },
+      "hours": "By appointment",
+      "languages": [
+        "English"
+      ],
+      "certifications": [],
+      "testimonial": null,
+      "lastVerified": "2026-07-30"
+    }
+  ]
+}

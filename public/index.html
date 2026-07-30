@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>ETIB Community Connect Directory</title>
-  <meta name="description" content="Find trusted blind-owned, visually impaired-owned, and accessibility-focused businesses through the ETIB Community Connect Directory." />
+  <title>Find Trusted Businesses | ETIB Community Connect</title>
+  <meta name="description" content="Search ETIB-verified blind-owned, visually impaired-owned, and accessibility-focused businesses." />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -15,19 +15,15 @@
       <a class="brand" href="index.html">
         <img src="assets/etib-logo.webp" alt="" width="427" height="512" />
         <span class="brand-text">
-          <strong>ETIB Community Connect Directory</strong>
+          <strong>ETIB Community Connect</strong>
+          <span>Verified businesses. Direct connections.</span>
         </span>
       </a>
-
       <nav class="site-nav" aria-label="Directory site navigation">
-        <ul id="siteNavList">
+        <ul>
           <li><a href="index.html" aria-current="page">Directory</a></li>
           <li><a href="advertise.html">Advertise</a></li>
-          <li><a href="add-business.html">Add Business</a></li>
-          <li><a href="login.html">Sign In</a></li>
-          <li><a href="signup.html">Sign Up</a></li>
-          <li><a href="owner-dashboard.html">Dashboard</a></li>
-          <li><a href="admin-dashboard.html">Admin</a></li>
+          <li><a href="legal.html#support">Contact ETIB</a></li>
         </ul>
       </nav>
     </div>
@@ -35,148 +31,115 @@
 
   <main id="main-content">
     <section class="hero">
-      <div class="container">
-        <div class="hero-grid panel">
-          <img src="assets/etib-logo.webp" alt="" width="427" height="512" />
-          <div>
-            <h1>ETIB Community Connect Directory</h1>
-            <p class="tagline">Connecting the blind and visually impaired community to trusted businesses</p>
-            <p>This directory connects the blind and visually impaired community with trusted businesses that are either blind or visually impaired-owned, or businesses that actively provide services designed for blind and visually impaired individuals.</p>
-            <p class="small">Find accessible, community-aligned businesses you can contact directly by phone, text, email, or website. No marketplace clutter. Just trusted connections.</p>
-
-            <div class="cta-row" role="group" aria-label="Primary calls to action">
-              <a class="btn btn-primary" href="#browse">Browse Directory</a>
-              <a class="btn btn-secondary" href="signup.html?redirect=add-business.html">Sign Up to Submit Your Business</a>
-              <a class="btn" href="login.html">Sign In</a>
-              <a class="btn btn-ghost" href="legal.html#support">Contact ETIB</a>
-              <a class="btn" href="mailto:etib@eventhoughimblind.com">Email ETIB</a>
-            </div>
-          </div>
+      <div class="container hero-grid panel">
+        <img src="assets/etib-logo.webp" alt="" width="427" height="512" />
+        <div>
+          <p class="eyebrow">Even Though I'm Blind, Inc.</p>
+          <h1>Find trusted businesses serving the blind and visually impaired community</h1>
+          <p class="tagline">Search verified businesses and connect with them directly by phone, text, email, or website.</p>
+          <p id="catalogSummary" class="catalog-summary" data-status role="status" aria-live="polite">Loading the verified directory.</p>
+          <a class="btn btn-primary" href="#directory-search">Start your search</a>
         </div>
       </div>
     </section>
 
-    <section id="browse" class="container" aria-labelledby="browseHeading" data-directory-app>
-      <section class="panel section-panel" aria-labelledby="featuredHeading">
-        <h2 id="featuredHeading" class="section-title">Featured businesses</h2>
-        <p class="small">Highlighted ETIB-approved businesses selected by admin.</p>
-        <div id="featuredListings" class="cards" aria-busy="true">
-          <div class="panel empty-state">
-            <p>Loading featured businesses...</p>
-          </div>
-        </div>
-      </section>
-
-      <div class="filters panel" role="search" aria-labelledby="browseHeading">
-        <h2 id="browseHeading">Browse listings</h2>
+    <section id="directory-search" class="container directory-app" aria-labelledby="search-heading" data-directory-app>
+      <form id="directorySearchForm" class="filters panel" role="search" aria-describedby="search-help">
+        <h2 id="search-heading">Search the directory</h2>
+        <p id="search-help">Enter any word or use the optional filters. Search covers business names, services, descriptions, accessibility details, and locations.</p>
 
         <div class="filter-grid">
           <div class="field span-2">
-            <label for="search">Search by business name, service, or keyword</label>
-            <input id="search" name="search" type="search" placeholder="Example: technology support, legal, tutoring" />
+            <label for="search">What are you looking for?</label>
+            <input id="search" name="q" type="search" autocomplete="off" placeholder="Example: technology, transportation, advocacy" />
           </div>
 
           <div class="field">
             <label for="filter-category">Category</label>
             <select id="filter-category" name="category">
               <option value="">All categories</option>
-              <option>Healthcare</option>
-              <option>Transportation</option>
-              <option>Legal Services</option>
-              <option>Education and Tutoring</option>
-              <option>Technology Support</option>
-              <option>Accessibility Consulting</option>
-              <option>Home Services</option>
-              <option>Financial Services</option>
-              <option>Employment and Career Services</option>
-              <option>Coaching and Counseling</option>
-              <option>Creative Services</option>
-              <option>Retail and Products</option>
-              <option>Nonprofit and Community Support</option>
-              <option>Entertainment and Media</option>
-              <option>Other</option>
             </select>
           </div>
 
           <div class="field">
-            <label for="filter-type">Listing type</label>
+            <label for="filter-type">Business type</label>
             <select id="filter-type" name="listingType">
-              <option value="">All types</option>
-              <option>Blind-Owned / Visually Impaired-Owned</option>
-              <option>Community Service Provider</option>
-              <option>Both</option>
+              <option value="">All business types</option>
             </select>
           </div>
 
           <div class="field">
-            <label for="filter-location">Location (city, state, or remote)</label>
-            <input id="filter-location" name="location" type="text" placeholder="Example: NY or remote" />
+            <label for="filter-location">Location or service area</label>
+            <input id="filter-location" name="location" type="search" autocomplete="address-level1" placeholder="Example: New York, nationwide, remote" />
           </div>
 
           <div class="field">
-            <label for="filter-contact">Contact method</label>
+            <label for="filter-contact">Available contact method</label>
             <select id="filter-contact" name="contactMethod">
               <option value="">Any contact method</option>
-              <option value="call">Call</option>
-              <option value="text">Text</option>
-              <option value="email">Email</option>
-              <option value="website">Website</option>
             </select>
           </div>
-
-          <div class="inline-actions">
-            <button class="btn" id="resetFilters" type="button">Clear Filters</button>
-          </div>
         </div>
-      </div>
 
-      <div class="results-top">
-        <p id="resultCount" data-status role="status" aria-live="polite" aria-atomic="true" tabindex="-1">Searching businesses now.</p>
-        <a class="btn btn-secondary" href="signup.html?redirect=add-business.html">Sign Up to Submit a Business</a>
-      </div>
+        <div class="inline-actions">
+          <button class="btn btn-primary" type="submit">Search businesses</button>
+          <button class="btn" id="resetFilters" type="button">Clear search</button>
+        </div>
+      </form>
 
-      <p id="directorySpeechStatus" data-status role="status" aria-live="polite" aria-atomic="true"></p>
-      <div class="cta-row">
-        <button class="btn" id="stopDirectorySpeech" type="button">Stop Spoken Audio</button>
-      </div>
+      <section class="results-section" aria-labelledby="results-heading">
+        <div class="results-top">
+          <div>
+            <h2 id="results-heading">Business results</h2>
+            <p id="resultCount" data-status role="status" aria-live="polite" aria-atomic="true" tabindex="-1">Loading businesses.</p>
+          </div>
+          <button class="btn" id="stopDirectorySpeech" type="button" hidden>Stop spoken listing</button>
+        </div>
+        <p id="directorySpeechStatus" data-status role="status" aria-live="polite" aria-atomic="true"></p>
+        <div id="directoryResults" class="cards" aria-busy="true">
+          <div class="panel empty-state"><p>Loading verified businesses.</p></div>
+        </div>
+        <nav class="pagination" id="paginationNav" aria-label="Business result pages" hidden>
+          <button class="btn" id="previousPage" type="button">Previous page</button>
+          <span class="pagination-status" id="paginationStatus" aria-live="polite">Page 1 of 1</span>
+          <button class="btn" id="nextPage" type="button">Next page</button>
+        </nav>
+      </section>
 
-      <section id="directoryResults" class="cards" aria-label="Business listing results" aria-busy="true"></section>
-
-      <nav class="pagination" id="paginationNav" aria-label="Directory result pages" hidden>
-        <button class="btn" id="previousPage" type="button">Previous Page</button>
-        <span class="pagination-status" id="paginationStatus" aria-live="polite">Page 1 of 1</span>
-        <button class="btn" id="nextPage" type="button">Next Page</button>
-      </nav>
+      <section class="panel trust-panel" aria-labelledby="managed-heading">
+        <h2 id="managed-heading">How listings are managed</h2>
+        <p>ETIB gathers, reviews, and publishes every business record. Businesses and visitors cannot upload or change listings directly. This keeps the public experience focused on finding reliable information.</p>
+        <p>If a published detail is incorrect, <a href="mailto:etib@eventhoughimblind.com?subject=ETIB%20Directory%20Correction">email ETIB to report the correction</a>.</p>
+      </section>
     </section>
   </main>
 
   <footer class="footer">
     <div class="container footer-grid">
-      <section aria-labelledby="foot-about">
-        <h2 id="foot-about">About this directory</h2>
-        <p class="small">ETIB Community Connect Directory is a mission-driven connection hub. No payments are processed. Users connect directly with providers by phone, text, email, or website.</p>
-        <p class="small">ETIB Community Connect Directory provides a community directory for informational and connection purposes only. ETIB does not process payments or guarantee third-party services. Users should contact providers directly to confirm service details and accessibility needs.</p>
+      <section aria-labelledby="footer-about">
+        <h2 id="footer-about">About the directory</h2>
+        <p>ETIB Community Connect is an informational directory. ETIB does not process service payments or guarantee third-party services.</p>
       </section>
-
-      <nav aria-labelledby="foot-legal">
-        <h2 id="foot-legal">Legal and support</h2>
+      <nav aria-labelledby="footer-links">
+        <h2 id="footer-links">Information and support</h2>
         <ul>
           <li><a href="legal.html#terms">Terms of Use</a></li>
           <li><a href="legal.html#privacy">Privacy Policy</a></li>
           <li><a href="legal.html#accessibility">Accessibility Statement</a></li>
-          <li><a href="legal.html#standards">Community Listing Standards</a></li>
-          <li><a href="legal.html#support">Contact and Support</a></li>
+          <li><a href="legal.html#standards">Listing Standards</a></li>
         </ul>
       </nav>
-
-      <section aria-labelledby="foot-contact">
-        <h2 id="foot-contact">Contact ETIB</h2>
+      <section aria-labelledby="footer-contact">
+        <h2 id="footer-contact">Contact ETIB</h2>
         <ul>
-          <li class="small">Email: <a href="mailto:etib@eventhoughimblind.com">etib@eventhoughimblind.com</a></li>
-          <li class="small">Phone: <a href="tel:9108535247">910-853-5247</a></li>
-          <li class="small">Website: <a href="https://eventhoughimblind.com/">eventhoughimblind.com</a></li>
+          <li><a href="mailto:etib@eventhoughimblind.com">etib@eventhoughimblind.com</a></li>
+          <li><a href="tel:9108535247">910-853-5247</a></li>
+          <li><a href="https://eventhoughimblind.com/">eventhoughimblind.com</a></li>
         </ul>
       </section>
+    </div>
+    <div class="container footer-bottom">
+      <p>&copy; <span data-current-year></span> Even Though I'm Blind, Inc.</p>
     </div>
   </footer>
 
