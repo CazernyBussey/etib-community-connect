@@ -1,0 +1,52 @@
+{
+  "id": "short-stable-business-id",
+  "legacyIds": [],
+  "name": "Public business name",
+  "status": "active",
+  "featured": {
+    "enabled": false,
+    "rank": null
+  },
+  "listingType": "Community Service Provider",
+  "categories": [
+    "Primary category"
+  ],
+  "services": [
+    "Specific service or search keyword"
+  ],
+  "summary": "One clear sentence for search results.",
+  "description": "A complete public description of the business and its services.",
+  "spokenSummary": "A short version written to sound natural when read aloud.",
+  "blindCommunitySupport": "How the business is owned by, led by, or specifically serves blind and visually impaired people.",
+  "accessibility": "Specific accessibility features, communication options, accommodations, and known limitations.",
+  "contact": {
+    "name": "Public contact name or team",
+    "email": "contact@example.org",
+    "phone": "2025550100",
+    "text": null,
+    "website": "https://example.org/",
+    "preferredMethod": "Email",
+    "socialLinks": [
+      {
+        "label": "LinkedIn",
+        "url": "https://www.linkedin.com/company/example/"
+      }
+    ]
+  },
+  "location": {
+    "city": "Washington",
+    "region": "District of Columbia",
+    "country": "United States",
+    "serviceArea": "Nationwide",
+    "remoteAvailable": true,
+    "remoteDetails": "Virtual services are available by accessible video call or telephone.",
+    "inPersonNotes": "Contact the business to confirm physical accessibility before visiting."
+  },
+  "hours": "Monday through Friday, 9 AM to 5 PM Eastern",
+  "languages": [
+    "English"
+  ],
+  "certifications": [],
+  "testimonial": null,
+  "lastVerified": "2026-07-30"
+}
