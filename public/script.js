@@ -130,54 +130,52 @@
     if (stopButton) stopButton.hidden = true;
   }
 
-  function listingCard(business) {
-    const categories = business.categories.map((item) => `<span class="badge">${escapeHtml(item)}</span>`).join("");
-    const featured = business.featured?.enabled ? '<span class="badge featured-badge">Featured</span>' : "";
-    const remote = business.location?.remoteAvailable ? '<span class="badge">Remote available</span>' : "";
-    const services = (business.services || []).slice(0, 5)
-      .map((service) => `<li>${escapeHtml(service)}</li>`)
-      .join("");
-    const speakButton = speechSupported
-      ? `<button class="btn" type="button" data-speak-business="${escapeHtml(business.id)}" aria-label="Hear the listing for ${escapeHtml(business.name)}">Hear this listing</button>`
-      : "";
-    const place = locationLabel(business.location) || "Location not specified";
+  function quickContactActionLinks(business) {
+    const links = [];
+    const contact = business.contact || {};
+    const name = business.name || "this business";
+    const phone = phoneHref(contact.phone);
+    const text = phoneHref(contact.text);
 
-    return `
-      <article class="card listing-card" aria-labelledby="business-${escapeHtml(business.id)}">
-        <div class="badge-row">${featured}${categories}${remote}</div>
-        <h3 id="business-${escapeHtml(business.id)}">${escapeHtml(business.name)}</h3>
-        <p class="meta">${escapeHtml(business.listingType)}</p>
-        <p>${escapeHtml(business.summary)}</p>
-        <dl class="card-facts">
-          <div><dt>Location</dt><dd>${escapeHtml(place)}</dd></div>
-          <div><dt>Service area</dt><dd>${escapeHtml(business.location?.serviceArea || "Not specified")}</dd></div>
-          <div><dt>Preferred contact</dt><dd>${escapeHtml(business.contact?.preferredMethod || "Not specified")}</dd></div>
-        </dl>
-        <div>
-          <h4>Services</h4>
-          <ul class="service-list">${services}</ul>
-        </div>
-        <div class="card-actions">
-          <a class="btn btn-primary" href="business-profile.html?business=${encodeURIComponent(business.id)}">View full profile</a>
-          ${speakButton}
-          ${contactActionLinks(business)}
-        </div>
-        <p class="verification-note">Information verified ${escapeHtml(formatDate(business.lastVerified))}.</p>
-      </article>
-    `;
+    if (phone) {
+      links.push(`<a class="btn btn-primary" href="tel:${escapeHtml(phone)}" aria-label="Call ${escapeHtml(name)}">Call</a>`);
+    }
+    if (contact.email) {
+      links.push(`<a class="btn" href="mailto:${escapeHtml(contact.email)}" aria-label="Email ${escapeHtml(name)}">Email</a>`);
+    }
+    if (text) {
+      links.push(`<a class="btn" href="sms:${escapeHtml(text)}" aria-label="Text ${escapeHtml(name)}">Text</a>`);
+    }
+    links.push(`<a class="btn" href="business-profile.html?business=${encodeURIComponent(business.id)}" aria-label="More information about ${escapeHtml(name)}">More information</a>`);
+    return links.join("");
   }
 
-  function populateSelect(select, values, labelForValue = (value) => value) {
-    if (!select) return;
-    const selected = select.value;
-    for (const value of values) {
-      const optionValue = typeof value === "string" ? value : value.value;
-      const option = document.createElement("option");
-      option.value = optionValue;
-      option.textContent = labelForValue(value);
-      select.append(option);
-    }
-    select.value = selected;
+  function listingSpotlight(business) {
+    const categories = (business.categories || [])
+      .slice(0, 2)
+      .map((item) => `<span class="badge">${escapeHtml(item)}</span>`)
+      .join("");
+    const featured = business.featured?.enabled ? '<span class="badge featured-badge">Featured</span>' : "";
+    const remote = business.location?.remoteAvailable ? '<span class="badge">Remote available</span>' : "";
+    const services = (business.services || []).slice(0, 3);
+    const extraServices = Math.max(0, (business.services || []).length - services.length);
+    const serviceText = services.map(escapeHtml).join(", ");
+    const serviceSuffix = extraServices ? `, and ${extraServices} more` : "";
+    const place = locationLabel(business.location) || business.location?.serviceArea || "Location not specified";
+
+    return `
+      <article class="panel spotlight-card" aria-labelledby="business-${escapeHtml(business.id)}">
+        <div class="badge-row">${featured}<span class="badge">${escapeHtml(business.listingType)}</span>${categories}${remote}</div>
+        <h3 id="business-${escapeHtml(business.id)}" tabindex="-1">${escapeHtml(business.name)}</h3>
+        <p class="business-location">${escapeHtml(place)}</p>
+        <p class="listing-summary">${escapeHtml(business.summary)}</p>
+        <p class="service-preview"><strong>Services:</strong> ${serviceText}${serviceSuffix}</p>
+        <div class="quick-contact-actions" aria-label="Contact and information options for ${escapeHtml(business.name)}">
+          ${quickContactActionLinks(business)}
+        </div>
+        <p class="verification-note">Verified by ETIB on ${escapeHtml(formatDate(business.lastVerified))}.</p>
+      </article>
+    `;
   }
 
   function initializeDirectory() {
@@ -186,86 +184,118 @@
 
     const form = document.getElementById("directorySearchForm");
     const queryField = document.getElementById("search");
-    const categoryField = document.getElementById("filter-category");
-    const typeField = document.getElementById("filter-type");
-    const locationField = document.getElementById("filter-location");
-    const contactField = document.getElementById("filter-contact");
     const resetButton = document.getElementById("resetFilters");
     const results = document.getElementById("directoryResults");
     const resultCount = document.getElementById("resultCount");
     const catalogSummary = document.getElementById("catalogSummary");
-    const pagination = document.getElementById("paginationNav");
-    const paginationStatus = document.getElementById("paginationStatus");
-    const previousButton = document.getElementById("previousPage");
-    const nextButton = document.getElementById("nextPage");
+    const previousButton = document.getElementById("previousBusiness");
+    const previewButton = document.getElementById("previewListing");
+    const nextButton = document.getElementById("nextBusiness");
     const speechStatus = document.getElementById("directorySpeechStatus");
-    const stopSpeechButton = document.getElementById("stopDirectorySpeech");
-    const spokenListings = new Map();
+    const pageSize = 24;
+    let listings = [];
     let currentPage = 1;
+    let totalPages = 1;
+    let totalListings = 0;
+    let currentIndex = 0;
+    let currentBusiness = null;
     let searchController;
+    let directorySpeechToken = 0;
 
     const initialParameters = new URLSearchParams(window.location.search);
     queryField.value = initialParameters.get("q") || "";
-    categoryField.dataset.initialValue = initialParameters.get("category") || "";
-    typeField.dataset.initialValue = initialParameters.get("listingType") || "";
-    locationField.value = initialParameters.get("location") || "";
-    contactField.dataset.initialValue = initialParameters.get("contactMethod") || "";
-    currentPage = Math.max(1, Number.parseInt(initialParameters.get("page") || "1", 10) || 1);
 
     function updateAddressBar() {
       const parameters = new URLSearchParams();
       if (queryField.value.trim()) parameters.set("q", queryField.value.trim());
-      if (categoryField.value) parameters.set("category", categoryField.value);
-      if (typeField.value) parameters.set("listingType", typeField.value);
-      if (locationField.value.trim()) parameters.set("location", locationField.value.trim());
-      if (contactField.value) parameters.set("contactMethod", contactField.value);
-      if (currentPage > 1) parameters.set("page", String(currentPage));
       const search = parameters.toString();
       window.history.replaceState(null, "", `${window.location.pathname}${search ? `?${search}` : ""}`);
     }
 
-    async function loadResults({ focusStatus = false } = {}) {
+    function resetPreviewButton() {
+      previewButton.dataset.speaking = "false";
+      previewButton.textContent = "Hear preview";
+      previewButton.setAttribute(
+        "aria-label",
+        currentBusiness ? `Hear preview for ${currentBusiness.name}` : "Hear business preview"
+      );
+    }
+
+    function stopDirectoryPreview(message = "") {
+      directorySpeechToken += 1;
+      if (speechSupported) window.speechSynthesis.cancel();
+      resetPreviewButton();
+      statusMessage(speechStatus, message);
+    }
+
+    function renderCurrentBusiness({ focusStatus = false } = {}) {
+      stopDirectoryPreview();
+
+      if (!currentBusiness) {
+        results.innerHTML = `
+          <div class="panel empty-state">
+            <h3>No businesses matched your search</h3>
+            <p>Try another business name, service, or location, or clear the search to browse every listing.</p>
+          </div>
+        `;
+        statusMessage(resultCount, "No verified businesses found.");
+        previousButton.disabled = true;
+        previewButton.disabled = true;
+        nextButton.disabled = true;
+        if (focusStatus) resultCount.focus();
+        return;
+      }
+
+      const absolutePosition = ((currentPage - 1) * pageSize) + currentIndex + 1;
+      const searchDescription = queryField.value.trim() ? " matching your search" : "";
+      results.innerHTML = listingSpotlight(currentBusiness);
+      statusMessage(
+        resultCount,
+        `Showing business ${absolutePosition} of ${totalListings}${searchDescription}: ${currentBusiness.name}.`
+      );
+      previousButton.disabled = totalListings <= 1;
+      nextButton.disabled = totalListings <= 1;
+      previewButton.disabled = !speechSupported;
+      previousButton.setAttribute("aria-label", `Show the previous business before ${currentBusiness.name}`);
+      nextButton.setAttribute("aria-label", `Show the next business after ${currentBusiness.name}`);
+      resetPreviewButton();
+      if (focusStatus) resultCount.focus();
+    }
+
+    async function loadResults({ page = 1, targetIndex = 0, focusStatus = false } = {}) {
       if (searchController) searchController.abort();
       const controller = new AbortController();
       searchController = controller;
+      stopDirectoryPreview();
       results.setAttribute("aria-busy", "true");
       results.innerHTML = '<div class="panel empty-state"><p>Searching verified businesses.</p></div>';
       statusMessage(resultCount, "Searching verified businesses.");
+      previousButton.disabled = true;
+      previewButton.disabled = true;
+      nextButton.disabled = true;
 
       const parameters = new URLSearchParams({
-        page: String(currentPage),
-        pageSize: "24"
+        page: String(page),
+        pageSize: String(pageSize)
       });
       if (queryField.value.trim()) parameters.set("q", queryField.value.trim());
-      if (categoryField.value) parameters.set("category", categoryField.value);
-      if (typeField.value) parameters.set("listingType", typeField.value);
-      if (locationField.value.trim()) parameters.set("location", locationField.value.trim());
-      if (contactField.value) parameters.set("contactMethod", contactField.value);
 
       try {
         const output = await api(`/listings?${parameters.toString()}`, { signal: controller.signal });
-        const listings = output.listings || [];
+        listings = output.listings || [];
         currentPage = output.pagination.page;
-        spokenListings.clear();
-        listings.forEach((business) => spokenListings.set(business.id, business));
-        results.innerHTML = listings.length
-          ? listings.map(listingCard).join("")
-          : `
-            <div class="panel empty-state">
-              <h3>No businesses matched this search</h3>
-              <p>Try fewer words, a broader location, or clear the optional filters.</p>
-            </div>
-          `;
-        const total = output.pagination.total;
-        statusMessage(resultCount, `${total} verified business${total === 1 ? "" : "es"} found.`);
-        pagination.hidden = output.pagination.totalPages <= 1;
-        paginationStatus.textContent = `Page ${output.pagination.page} of ${output.pagination.totalPages}`;
-        previousButton.disabled = output.pagination.page <= 1;
-        nextButton.disabled = output.pagination.page >= output.pagination.totalPages;
+        totalPages = output.pagination.totalPages;
+        totalListings = output.pagination.total;
+        currentIndex = listings.length
+          ? Math.min(Math.max(0, targetIndex), listings.length - 1)
+          : 0;
+        currentBusiness = listings[currentIndex] || null;
         updateAddressBar();
-        if (focusStatus) resultCount.focus();
+        renderCurrentBusiness({ focusStatus });
       } catch (error) {
         if (error.name === "AbortError") return;
+        listings = [];
+        currentBusiness = null;
         results.innerHTML = `
           <div class="panel empty-state">
             <h3>The directory could not load</h3>
@@ -273,7 +303,9 @@
           </div>
         `;
         statusMessage(resultCount, error.message, true);
-        pagination.hidden = true;
+        previousButton.disabled = true;
+        previewButton.disabled = true;
+        nextButton.disabled = true;
       } finally {
         if (searchController === controller) {
           results.setAttribute("aria-busy", "false");
@@ -281,15 +313,69 @@
       }
     }
 
+    function speakCurrentBusiness() {
+      if (!speechSupported || !currentBusiness) {
+        statusMessage(speechStatus, "Spoken preview is not supported by this browser.", true);
+        return;
+      }
+      if (previewButton.dataset.speaking === "true") {
+        stopDirectoryPreview("Preview stopped.");
+        return;
+      }
+
+      window.speechSynthesis.cancel();
+      const token = ++directorySpeechToken;
+      const utterance = new SpeechSynthesisUtterance(currentBusiness.spokenSummary || currentBusiness.summary);
+      utterance.onstart = () => {
+        if (token !== directorySpeechToken) return;
+        previewButton.dataset.speaking = "true";
+        previewButton.textContent = "Stop preview";
+        previewButton.setAttribute("aria-label", `Stop preview for ${currentBusiness.name}`);
+        statusMessage(speechStatus, `Playing preview for ${currentBusiness.name}.`);
+      };
+      const finish = () => {
+        if (token !== directorySpeechToken) return;
+        resetPreviewButton();
+        statusMessage(speechStatus, "");
+      };
+      utterance.onend = finish;
+      utterance.onerror = () => {
+        if (token !== directorySpeechToken) return;
+        resetPreviewButton();
+        statusMessage(speechStatus, "The spoken preview stopped before it finished.", true);
+      };
+      window.speechSynthesis.speak(utterance);
+    }
+
+    function navigate(direction) {
+      if (totalListings <= 1 || !currentBusiness) return;
+      stopDirectoryPreview();
+
+      if (direction === "next") {
+        if (currentIndex < listings.length - 1) {
+          currentIndex += 1;
+          currentBusiness = listings[currentIndex];
+          renderCurrentBusiness();
+          return;
+        }
+        const nextPage = currentPage < totalPages ? currentPage + 1 : 1;
+        loadResults({ page: nextPage, targetIndex: 0 });
+        return;
+      }
+
+      if (currentIndex > 0) {
+        currentIndex -= 1;
+        currentBusiness = listings[currentIndex];
+        renderCurrentBusiness();
+        return;
+      }
+      const previousPage = currentPage > 1 ? currentPage - 1 : totalPages;
+      loadResults({ page: previousPage, targetIndex: pageSize - 1 });
+    }
+
     async function loadOptions() {
       try {
         const options = await api("/directory-options");
-        populateSelect(categoryField, options.categories || []);
-        populateSelect(typeField, options.listingTypes || []);
-        populateSelect(contactField, options.contactMethods || [], (item) => item.label);
-        categoryField.value = categoryField.dataset.initialValue || "";
-        typeField.value = typeField.dataset.initialValue || "";
-        contactField.value = contactField.dataset.initialValue || "";
         const count = options.businessCount || 0;
         catalogSummary.textContent = `${count} verified business${count === 1 ? "" : "es"} available. Catalog updated ${formatDate(options.catalogUpdated)}.`;
       } catch {
@@ -299,46 +385,26 @@
 
     form.addEventListener("submit", (event) => {
       event.preventDefault();
-      currentPage = 1;
-      loadResults({ focusStatus: true });
+      loadResults({ page: 1, targetIndex: 0, focusStatus: true });
     });
 
     resetButton.addEventListener("click", () => {
       form.reset();
-      currentPage = 1;
-      loadResults({ focusStatus: true });
-      queryField.focus();
+      loadResults({ page: 1, targetIndex: 0, focusStatus: true });
     });
 
     previousButton.addEventListener("click", () => {
-      if (currentPage <= 1) return;
-      currentPage -= 1;
-      loadResults({ focusStatus: true });
+      navigate("previous");
     });
 
     nextButton.addEventListener("click", () => {
-      currentPage += 1;
-      loadResults({ focusStatus: true });
+      navigate("next");
     });
 
-    results.addEventListener("click", (event) => {
-      const button = event.target.closest("[data-speak-business]");
-      if (!button) return;
-      const business = spokenListings.get(button.dataset.speakBusiness);
-      if (!business) return;
-      startSpeech(
-        business.spokenSummary || business.summary,
-        business.name,
-        speechStatus,
-        stopSpeechButton
-      );
-    });
+    previewButton.addEventListener("click", speakCurrentBusiness);
 
-    stopSpeechButton.addEventListener("click", () => {
-      stopSpeech(speechStatus, stopSpeechButton);
-    });
-
-    loadOptions().then(() => loadResults());
+    loadOptions();
+    loadResults({ page: 1, targetIndex: 0 });
   }
 
   function definitionItem(term, description) {

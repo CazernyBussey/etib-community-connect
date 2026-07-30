@@ -84,7 +84,17 @@ test("the public interface is search-only and exposes accessible status changes"
   const index = fs.readFileSync(path.join(publicDir, "index.html"), "utf8");
   assert.match(index, /role="search"/i);
   assert.match(index, /Search businesses/);
-  assert.match(index, /Businesses and visitors cannot upload or change listings directly/);
+  assert.match(index, /Visitors cannot add or edit businesses/);
+  assert.match(
+    index,
+    /id="previousBusiness"[\s\S]*id="previewListing"[\s\S]*id="nextBusiness"/,
+    "Previous, Hear preview, and Next controls must remain together in that order"
+  );
+  assert.doesNotMatch(index, /filter-category|filter-type|filter-location|filter-contact/);
+  assert.match(script, /function listingSpotlight\(/);
+  assert.match(script, />More information<\/a>/);
+  assert.match(script, /navigate\("previous"\)/);
+  assert.match(script, /navigate\("next"\)/);
 });
 
 test("styles include strong focus, contrast-mode, motion, and target-size support", () => {

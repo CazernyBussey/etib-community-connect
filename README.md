@@ -20,10 +20,12 @@ Use these supporting files:
 
 ## Public features
 
+- A clean, one-business-at-a-time directory view
+- Previous, Hear Preview, and Next controls grouped together
 - Keyword search across names, services, descriptions, accessibility details, and locations
-- Category, business-type, location, and contact-method filters
-- Shareable search URLs and accessible pagination
-- Featured placement within the single search-results experience
+- Search results that open directly in the same focused business view
+- Immediate Call, Email, Text, and More Information actions when available
+- Seamless wraparound browsing across all matching businesses without exposing technical result pages
 - Detailed profiles with services, blind-community support, accessibility, location, hours, languages, and direct contact options
 - Optional browser speech playback
 - Legacy listing ID redirects through the read-only detail API
