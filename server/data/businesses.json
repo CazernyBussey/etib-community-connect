@@ -38,7 +38,20 @@
         "text": null,
         "website": "https://eventhoughimblind.com/",
         "preferredMethod": "Email",
-        "socialLinks": []
+        "socialLinks": [
+          {
+            "label": "Instagram",
+            "url": "https://www.instagram.com/eventhoughimblind/"
+          },
+          {
+            "label": "YouTube",
+            "url": "https://www.youtube.com/channel/UC0Y8XSPUsK7mTWG3WUhsbkg"
+          },
+          {
+            "label": "Facebook",
+            "url": "https://www.facebook.com/p/Even-Though-Im-Blind-100086775408919/"
+          }
+        ]
       },
       "location": {
         "city": "Manhattan",
