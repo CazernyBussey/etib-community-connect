@@ -3,74 +3,6 @@
   "catalogUpdated": "2026-08-12",
   "businesses": [
     {
-      "id": "etib-inc",
-      "legacyIds": [
-        1
-      ],
-      "name": "Even Though I'm Blind, Inc.",
-      "status": "active",
-      "featured": {
-        "enabled": true,
-        "rank": 2
-      },
-      "listingType": "Blind-Owned / Visually Impaired-Owned",
-      "categories": [
-        "Nonprofit and Community Support"
-      ],
-      "services": [
-        "Accessible media",
-        "Advocacy",
-        "Community outreach",
-        "Education",
-        "Podcasting",
-        "Radio",
-        "Storytelling"
-      ],
-      "summary": "Even Though I'm Blind, Inc. supports the blind and visually impaired community through accessible media, advocacy, storytelling, and community-centered opportunities.",
-      "description": "Even Though I'm Blind, Inc. supports the blind and visually impaired community by creating accessible media, advocacy, storytelling, and community-centered opportunities that amplify real voices and lived experiences. Through radio, podcasts, educational content, events, and outreach, ETIB promotes visibility, empowerment, inclusion, and leadership while helping reshape how the world understands blind and visually impaired people.",
-      "spokenSummary": "Even Though I'm Blind, Inc. is a nonprofit media and advocacy organization empowering the blind and visually impaired community through accessible storytelling, media, outreach, and inclusive opportunities.",
-      "blindCommunitySupport": "ETIB creates platforms where blind and visually impaired people can share their experiences, find useful information, build connections, and access opportunities without being framed through pity.",
-      "accessibility": "ETIB offers screen-reader-friendly digital platforms, audio-based media, clear communication, and accessibility-centered outreach designed to reduce barriers to information and participation.",
-      "contact": {
-        "name": "Cazerny Bussey",
-        "email": "etib@eventhoughimblind.com",
-        "phone": "9108535247",
-        "text": null,
-        "website": "https://eventhoughimblind.com/",
-        "preferredMethod": "Email",
-        "socialLinks": [
-          {
-            "label": "Instagram",
-            "url": "https://www.instagram.com/eventhoughimblind/"
-          },
-          {
-            "label": "YouTube",
-            "url": "https://www.youtube.com/channel/UC0Y8XSPUsK7mTWG3WUhsbkg"
-          },
-          {
-            "label": "Facebook",
-            "url": "https://www.facebook.com/p/Even-Though-Im-Blind-100086775408919/"
-          }
-        ]
-      },
-      "location": {
-        "city": "Manhattan",
-        "region": "New York City",
-        "country": "United States",
-        "serviceArea": "Local",
-        "remoteAvailable": false,
-        "remoteDetails": null,
-        "inPersonNotes": null
-      },
-      "hours": "By appointment",
-      "languages": [
-        "English"
-      ],
-      "certifications": [],
-      "testimonial": null,
-      "lastVerified": "2026-07-30"
-    },
-    {
       "id": "liner-legal",
       "legacyIds": [],
       "name": "Liner Legal",
@@ -154,6 +86,141 @@
       "certifications": [],
       "testimonial": null,
       "lastVerified": "2026-08-12"
+    },
+    {
+      "id": "eyes-like-mine",
+      "legacyIds": [],
+      "name": "Eyes Like Mine Inc.",
+      "status": "active",
+      "featured": {
+        "enabled": true,
+        "rank": 2
+      },
+      "listingType": "Community Service Provider",
+      "categories": [
+        "Blind and Visually Impaired Support",
+        "Peer Support",
+        "Advocacy",
+        "Community Outreach",
+        "Empowerment Programs",
+        "Accessible Events"
+      ],
+      "services": [
+        "Peer support groups",
+        "Women’s support group",
+        "Men’s support group",
+        "Blind and visually impaired advocacy",
+        "Community outreach",
+        "Empowerment workshops",
+        "Dancing With The Blind",
+        "Ms. Blind Diva Empowerment Pageant",
+        "Awareness events",
+        "Volunteer opportunities",
+        "Partnership opportunities"
+      ],
+      "summary": "Eyes Like Mine Inc. is a Newark-based nonprofit providing peer support, advocacy, empowerment programs, and community events for blind and visually impaired people.",
+      "description": "Eyes Like Mine Inc. is a Newark-based 501(c)(3) nonprofit that empowers blind and visually impaired people through peer support, advocacy, community outreach, education, and inclusive events. Its programs include support groups, Dancing With The Blind, the Ms. Blind Diva Empowerment Pageant, empowerment workshops, volunteer opportunities, and community partnerships.",
+      "spokenSummary": "Eyes Like Mine Inc. is a Newark nonprofit that supports blind and visually impaired people through peer support, advocacy, empowerment programs, and community events.",
+      "blindCommunitySupport": "Eyes Like Mine creates peer connection, advocacy, workshops, events, and empowerment opportunities that help blind and visually impaired people build confidence, community, and visibility.",
+      "accessibility": "The organization provides online support-group options and accessible community programming. Visitors should contact the team directly to request accommodations or confirm current event access details.",
+      "contact": {
+        "name": "Eyes Like Mine Inc. team",
+        "email": "info@eyeslikemine.org",
+        "phone": "9733273035",
+        "text": null,
+        "website": "https://eyeslikemine.org/",
+        "preferredMethod": "Email",
+        "socialLinks": [
+          {
+            "label": "Facebook",
+            "url": "https://www.facebook.com/eyeslikemineinc/"
+          }
+        ]
+      },
+      "location": {
+        "city": "Newark",
+        "region": "New Jersey",
+        "country": "United States",
+        "serviceArea": "New Jersey",
+        "remoteAvailable": true,
+        "remoteDetails": "Online support-group and virtual participation options are listed on the official website; availability may vary.",
+        "inPersonNotes": null
+      },
+      "hours": "By appointment; check the official website for current program and event schedules.",
+      "languages": [
+        "English"
+      ],
+      "certifications": [],
+      "testimonial": null,
+      "lastVerified": "2026-08-12"
+    },
+    {
+      "id": "etib-inc",
+      "legacyIds": [
+        1
+      ],
+      "name": "Even Though I'm Blind, Inc.",
+      "status": "active",
+      "featured": {
+        "enabled": true,
+        "rank": 3
+      },
+      "listingType": "Blind-Owned / Visually Impaired-Owned",
+      "categories": [
+        "Nonprofit and Community Support"
+      ],
+      "services": [
+        "Accessible media",
+        "Advocacy",
+        "Community outreach",
+        "Education",
+        "Podcasting",
+        "Radio",
+        "Storytelling"
+      ],
+      "summary": "Even Though I'm Blind, Inc. supports the blind and visually impaired community through accessible media, advocacy, storytelling, and community-centered opportunities.",
+      "description": "Even Though I'm Blind, Inc. supports the blind and visually impaired community by creating accessible media, advocacy, storytelling, and community-centered opportunities that amplify real voices and lived experiences. Through radio, podcasts, educational content, events, and outreach, ETIB promotes visibility, empowerment, inclusion, and leadership while helping reshape how the world understands blind and visually impaired people.",
+      "spokenSummary": "Even Though I'm Blind, Inc. is a nonprofit media and advocacy organization empowering the blind and visually impaired community through accessible storytelling, media, outreach, and inclusive opportunities.",
+      "blindCommunitySupport": "ETIB creates platforms where blind and visually impaired people can share their experiences, find useful information, build connections, and access opportunities without being framed through pity.",
+      "accessibility": "ETIB offers screen-reader-friendly digital platforms, audio-based media, clear communication, and accessibility-centered outreach designed to reduce barriers to information and participation.",
+      "contact": {
+        "name": "Cazerny Bussey",
+        "email": "etib@eventhoughimblind.com",
+        "phone": "9108535247",
+        "text": null,
+        "website": "https://eventhoughimblind.com/",
+        "preferredMethod": "Email",
+        "socialLinks": [
+          {
+            "label": "Instagram",
+            "url": "https://www.instagram.com/eventhoughimblind/"
+          },
+          {
+            "label": "YouTube",
+            "url": "https://www.youtube.com/channel/UC0Y8XSPUsK7mTWG3WUhsbkg"
+          },
+          {
+            "label": "Facebook",
+            "url": "https://www.facebook.com/p/Even-Though-Im-Blind-100086775408919/"
+          }
+        ]
+      },
+      "location": {
+        "city": "Manhattan",
+        "region": "New York City",
+        "country": "United States",
+        "serviceArea": "Local",
+        "remoteAvailable": false,
+        "remoteDetails": null,
+        "inPersonNotes": null
+      },
+      "hours": "By appointment",
+      "languages": [
+        "English"
+      ],
+      "certifications": [],
+      "testimonial": null,
+      "lastVerified": "2026-07-30"
     }
   ]
 }
