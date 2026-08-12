@@ -222,6 +222,76 @@
       "lastVerified": "2026-08-12"
     },
     {
+      "id": "access-information-news",
+      "legacyIds": [],
+      "name": "Access Information News",
+      "status": "active",
+      "featured": {
+        "enabled": true,
+        "rank": 4
+      },
+      "listingType": "Community Service Provider",
+      "categories": [
+        "Accessible Media",
+        "Disability News",
+        "Access Technology",
+        "Community Resources",
+        "Advocacy"
+      ],
+      "services": [
+        "Weekly access-information newsletter",
+        "Disability and accessibility news",
+        "Access-technology coverage",
+        "Disability inclusion stories",
+        "Community resource coverage",
+        "Sponsor and partnership opportunities",
+        "PWD Media Co-op participation"
+      ],
+      "summary": "Access Information News is a weekly publication covering access information, disability inclusion, accessibility, and technology for disabled communities and professionals.",
+      "description": "Access Information News is a weekly access-information publication and newsletter published by Aaron Di Blasi through Mind Vault Solutions, Ltd. It shares news, resources, technology, advocacy, and disability-inclusion stories for people with disabilities, accessibility professionals, organizations, and allies. ETIB is a current pro bono sponsor of Access Information News through its PWD Media Co-op.",
+      "spokenSummary": "Access Information News is a weekly publication covering disability news, accessibility, access technology, and inclusion.",
+      "blindCommunitySupport": "Access Information News helps blind and disabled readers discover access technology, disability resources, advocacy developments, inclusive organizations, and community stories.",
+      "accessibility": "The publication is focused on access information and disability inclusion. Readers who need a specific accommodation or accessible communication option should contact the publisher directly.",
+      "contact": {
+        "name": "Aaron Di Blasi, Publisher",
+        "email": "ad@mvsltd.com",
+        "phone": "8555786660",
+        "text": null,
+        "website": "https://accessinformationnews.com/",
+        "preferredMethod": "Email",
+        "socialLinks": [
+          {
+            "label": "Sponsors",
+            "url": "https://accessinformationnews.com/sponsors/"
+          },
+          {
+            "label": "Subscribe",
+            "url": "https://accessinformationnews.com/subscribe/"
+          },
+          {
+            "label": "PWD Media Co-op",
+            "url": "https://at-newswire.com/pwd-mdc/"
+          }
+        ]
+      },
+      "location": {
+        "city": "Mayfield Heights",
+        "region": "Ohio",
+        "country": "United States",
+        "serviceArea": "Global and online",
+        "remoteAvailable": true,
+        "remoteDetails": "The publication and newsletter are delivered online, with web-based access and subscription options.",
+        "inPersonNotes": null
+      },
+      "hours": "Weekly publication; contact the publisher by email.",
+      "languages": [
+        "English"
+      ],
+      "certifications": [],
+      "testimonial": null,
+      "lastVerified": "2026-08-12"
+    },
+    {
       "id": "etib-inc",
       "legacyIds": [
         1
@@ -230,7 +300,7 @@
       "status": "active",
       "featured": {
         "enabled": true,
-        "rank": 4
+        "rank": 5
       },
       "listingType": "Blind-Owned / Visually Impaired-Owned",
       "categories": [
