@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "catalogUpdated": "2026-07-30",
+  "catalogUpdated": "2026-08-12",
   "businesses": [
     {
       "id": "etib-inc",
@@ -56,6 +56,71 @@
       "certifications": [],
       "testimonial": null,
       "lastVerified": "2026-07-30"
+    },
+    {
+      "id": "liner-legal",
+      "legacyIds": [],
+      "name": "Liner Legal",
+      "status": "active",
+      "featured": {
+        "enabled": true,
+        "rank": 2
+      },
+      "listingType": "Community Service Provider",
+      "categories": [
+        "Disability Legal Services",
+        "Social Security Disability",
+        "Long-Term Disability",
+        "Community Resources"
+      ],
+      "services": [
+        "SSDI information",
+        "SSI information",
+        "Long-Term Disability information",
+        "Disability eligibility survey",
+        "Disability claim consultations",
+        "Benefits application guidance",
+        "Disability appeals information"
+      ],
+      "summary": "Liner Legal is a disability law firm and ETIB community resource for people exploring Social Security Disability and Long-Term Disability options.",
+      "description": "Liner Legal, founded by Michael Liner, provides disability-law information and legal services related to Social Security Disability Insurance, Supplemental Security Income, and Long-Term Disability matters. Liner Legal shared a short eligibility survey with Even Though I'm Blind, Inc. as part of a resource collaboration to help visitors determine whether they may qualify for an initial conversation about disability benefits.",
+      "spokenSummary": "Liner Legal is a disability law firm that provides information and legal services related to Social Security Disability, Supplemental Security Income, and Long-Term Disability benefits.",
+      "blindCommunitySupport": "This listing gives blind and visually impaired people a direct starting point for exploring disability-benefit questions and connecting with a disability-law firm. ETIB shares the resource for information and access; Liner Legal independently handles eligibility review, legal advice, and representation decisions.",
+      "accessibility": "Visitors can use the linked online eligibility survey and Liner Legal website to begin. People who need an accessible alternative or communication accommodation should contact Liner Legal directly at (216) 282-1773 or through linerlegal.com.",
+      "contact": {
+        "name": "Liner Legal team",
+        "email": null,
+        "phone": "2162821773",
+        "text": null,
+        "website": "https://linerlegal.com/",
+        "preferredMethod": "Website",
+        "socialLinks": [
+          {
+            "label": "Eligibility survey",
+            "url": "https://referral.linerlegalsurvey.com/eventhoughimblind"
+          },
+          {
+            "label": "Liner Legal website",
+            "url": "https://linerlegal.com/"
+          }
+        ]
+      },
+      "location": {
+        "city": "Cleveland",
+        "region": "Ohio",
+        "country": "United States",
+        "serviceArea": "Nationwide",
+        "remoteAvailable": true,
+        "remoteDetails": "Online and telephone communication available through Liner Legal.",
+        "inPersonNotes": null
+      },
+      "hours": "Monday-Friday, 8:30 AM-5:00 PM Eastern",
+      "languages": [
+        "English"
+      ],
+      "certifications": [],
+      "testimonial": null,
+      "lastVerified": "2026-08-12"
     }
   ]
 }
