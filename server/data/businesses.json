@@ -155,6 +155,73 @@
       "lastVerified": "2026-08-12"
     },
     {
+      "id": "imperfektlymade-foundation",
+      "legacyIds": [],
+      "name": "IMperfeKtlymade Foundation",
+      "status": "active",
+      "featured": {
+        "enabled": true,
+        "rank": 3
+      },
+      "listingType": "Community Service Provider",
+      "categories": [
+        "Blind and Visually Impaired Support",
+        "Accessible Fashion",
+        "Creative Careers",
+        "Community Events",
+        "Education and Scholarships"
+      ],
+      "services": [
+        "Accessible fashion initiatives",
+        "Blind and visually impaired fashion shows",
+        "Fashion participation opportunities",
+        "Style Mate accessible clothing technology",
+        "Creative-career scholarships",
+        "Community outreach",
+        "Volunteer opportunities",
+        "Donations and sponsorships"
+      ],
+      "summary": "IMperfeKtlymade Foundation empowers blind and visually impaired people through accessible fashion, creative opportunities, community events, and education support.",
+      "description": "Founded by Angela Harris, the IMperfeKtlymade Foundation is an Alexandria, Virginia-based nonprofit supporting blind and visually impaired people through inclusive fashion experiences, creative-career opportunities, community events, and advocacy. The foundation produces fashion shows featuring blind and visually impaired models, develops Style Mate, an accessible styling solution, and offers support initiatives including scholarships for legally blind students pursuing creative careers.",
+      "spokenSummary": "IMperfeKtlymade Foundation is a Virginia nonprofit that supports blind and visually impaired people through accessible fashion, creative opportunities, fashion shows, and scholarships.",
+      "blindCommunitySupport": "The foundation creates visible, confidence-building opportunities for blind and visually impaired people to participate in fashion and creative spaces, while also supporting education, community connection, and independence.",
+      "accessibility": "The foundation focuses on inclusive fashion and accessible participation for blind and visually impaired people. Contact the organization directly to confirm current event accommodations, application requirements, and registration details.",
+      "contact": {
+        "name": "Angela Harris / IMperfeKtlymade Foundation",
+        "email": "info@imperfektlymade.com",
+        "phone": "2404163741",
+        "text": null,
+        "website": "https://www.imperfektlymade.com/",
+        "preferredMethod": "Email",
+        "socialLinks": [
+          {
+            "label": "Facebook",
+            "url": "https://www.facebook.com/angela.hall.98/"
+          },
+          {
+            "label": "Instagram",
+            "url": "https://www.instagram.com/coachangelavharris/"
+          }
+        ]
+      },
+      "location": {
+        "city": "Alexandria",
+        "region": "Virginia",
+        "country": "United States",
+        "serviceArea": "Northern Virginia and virtual/community-connected opportunities",
+        "remoteAvailable": true,
+        "remoteDetails": "Online information, applications, and community updates are available through the official website; event participation varies.",
+        "inPersonNotes": null
+      },
+      "hours": "By appointment; check the official website for current program and fashion-show schedules.",
+      "languages": [
+        "English"
+      ],
+      "certifications": [],
+      "testimonial": null,
+      "lastVerified": "2026-08-12"
+    },
+    {
       "id": "etib-inc",
       "legacyIds": [
         1
@@ -163,7 +230,7 @@
       "status": "active",
       "featured": {
         "enabled": true,
-        "rank": 3
+        "rank": 4
       },
       "listingType": "Blind-Owned / Visually Impaired-Owned",
       "categories": [
