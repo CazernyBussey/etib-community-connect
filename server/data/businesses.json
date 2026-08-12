@@ -102,6 +102,26 @@
           {
             "label": "Liner Legal website",
             "url": "https://linerlegal.com/"
+          },
+          {
+            "label": "YouTube",
+            "url": "https://www.youtube.com/@LinerLegal/featured"
+          },
+          {
+            "label": "Instagram",
+            "url": "https://www.instagram.com/linerlegal/"
+          },
+          {
+            "label": "Facebook",
+            "url": "https://www.facebook.com/linerlegal"
+          },
+          {
+            "label": "TikTok",
+            "url": "https://www.tiktok.com/@backwardshatbarrister"
+          },
+          {
+            "label": "LinkedIn",
+            "url": "https://www.linkedin.com/company/liner-legal-llc/posts/?feedView=all"
           }
         ]
       },
