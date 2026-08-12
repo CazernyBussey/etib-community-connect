@@ -11,7 +11,7 @@
       "status": "active",
       "featured": {
         "enabled": true,
-        "rank": 1
+        "rank": 2
       },
       "listingType": "Blind-Owned / Visually Impaired-Owned",
       "categories": [
@@ -64,7 +64,7 @@
       "status": "active",
       "featured": {
         "enabled": true,
-        "rank": 2
+        "rank": 1
       },
       "listingType": "Community Service Provider",
       "categories": [
