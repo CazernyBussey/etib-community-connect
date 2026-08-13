@@ -158,9 +158,9 @@
       "lastVerified": "2026-08-12"
     },
     {
-      "id": "dr-kirk-adams",
+      "id": "pwd-media-distribution-co-op",
       "legacyIds": [],
-      "name": "Dr. Kirk Adams, Ph.D.",
+      "name": "PWD Media Distribution Co-op",
       "status": "active",
       "featured": {
         "enabled": true,
@@ -168,73 +168,62 @@
       },
       "listingType": "Community Service Provider",
       "categories": [
-        "Disability Inclusion",
-        "Accessibility Leadership",
-        "Keynote Speaking",
-        "Workplace Inclusion",
-        "Blind and Visually Impaired Advocacy",
-        "Consulting"
+        "Accessible Media",
+        "Disability Community Resources",
+        "Media Distribution",
+        "Blind and Low Vision Support",
+        "Networking and Outreach"
       ],
       "services": [
-        "Disability inclusion consulting",
-        "Accessible leadership consulting",
-        "Keynote speaking",
-        "Workshops",
-        "Executive leadership retreats",
-        "Panel discussions",
-        "Workplace accessibility strategy",
-        "Blind and visually impaired advocacy",
-        "Organizational inclusion guidance"
+        "Disability-focused media distribution",
+        "Accessible information sharing",
+        "Social media amplification",
+        "Community news distribution",
+        "Content reach and promotion",
+        "Disability network collaboration",
+        "Media partnership opportunities"
       ],
-      "summary": "Dr. Kirk Adams is a disability inclusion advocate, consultant, and keynote speaker helping organizations build more accessible and inclusive workplaces and communities.",
-      "description": "Dr. Kirk Adams, Ph.D. is a disability inclusion advocate, consultant, and keynote speaker with more than three decades of experience advancing accessibility and opportunity for people who are blind or visually impaired. He is the former President and CEO of the American Foundation for the Blind and former President and CEO of The Lighthouse for the Blind, Inc. Today, he serves as Managing Director of Innovative Impact, LLC, where he helps organizations strengthen workplace accessibility, inclusive leadership, and disability inclusion.",
-      "spokenSummary": "Dr. Kirk Adams is a disability inclusion advocate, consultant, and keynote speaker who helps organizations build accessible workplaces and inclusive leadership practices.",
-      "blindCommunitySupport": "Dr. Adams brings lived experience, executive leadership, advocacy, and practical inclusion strategy to conversations about blindness, employment, accessibility, and opportunity.",
-      "accessibility": "Dr. Adams focuses on accessibility and disability inclusion in his consulting, speaking, workshops, and leadership work. Visitors should contact him directly to discuss event accommodations and communication preferences.",
+      "summary": "The PWD Media Distribution Co-op is a disability-focused media network that helps organizations and leaders amplify accessible information to blind, low-vision, and broader disability communities.",
+      "description": "The Persons with Disabilities Media Distribution Co-op brings together disability leaders, businesses, and organizations with verified audiences to share approved content across connected media and social channels. The network is designed to increase reach, visibility, and access to useful information, opportunities, and community resources for blind, low-vision, deaf, hard-of-hearing, deafblind, neurodivergent, and broader disabled communities. Dr. Kirk Adams is a co-founder and contributes his media channels to the network.",
+      "spokenSummary": "The PWD Media Distribution Co-op is a disability-focused media network that helps organizations reach blind, low-vision, and broader disability communities.",
+      "blindCommunitySupport": "The co-op helps disability organizations, businesses, and leaders share accessible news, opportunities, technology, services, and community information with audiences connected to the disability community.",
+      "accessibility": "The network focuses on accessible information and disability-specific audiences. Organizations interested in participation or distribution should review the official co-op information and contact the managing organization.",
       "contact": {
-        "name": "Dr. Kirk Adams, Ph.D.",
-        "email": "kirkadams@drkirkadams.com",
-        "phone": "2066601363",
+        "name": "PWD Media Distribution Co-op",
+        "email": "publisher@toptechtidbits.com",
+        "phone": "8555786660",
         "text": null,
-        "website": "https://drkirkadams.com/",
-        "preferredMethod": "Email",
+        "website": "https://at-newswire.com/pwd-mdc/",
+        "preferredMethod": "Website",
         "socialLinks": [
           {
-            "label": "Facebook",
-            "url": "https://drkirkadams.com/facebook"
+            "label": "PWD Media Co-op network feed",
+            "url": "https://www.linkedin.com/company/pwd-media-distribution-co-op/"
           },
           {
-            "label": "LinkedIn",
-            "url": "https://drkirkadams.com/linkedin"
+            "label": "AT-Newswire",
+            "url": "https://at-newswire.com/"
           },
           {
-            "label": "LinkedIn company",
-            "url": "https://drkirkadams.com/linkedinpage"
+            "label": "Access Information News",
+            "url": "https://accessinformationnews.com/"
           },
           {
-            "label": "X",
-            "url": "https://drkirkadams.com/x"
-          },
-          {
-            "label": "YouTube",
-            "url": "https://drkirkadams.com/youtube"
-          },
-          {
-            "label": "Medium",
-            "url": "https://drkirkadams.com/medium"
+            "label": "Top Tech Tidbits",
+            "url": "https://toptechtidbits.com/"
           }
         ]
       },
       "location": {
-        "city": "Seattle",
-        "region": "Washington",
+        "city": "Mayfield Heights",
+        "region": "Ohio",
         "country": "United States",
-        "serviceArea": "National and global, with virtual opportunities",
+        "serviceArea": "Global and online",
         "remoteAvailable": true,
-        "remoteDetails": "Consulting, speaking, and virtual conversations may be available by arrangement.",
+        "remoteDetails": "Media distribution and network participation are handled online.",
         "inPersonNotes": null
       },
-      "hours": "By appointment; speaking and consulting availability by arrangement.",
+      "hours": "By appointment; review the official website for participation and submission information.",
       "languages": [
         "English"
       ],
