@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "catalogUpdated": "2026-08-12",
+  "catalogUpdated": "2026-08-13",
   "businesses": [
     {
       "id": "liner-legal",
@@ -531,6 +531,77 @@
       "certifications": [],
       "testimonial": null,
       "lastVerified": "2026-08-12"
+    },
+    {
+      "id": "north-carolina-reading-service",
+      "legacyIds": [],
+      "name": "North Carolina Reading Service",
+      "status": "active",
+      "featured": {
+        "enabled": true,
+        "rank": 8
+      },
+      "listingType": "Community Service Provider",
+      "categories": [
+        "Accessible Media",
+        "Reading Service",
+        "Audio Information",
+        "Blind and Print-Impaired Support",
+        "News and Information",
+        "Radio and Streaming"
+      ],
+      "services": [
+        "24-hour audio programming",
+        "Accessible news reading",
+        "Newspaper and periodical access",
+        "Streaming audio",
+        "Smartphone and tablet listening",
+        "Alexa listening",
+        "Special programs",
+        "Legal matters programming",
+        "Technology programming",
+        "Volunteer opportunities",
+        "Community information"
+      ],
+      "summary": "North Carolina Reading Service provides accessible news, information, and entertainment through audio programming for people who are blind, print impaired, and their families.",
+      "description": "The North Carolina Reading Service is a Raleigh-based 501(c)(3) nonprofit that has served the blind and print-impaired community since 1983. Volunteers read local and regional newspapers, editorials, obituaries, literature, and advertisements, while special programs cover education, technology, legal matters, vision news, and other community topics. NCRS broadcasts 24 hours a day, seven days a week through streaming audio, website listening, smartphone and tablet apps, and Alexa-enabled devices.",
+      "spokenSummary": "North Carolina Reading Service provides accessible audio news, information, and entertainment for people who are blind or print impaired.",
+      "blindCommunitySupport": "NCRS helps people who are blind or print impaired stay connected to local news, community information, education, technology, legal resources, and entertainment through accessible audio programming.",
+      "accessibility": "NCRS delivers information through audio, streaming media, smartphone and tablet apps, and Alexa-enabled devices. Contact the organization directly for current listening options, accessibility questions, and communication accommodations.",
+      "contact": {
+        "name": "North Carolina Reading Service",
+        "email": "info@ncreadingservice.org",
+        "phone": "9198325138",
+        "text": null,
+        "website": "https://www.ncreadingservice.org/",
+        "preferredMethod": "Email",
+        "socialLinks": [
+          {
+            "label": "Facebook",
+            "url": "https://www.facebook.com/ncreadingservice/"
+          },
+          {
+            "label": "Instagram",
+            "url": "https://www.instagram.com/ncreadingservice/"
+          }
+        ]
+      },
+      "location": {
+        "city": "Raleigh",
+        "region": "North Carolina",
+        "country": "United States",
+        "serviceArea": "North Carolina and online",
+        "remoteAvailable": true,
+        "remoteDetails": "Listeners can access programming online through the website, streaming audio, mobile apps, and Alexa-enabled devices.",
+        "inPersonNotes": null
+      },
+      "hours": "Office hours Monday-Friday, 8:00 AM-4:00 PM. Broadcast programming is available 24 hours a day, seven days a week.",
+      "languages": [
+        "English"
+      ],
+      "certifications": [],
+      "testimonial": null,
+      "lastVerified": "2026-08-13"
     }
   ]
 }
