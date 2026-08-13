@@ -158,13 +158,98 @@
       "lastVerified": "2026-08-12"
     },
     {
+      "id": "dr-kirk-adams",
+      "legacyIds": [],
+      "name": "Dr. Kirk Adams, Ph.D.",
+      "status": "active",
+      "featured": {
+        "enabled": true,
+        "rank": 3
+      },
+      "listingType": "Community Service Provider",
+      "categories": [
+        "Disability Inclusion",
+        "Accessibility Leadership",
+        "Keynote Speaking",
+        "Workplace Inclusion",
+        "Blind and Visually Impaired Advocacy",
+        "Consulting"
+      ],
+      "services": [
+        "Disability inclusion consulting",
+        "Accessible leadership consulting",
+        "Keynote speaking",
+        "Workshops",
+        "Executive leadership retreats",
+        "Panel discussions",
+        "Workplace accessibility strategy",
+        "Blind and visually impaired advocacy",
+        "Organizational inclusion guidance"
+      ],
+      "summary": "Dr. Kirk Adams is a disability inclusion advocate, consultant, and keynote speaker helping organizations build more accessible and inclusive workplaces and communities.",
+      "description": "Dr. Kirk Adams, Ph.D. is a disability inclusion advocate, consultant, and keynote speaker with more than three decades of experience advancing accessibility and opportunity for people who are blind or visually impaired. He is the former President and CEO of the American Foundation for the Blind and former President and CEO of The Lighthouse for the Blind, Inc. Today, he serves as Managing Director of Innovative Impact, LLC, where he helps organizations strengthen workplace accessibility, inclusive leadership, and disability inclusion.",
+      "spokenSummary": "Dr. Kirk Adams is a disability inclusion advocate, consultant, and keynote speaker who helps organizations build accessible workplaces and inclusive leadership practices.",
+      "blindCommunitySupport": "Dr. Adams brings lived experience, executive leadership, advocacy, and practical inclusion strategy to conversations about blindness, employment, accessibility, and opportunity.",
+      "accessibility": "Dr. Adams focuses on accessibility and disability inclusion in his consulting, speaking, workshops, and leadership work. Visitors should contact him directly to discuss event accommodations and communication preferences.",
+      "contact": {
+        "name": "Dr. Kirk Adams, Ph.D.",
+        "email": "kirkadams@drkirkadams.com",
+        "phone": "2066601363",
+        "text": null,
+        "website": "https://drkirkadams.com/",
+        "preferredMethod": "Email",
+        "socialLinks": [
+          {
+            "label": "Facebook",
+            "url": "https://drkirkadams.com/facebook"
+          },
+          {
+            "label": "LinkedIn",
+            "url": "https://drkirkadams.com/linkedin"
+          },
+          {
+            "label": "LinkedIn company",
+            "url": "https://drkirkadams.com/linkedinpage"
+          },
+          {
+            "label": "X",
+            "url": "https://drkirkadams.com/x"
+          },
+          {
+            "label": "YouTube",
+            "url": "https://drkirkadams.com/youtube"
+          },
+          {
+            "label": "Medium",
+            "url": "https://drkirkadams.com/medium"
+          }
+        ]
+      },
+      "location": {
+        "city": "Seattle",
+        "region": "Washington",
+        "country": "United States",
+        "serviceArea": "National and global, with virtual opportunities",
+        "remoteAvailable": true,
+        "remoteDetails": "Consulting, speaking, and virtual conversations may be available by arrangement.",
+        "inPersonNotes": null
+      },
+      "hours": "By appointment; speaking and consulting availability by arrangement.",
+      "languages": [
+        "English"
+      ],
+      "certifications": [],
+      "testimonial": null,
+      "lastVerified": "2026-08-12"
+    },
+    {
       "id": "eyes-like-mine",
       "legacyIds": [],
       "name": "Eyes Like Mine Inc.",
       "status": "active",
       "featured": {
         "enabled": true,
-        "rank": 3
+        "rank": 4
       },
       "listingType": "Community Service Provider",
       "categories": [
@@ -231,7 +316,7 @@
       "status": "active",
       "featured": {
         "enabled": true,
-        "rank": 4
+        "rank": 5
       },
       "listingType": "Community Service Provider",
       "categories": [
@@ -300,7 +385,7 @@
       "status": "active",
       "featured": {
         "enabled": true,
-        "rank": 5
+        "rank": 6
       },
       "listingType": "Blind-Owned / Visually Impaired-Owned",
       "categories": [
