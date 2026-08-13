@@ -394,9 +394,16 @@
         "enabled": true,
         "rank": 6
       },
-      "listingType": "Blind-Owned / Visually Impaired-Owned",
+      "listingType": "Community Service Provider",
       "categories": [
-        "Nonprofit and Community Support"
+        "Nonprofit and Community Support",
+        "Accessible Media",
+        "Advocacy",
+        "Community Outreach",
+        "Education",
+        "Podcasting",
+        "Radio",
+        "Storytelling"
       ],
       "services": [
         "Accessible media",
@@ -449,7 +456,7 @@
       ],
       "certifications": [],
       "testimonial": null,
-      "lastVerified": "2026-07-30"
+      "lastVerified": "2026-08-12"
     },
     {
       "id": "pwd-media-distribution-co-op",
