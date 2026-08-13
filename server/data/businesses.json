@@ -450,6 +450,80 @@
       "certifications": [],
       "testimonial": null,
       "lastVerified": "2026-07-30"
+    },
+    {
+      "id": "pwd-media-distribution-co-op",
+      "legacyIds": [],
+      "name": "PWD Media Distribution Co-op",
+      "status": "active",
+      "featured": {
+        "enabled": true,
+        "rank": 7
+      },
+      "listingType": "Community Service Provider",
+      "categories": [
+        "Accessible Media",
+        "Disability Community Resources",
+        "Media Distribution",
+        "Blind and Low Vision Support",
+        "Networking and Outreach"
+      ],
+      "services": [
+        "Disability-focused media distribution",
+        "Accessible information sharing",
+        "Social media amplification",
+        "Community news distribution",
+        "Content reach and promotion",
+        "Disability network collaboration",
+        "Media partnership opportunities"
+      ],
+      "summary": "The PWD Media Distribution Co-op is a disability-focused media network that helps organizations and leaders amplify accessible information to blind, low-vision, and broader disability communities.",
+      "description": "The Persons with Disabilities Media Distribution Co-op brings together disability leaders, businesses, and organizations with verified audiences to share approved content across connected media and social channels. The network is designed to increase reach, visibility, and access to useful information, opportunities, and community resources for blind, low-vision, deaf, hard-of-hearing, deafblind, neurodivergent, and broader disabled communities. Dr. Kirk Adams is a co-founder and contributes his media channels to the network.",
+      "spokenSummary": "The PWD Media Distribution Co-op is a disability-focused media network that helps organizations reach blind, low-vision, and broader disability communities.",
+      "blindCommunitySupport": "The co-op helps disability organizations, businesses, and leaders share accessible news, opportunities, technology, services, and community information with audiences connected to the disability community.",
+      "accessibility": "The network focuses on accessible information and disability-specific audiences. Organizations interested in participation or distribution should review the official co-op information and contact the managing organization.",
+      "contact": {
+        "name": "PWD Media Distribution Co-op",
+        "email": "publisher@toptechtidbits.com",
+        "phone": "8555786660",
+        "text": null,
+        "website": "https://at-newswire.com/pwd-mdc/",
+        "preferredMethod": "Website",
+        "socialLinks": [
+          {
+            "label": "PWD Media Co-op network feed",
+            "url": "https://www.linkedin.com/company/pwd-media-distribution-co-op/"
+          },
+          {
+            "label": "AT-Newswire",
+            "url": "https://at-newswire.com/"
+          },
+          {
+            "label": "Access Information News",
+            "url": "https://accessinformationnews.com/"
+          },
+          {
+            "label": "Top Tech Tidbits",
+            "url": "https://toptechtidbits.com/"
+          }
+        ]
+      },
+      "location": {
+        "city": "Mayfield Heights",
+        "region": "Ohio",
+        "country": "United States",
+        "serviceArea": "Global and online",
+        "remoteAvailable": true,
+        "remoteDetails": "Media distribution and network participation are handled online.",
+        "inPersonNotes": null
+      },
+      "hours": "By appointment; review the official website for participation and submission information.",
+      "languages": [
+        "English"
+      ],
+      "certifications": [],
+      "testimonial": null,
+      "lastVerified": "2026-08-12"
     }
   ]
 }
