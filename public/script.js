@@ -202,9 +202,10 @@
     let currentBusiness = null;
     let searchController;
     let directorySpeechToken = 0;
-    let directoryGroup = initialParameters.get("group") === "media" ? "media" : "business";
+    let directoryGroup = "business";
 
     const initialParameters = new URLSearchParams(window.location.search);
+    directoryGroup = initialParameters.get("group") === "media" ? "media" : "business";
     queryField.value = initialParameters.get("q") || "";
 
     function updateAddressBar() {
