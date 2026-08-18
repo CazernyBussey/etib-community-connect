@@ -887,3 +887,36 @@ blockquote {
     box-shadow: none;
   }
 }
+
+
+.directory-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin: 0 0 1rem;
+}
+
+.directory-tab {
+  min-height: 44px;
+  padding: 0.7rem 1rem;
+  border: 2px solid var(--border-color, #334155);
+  border-radius: 0.5rem;
+  background: var(--surface, #ffffff);
+  color: inherit;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.directory-tab:hover,
+.directory-tab:focus-visible,
+.directory-tab.is-active {
+  border-color: var(--accent, #b8860b);
+  background: var(--accent, #b8860b);
+  color: #111827;
+}
+
+.directory-tab:focus-visible {
+  outline: 3px solid currentColor;
+  outline-offset: 3px;
+}
