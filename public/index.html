@@ -40,15 +40,20 @@
     </section>
 
     <section id="directory-search" class="container directory-app" aria-labelledby="search-heading" data-directory-app>
+      <div class="directory-tabs" role="tablist" aria-label="Directory sections">
+        <button class="directory-tab is-active" id="businessTab" type="button" role="tab" aria-selected="true" aria-controls="directorySearchForm" data-directory-group="business">Businesses &amp; Organizations</button>
+        <button class="directory-tab" id="mediaTab" type="button" role="tab" aria-selected="false" aria-controls="directorySearchForm" data-directory-group="media">Podcasts &amp; Media</button>
+      </div>
+
       <form id="directorySearchForm" class="quick-search panel" role="search" aria-describedby="search-help">
         <h2 id="search-heading">Search the directory</h2>
-        <label for="search">Business name, service, or location</label>
+        <label for="search">Business, podcast, service, or location</label>
         <div class="search-row">
           <input id="search" name="q" type="search" autocomplete="off" placeholder="Example: advocacy or New York" />
           <button class="btn btn-primary" type="submit">Search businesses</button>
           <button class="btn" id="resetFilters" type="button">Clear search</button>
         </div>
-        <p id="search-help">Leave the search blank to browse every verified listing.</p>
+        <p id="search-help">Leave the search blank to browse every listing in the selected section.</p>
       </form>
 
       <section class="listing-viewer" aria-labelledby="results-heading">
