@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "catalogUpdated": "2026-08-13",
+  "catalogUpdated": "2026-08-17",
   "businesses": [
     {
       "id": "liner-legal",
@@ -602,6 +602,74 @@
       "certifications": [],
       "testimonial": null,
       "lastVerified": "2026-08-13"
+    },
+    {
+      "id": "even-though-im-blind-experience-podcast",
+      "legacyIds": [],
+      "name": "Even Though I'm Blind Experience Podcast",
+      "status": "active",
+      "featured": {
+        "enabled": true,
+        "rank": 9
+      },
+      "listingType": "Community Service Provider",
+      "categories": [
+        "Podcast",
+        "Accessible Media",
+        "Blind and Visually Impaired Support",
+        "Advocacy"
+      ],
+      "services": [
+        "Podcast interviews",
+        "Blind and visually impaired community stories",
+        "Accessibility and inclusion conversations",
+        "Advocacy and awareness",
+        "Inspiration and education",
+        "Video podcast episodes"
+      ],
+      "summary": "The Even Though I'm Blind Experience Podcast amplifies the voices, stories, and perspectives of blind and visually impaired people through conversations that inform, inspire, and challenge the way the world listens.",
+      "description": "The Even Though I'm Blind Experience Podcast, produced by Even Though I'm Blind, Inc., features conversations with blind and visually impaired people, advocates, creators, leaders, and community partners. Episodes explore blindness, accessibility, advocacy, creativity, resilience, inclusion, and the everyday experiences that shape the blind and visually impaired community.",
+      "spokenSummary": "The Even Though I'm Blind Experience Podcast shares informative and inspiring conversations with blind and visually impaired people, advocates, creators, and community leaders.",
+      "blindCommunitySupport": "The podcast creates visibility for blind and visually impaired voices while connecting listeners with lived experiences, advocacy, creativity, accessibility, and community leadership.",
+      "accessibility": "The podcast is available through the ETIB website, Apple Podcasts, Spotify, and YouTube. Visitors who need an accessible communication accommodation can contact Even Though I'm Blind, Inc. directly.",
+      "contact": {
+        "name": "Even Though I'm Blind, Inc.",
+        "email": "etib@eventhoughimblind.com",
+        "phone": "9108535247",
+        "text": null,
+        "website": "https://eventhoughimblind.com/even-though-im-blind-experience/",
+        "preferredMethod": "Website",
+        "socialLinks": [
+          {
+            "label": "Apple Podcasts",
+            "url": "https://podcasts.apple.com/us/podcast/even-though-im-blind-experience/id1812246570"
+          },
+          {
+            "label": "Spotify",
+            "url": "https://open.spotify.com/show/2ejjSEAbngiJDrvqiN6vR6"
+          },
+          {
+            "label": "YouTube",
+            "url": "https://youtube.com/playlist?list=PLq11DKhUJUuaDFPjBjNZSu5e96Dx2hRu7"
+          }
+        ]
+      },
+      "location": {
+        "city": null,
+        "region": null,
+        "country": "United States",
+        "serviceArea": "Global and online",
+        "remoteAvailable": true,
+        "remoteDetails": "Listeners can access episodes online through the ETIB website, Apple Podcasts, Spotify, and YouTube.",
+        "inPersonNotes": null
+      },
+      "hours": "Online podcast; new episode availability may vary.",
+      "languages": [
+        "English"
+      ],
+      "certifications": [],
+      "testimonial": null,
+      "lastVerified": "2026-08-17"
     }
   ]
 }
