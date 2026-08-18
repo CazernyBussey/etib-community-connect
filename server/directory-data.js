@@ -18,6 +18,7 @@ export const supportedCategories = [
 ];
 
 const preferredMethods = ["Phone", "Text", "Email", "Website"];
+const mediaCategoryTerms = ["podcast", "podcasting", "accessible media", "media distribution", "radio", "radio and streaming", "audio information", "reading service", "news and information", "disability news"];
 const businessStatuses = ["active", "inactive"];
 
 function isPlainObject(value) {
@@ -290,12 +291,18 @@ function supportsContactMethod(business, method) {
   return !method || methods[method] === true;
 }
 
+function isMediaListing(business) {
+  const text = [...business.categories, ...business.services].join(" ").toLowerCase();
+  return mediaCategoryTerms.some((term) => text.includes(term));
+}
+
 export function searchBusinesses(catalog, filters = {}) {
   const query = String(filters.query || "").trim().toLowerCase();
   const category = String(filters.category || "").trim().toLowerCase();
   const listingType = String(filters.listingType || "").trim().toLowerCase();
   const location = String(filters.location || "").trim().toLowerCase();
   const contactMethod = String(filters.contactMethod || "").trim().toLowerCase();
+  const group = String(filters.group || "").trim().toLowerCase();
 
   return activeBusinesses(catalog)
     .filter((business) => !query || searchText(business).includes(query))
@@ -313,6 +320,7 @@ export function searchBusinesses(catalog, filters = {}) {
       return locationText.includes(location);
     })
     .filter((business) => supportsContactMethod(business, contactMethod))
+    .filter((business) => !group || (group === "media" ? isMediaListing(business) : group === "business" ? !isMediaListing(business) : true))
     .sort((left, right) => {
       if (left.featured.enabled !== right.featured.enabled) return left.featured.enabled ? -1 : 1;
       const leftRank = left.featured.rank ?? Number.MAX_SAFE_INTEGER;
