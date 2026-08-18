@@ -185,6 +185,7 @@
     const form = document.getElementById("directorySearchForm");
     const queryField = document.getElementById("search");
     const resetButton = document.getElementById("resetFilters");
+    const directoryTabs = [...document.querySelectorAll("[data-directory-group]")];
     const results = document.getElementById("directoryResults");
     const resultCount = document.getElementById("resultCount");
     const catalogSummary = document.getElementById("catalogSummary");
@@ -201,6 +202,7 @@
     let currentBusiness = null;
     let searchController;
     let directorySpeechToken = 0;
+    let directoryGroup = initialParameters.get("group") === "media" ? "media" : "business";
 
     const initialParameters = new URLSearchParams(window.location.search);
     queryField.value = initialParameters.get("q") || "";
@@ -208,6 +210,7 @@
     function updateAddressBar() {
       const parameters = new URLSearchParams();
       if (queryField.value.trim()) parameters.set("q", queryField.value.trim());
+      if (directoryGroup === "media") parameters.set("group", "media");
       const search = parameters.toString();
       window.history.replaceState(null, "", `${window.location.pathname}${search ? `?${search}` : ""}`);
     }
@@ -276,7 +279,8 @@
 
       const parameters = new URLSearchParams({
         page: String(page),
-        pageSize: String(pageSize)
+        pageSize: String(pageSize),
+        group: directoryGroup
       });
       if (queryField.value.trim()) parameters.set("q", queryField.value.trim());
 
@@ -382,6 +386,23 @@
         catalogSummary.textContent = "Search the verified ETIB business catalog.";
       }
     }
+
+    function updateDirectoryTabs() {
+      directoryTabs.forEach((tab) => {
+        const selected = tab.dataset.directoryGroup === directoryGroup;
+        tab.classList.toggle("is-active", selected);
+        tab.setAttribute("aria-selected", String(selected));
+      });
+    }
+
+    directoryTabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        directoryGroup = tab.dataset.directoryGroup === "media" ? "media" : "business";
+        updateDirectoryTabs();
+        loadResults({ page: 1, targetIndex: 0, focusStatus: true });
+      });
+    });
+    updateDirectoryTabs();
 
     form.addEventListener("submit", (event) => {
       event.preventDefault();
