@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "catalogUpdated": "2026-08-17",
+  "catalogUpdated": "2026-08-18",
   "businesses": [
     {
       "id": "liner-legal",
@@ -670,6 +670,96 @@
       "certifications": [],
       "testimonial": null,
       "lastVerified": "2026-08-17"
+    },
+    {
+      "id": "podcasts-by-dr-kirk-adams",
+      "legacyIds": [],
+      "name": "Podcasts By Dr. Kirk Adams",
+      "status": "active",
+      "featured": {
+        "enabled": true,
+        "rank": 10
+      },
+      "listingType": "Community Service Provider",
+      "categories": [
+        "Podcast",
+        "Accessible Media",
+        "Disability Inclusion",
+        "Leadership",
+        "Blind and Visually Impaired Support"
+      ],
+      "services": [
+        "Podcast interviews",
+        "Accessibility and inclusion conversations",
+        "Disability rights and advocacy",
+        "Inclusive leadership discussions",
+        "Employment and workplace accessibility",
+        "Accessible innovation conversations",
+        "Video and audio podcast episodes"
+      ],
+      "summary": "Podcasts By Dr. Kirk Adams features conversations about accessibility, leadership, disability inclusion, social change, and the lived experience of blindness.",
+      "description": "Podcasts By Dr. Kirk Adams is hosted by Dr. Kirk Adams, former President and CEO of the American Foundation for the Blind and a lifelong advocate for people with visual impairments. The podcast brings together leaders, advocates, entrepreneurs, creators, and innovators to discuss disability rights, employment, accessibility, inclusive leadership, and social change.",
+      "spokenSummary": "Podcasts By Dr. Kirk Adams shares conversations about accessibility, disability inclusion, leadership, and social change.",
+      "blindCommunitySupport": "The podcast elevates blind and visually impaired voices, practical accessibility ideas, disability leadership, employment opportunities, and conversations that help create a more inclusive world.",
+      "accessibility": "Episodes are available online through Dr. Kirk Adams's podcast website and major podcast platforms. Visitors who need an accessible communication accommodation can contact Dr. Kirk Adams directly.",
+      "contact": {
+        "name": "Dr. Kirk Adams, Ph.D.",
+        "email": "kirkadams@drkirkadams.com",
+        "phone": "2066601363",
+        "text": null,
+        "website": "https://drkirkadams.com/podcasts",
+        "preferredMethod": "Email",
+        "socialLinks": [
+          {
+            "label": "Podcast website",
+            "url": "https://drkirkadams.com/podcasts"
+          },
+          {
+            "label": "Apple Podcasts",
+            "url": "https://drkirkadams.com/podcasts-apple"
+          },
+          {
+            "label": "Amazon Music",
+            "url": "https://drkirkadams.com/podcasts-amazon"
+          },
+          {
+            "label": "Spotify",
+            "url": "https://drkirkadams.com/podcasts-spotify"
+          },
+          {
+            "label": "iHeart Radio",
+            "url": "https://drkirkadams.com/podcasts-iheart-radio"
+          },
+          {
+            "label": "YouTube",
+            "url": "https://drkirkadams.com/youtube"
+          },
+          {
+            "label": "Dr. Kirk Adams website",
+            "url": "https://drkirkadams.com/"
+          },
+          {
+            "label": "Dr. Kirk Adams LinkedIn",
+            "url": "https://linkedin.com/in/kirkadamsphd/"
+          }
+        ]
+      },
+      "location": {
+        "city": "Seattle",
+        "region": "Washington",
+        "country": "United States",
+        "serviceArea": "National and global, with online access",
+        "remoteAvailable": true,
+        "remoteDetails": "Episodes and podcast conversations are available online through the website and major podcast platforms.",
+        "inPersonNotes": null
+      },
+      "hours": "Online podcast; new episode availability may vary.",
+      "languages": [
+        "English"
+      ],
+      "certifications": [],
+      "testimonial": null,
+      "lastVerified": "2026-08-18"
     }
   ]
 }
