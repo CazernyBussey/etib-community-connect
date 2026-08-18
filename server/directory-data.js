@@ -11,6 +11,12 @@ export const listingTypes = [
   "Both"
 ];
 
+// Keep simple directory categories available for future listings even before
+// the first listing in that category is added to the catalog.
+export const supportedCategories = [
+  "Podcast"
+];
+
 const preferredMethods = ["Phone", "Text", "Email", "Website"];
 const businessStatuses = ["active", "inactive"];
 
@@ -348,8 +354,10 @@ export function findBusiness(catalog, identifier) {
 
 export function getDirectoryOptions(catalog) {
   const businesses = activeBusinesses(catalog);
-  const categories = [...new Set(businesses.flatMap((business) => business.categories))]
-    .sort((left, right) => left.localeCompare(right));
+  const categories = [...new Set([
+    ...supportedCategories,
+    ...businesses.flatMap((business) => business.categories)
+  ])].sort((left, right) => left.localeCompare(right));
   const availableListingTypes = [...new Set(businesses.map((business) => business.listingType))]
     .sort((left, right) => left.localeCompare(right));
   return {
