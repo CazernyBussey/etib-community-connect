@@ -81,7 +81,8 @@ app.get("/api/listings", (req, res) => {
     category: req.query.category,
     listingType: req.query.listingType,
     location: req.query.location,
-    contactMethod: req.query.contactMethod
+    contactMethod: req.query.contactMethod,
+    group: req.query.group
   });
   const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
   const page = Math.min(requestedPage, totalPages);
