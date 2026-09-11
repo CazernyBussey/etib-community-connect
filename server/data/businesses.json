@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "catalogUpdated": "2026-08-18",
+  "catalogUpdated": "2026-09-11",
   "businesses": [
     {
       "id": "liner-legal",
@@ -760,6 +760,90 @@
       "certifications": [],
       "testimonial": null,
       "lastVerified": "2026-08-18"
+    },
+    {
+      "id": "white-canes-connect",
+      "legacyIds": [],
+      "name": "White Canes Connect",
+      "status": "active",
+      "featured": {
+        "enabled": true,
+        "rank": 11
+      },
+      "listingType": "Podcast",
+      "categories": [
+        "Podcast",
+        "Accessible Media",
+        "Blind and Visually Impaired Support",
+        "Advocacy",
+        "Community News",
+        "Pennsylvania"
+      ],
+      "services": [
+        "Weekly podcast episodes",
+        "Blind and visually impaired community stories",
+        "Accessibility and advocacy conversations",
+        "National Federation of the Blind of Pennsylvania news",
+        "Guest interviews",
+        "Community resources and event information",
+        "Podcast sponsorship opportunities",
+        "Audio and video podcast access"
+      ],
+      "summary": "White Canes Connect is the weekly podcast of the National Federation of the Blind of Pennsylvania, sharing stories, resources, advocacy, and conversations important to blind and visually impaired people.",
+      "description": "White Canes Connect is presented by the National Federation of the Blind of Pennsylvania and hosted by Lisa Bryant and David B. Goldstein. The weekly podcast spotlights blind Pennsylvanians and explores accessibility, advocacy, technology, education, employment, community events, personal stories, and issues that matter to blind and visually impaired people.",
+      "spokenSummary": "White Canes Connect is the weekly podcast of the National Federation of the Blind of Pennsylvania, featuring community stories, advocacy, accessibility, and useful information for blind and visually impaired listeners.",
+      "blindCommunitySupport": "The podcast centers blind voices, connects listeners with community resources and advocacy information, highlights blind leaders and organizations, and shares practical conversations about independence, accessibility, technology, education, and opportunity.",
+      "accessibility": "Episodes are available online in audio and video formats through the White Canes Connect website, Apple Podcasts, Spotify, Audible, and YouTube. Listeners can contact the podcast by email or voicemail with questions, comments, accessibility needs, or story ideas.",
+      "contact": {
+        "name": "Lisa Bryant and David B. Goldstein",
+        "email": "WhiteCanesConnect@gmail.com",
+        "phone": "2673384495",
+        "text": null,
+        "website": "https://whitecanesconnect.com/",
+        "preferredMethod": "Email",
+        "socialLinks": [
+          {
+            "label": "Apple Podcasts",
+            "url": "https://podcasts.apple.com/us/podcast/white-canes-connect/id1592248709"
+          },
+          {
+            "label": "Spotify",
+            "url": "https://open.spotify.com/show/1YDQSJqpoteGb1UMPwRSuI"
+          },
+          {
+            "label": "Amazon Music",
+            "url": "https://music.amazon.com/podcasts/7dd1600d-05fa-48f3-8a8e-456e30e690bc/white-canes-connect"
+          },
+          {
+            "label": "YouTube",
+            "url": "https://www.youtube.com/@pablindpodcast"
+          },
+          {
+            "label": "Instagram",
+            "url": "https://www.instagram.com/pablindpodcast/"
+          },
+          {
+            "label": "National Federation of the Blind of Pennsylvania",
+            "url": "https://www.nfbofpa.org/"
+          }
+        ]
+      },
+      "location": {
+        "city": null,
+        "region": "Pennsylvania",
+        "country": "United States",
+        "serviceArea": "Pennsylvania and global online audience",
+        "remoteAvailable": true,
+        "remoteDetails": "Listeners can access episodes worldwide through the podcast website and major podcast platforms.",
+        "inPersonNotes": null
+      },
+      "hours": "Weekly podcast; new episodes are released on Mondays.",
+      "languages": [
+        "English"
+      ],
+      "certifications": [],
+      "testimonial": null,
+      "lastVerified": "2026-09-11"
     }
   ]
 }
