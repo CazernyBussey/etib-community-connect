@@ -903,6 +903,68 @@
       "certifications": [],
       "testimonial": null,
       "lastVerified": "2026-09-30"
+    },
+    {
+      "id": "blind-table-talk",
+      "legacyIds": [],
+      "name": "Blind Table Talk Podcast",
+      "status": "active",
+      "featured": {
+        "enabled": false,
+        "rank": null
+      },
+      "listingType": "Both",
+      "categories": [
+        "Podcast",
+        "Accessible Media",
+        "Blind and Visually Impaired Support"
+      ],
+      "services": [
+        "Podcast conversations",
+        "Blind community stories",
+        "Community resource spotlights",
+        "Product and service discussions",
+        "Relationship conversations"
+      ],
+      "summary": "Blind Table Talk is a podcast sharing blind and visually impaired community stories, resources, and conversations.",
+      "description": "Hosted by Sayyida Victoria Hillard and Joe Fleeks, Blind Table Talk explores everyday experiences, relationships, community organizations, products, services, and fellow podcasts. Episodes are available on Apple Podcasts and Spotify, and its website provides community resources and event information.",
+      "spokenSummary": "Blind Table Talk is a podcast sharing blind and visually impaired community stories, resources, and conversations.",
+      "blindCommunitySupport": "A blind-led podcast centering blind and visually impaired voices and connecting listeners with resources and community perspectives.",
+      "accessibility": "Audio episodes are available on Apple Podcasts and Spotify. Email contact is available through the official website; contact the podcast for transcript availability or other communication accommodations.",
+      "contact": {
+        "name": "Sayyida Victoria Hillard and team",
+        "email": "info@BlindTableTalk.com",
+        "phone": null,
+        "text": null,
+        "website": "https://blindtabletalk.com/",
+        "preferredMethod": "Email",
+        "socialLinks": [
+          {
+            "label": "Apple Podcasts",
+            "url": "https://podcasts.apple.com/us/podcast/blind-table-talk/id1640402653"
+          },
+          {
+            "label": "Spotify",
+            "url": "https://open.spotify.com/show/6VZmxw6T75diXqnBOhYTKR"
+          }
+        ]
+      },
+      "location": {
+        "city": null,
+        "region": null,
+        "country": "United States",
+        "serviceArea": "Online inquiries; contact the provider to confirm service coverage.",
+        "remoteAvailable": true,
+        "remoteDetails": "Episodes and community resources are available online.",
+        "inPersonNotes": "Contact the provider to confirm any in-person services and access arrangements."
+      },
+      "hours": "Contact the provider for current availability and appointment times.",
+      "languages": [
+        "English"
+      ],
+      "certifications": [],
+      "testimonial": null,
+      "lastVerified": "2026-09-30"
     }
   ]
 }
