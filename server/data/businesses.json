@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "catalogUpdated": "2026-09-11",
+  "catalogUpdated": "2026-09-30",
   "businesses": [
     {
       "id": "liner-legal",
@@ -844,6 +844,283 @@
       "certifications": [],
       "testimonial": null,
       "lastVerified": "2026-08-18"
+    },
+    {
+      "id": "blind-professionals-network",
+      "legacyIds": [],
+      "name": "Blind Professionals Network (BPN)",
+      "status": "active",
+      "featured": {
+        "enabled": false,
+        "rank": null
+      },
+      "listingType": "Community Service Provider",
+      "categories": [
+        "Nonprofit and Community Support",
+        "Employment and Career Development",
+        "Assistive Technology Training"
+      ],
+      "services": [
+        "Free professional development",
+        "Virtual peer support groups",
+        "Career mentoring",
+        "Employment services",
+        "Assistive technology training",
+        "Internship opportunities"
+      ],
+      "summary": "Blind Professionals Network provides free career resources, training, mentoring, and peer support for blind and visually impaired professionals.",
+      "description": "Founded by Sayyida Victoria Hillard, Blind Professionals Network is a nonprofit supporting blind and visually impaired people across career stages. Its free programs include professional development workshops, employment services, assistive technology training, career mentoring, internships, and networking. Its related BPN Empowered podcast is described as coming soon on its official page.",
+      "spokenSummary": "Blind Professionals Network provides free career resources, training, mentoring, and peer support for blind and visually impaired professionals.",
+      "blindCommunitySupport": "Founded and led by Sayyida Victoria Hillard, who is blind, BPN specifically serves blind and visually impaired professionals.",
+      "accessibility": "Public email and website contact options are available. Contact the provider to discuss communication needs, accessible formats, and accommodations; ETIB has not independently audited its website or services.",
+      "contact": {
+        "name": "Sayyida Victoria Hillard and team",
+        "email": "info@BlindProNet.org",
+        "phone": "8006998238",
+        "text": null,
+        "website": "https://blindpronet.org/",
+        "preferredMethod": "Email",
+        "socialLinks": [
+          {
+            "label": "BPN Empowered podcast — coming soon",
+            "url": "https://www.bpnworkplacesolutions.org/bpn-empowered-podcast/"
+          }
+        ]
+      },
+      "location": {
+        "city": null,
+        "region": null,
+        "country": "United States",
+        "serviceArea": "Online inquiries; contact the provider to confirm service coverage.",
+        "remoteAvailable": true,
+        "remoteDetails": "Virtual support groups and online resources are offered; contact BPN for current program schedules.",
+        "inPersonNotes": "Contact the provider to confirm any in-person services and access arrangements."
+      },
+      "hours": "Contact the provider for current availability and appointment times.",
+      "languages": [
+        "English"
+      ],
+      "certifications": [],
+      "testimonial": null,
+      "lastVerified": "2026-09-30"
+    },
+    {
+      "id": "bpn-workplace-solutions",
+      "legacyIds": [],
+      "name": "BPN Workplace Solutions",
+      "status": "active",
+      "featured": {
+        "enabled": false,
+        "rank": null
+      },
+      "listingType": "Both",
+      "categories": [
+        "Accessibility Consulting",
+        "Workplace Inclusion",
+        "Professional Development"
+      ],
+      "services": [
+        "Digital accessibility testing",
+        "Custom JAWS training",
+        "Disability inclusion training",
+        "Professional development workshops",
+        "Workplace coaching"
+      ],
+      "summary": "BPN Workplace Solutions provides accessibility testing, JAWS training, inclusion workshops, and coaching delivered by blind professionals.",
+      "description": "Founded by Sayyida Victoria Hillard, BPN Workplace Solutions is the commercial division of Blind Professionals Network. It helps organizations improve workplace inclusion while creating employment opportunities for blind professionals. Its official website states that service proceeds are reinvested into BPN.",
+      "spokenSummary": "BPN Workplace Solutions provides accessibility testing, JAWS training, inclusion workshops, and coaching delivered by blind professionals.",
+      "blindCommunitySupport": "Blind-led professional services create work opportunities for blind individuals and support BPN’s free community programs.",
+      "accessibility": "Public email and website contact options are available. Contact the provider to discuss communication needs, accessible formats, and accommodations; ETIB has not independently audited its website or services.",
+      "contact": {
+        "name": "Sayyida Victoria Hillard and team",
+        "email": "BPNWorkplaceSolutions@BlindProNet.org",
+        "phone": "8006998238",
+        "text": null,
+        "website": "https://www.bpnworkplacesolutions.org/",
+        "preferredMethod": "Email",
+        "socialLinks": []
+      },
+      "location": {
+        "city": null,
+        "region": null,
+        "country": "United States",
+        "serviceArea": "Online inquiries; contact the provider to confirm service coverage.",
+        "remoteAvailable": true,
+        "remoteDetails": "Digital accessibility services are offered; contact the team to confirm remote delivery options for training and coaching.",
+        "inPersonNotes": "Contact the provider to confirm any in-person services and access arrangements."
+      },
+      "hours": "Contact the provider for current availability and appointment times.",
+      "languages": [
+        "English"
+      ],
+      "certifications": [],
+      "testimonial": null,
+      "lastVerified": "2026-09-30"
+    },
+    {
+      "id": "better-blind-insight",
+      "legacyIds": [],
+      "name": "Better Blind Insight",
+      "status": "active",
+      "featured": {
+        "enabled": false,
+        "rank": null
+      },
+      "listingType": "Blind-Owned / Visually Impaired-Owned",
+      "categories": [
+        "Personal and Professional Coaching",
+        "Confidence and Personal Development"
+      ],
+      "services": [
+        "Empowerment coaching",
+        "Individual coaching sessions",
+        "Confidence building",
+        "Personal and professional goal planning",
+        "Workshops and seminars"
+      ],
+      "summary": "Better Blind Insight offers personal and professional empowerment coaching with Sayyida Victoria Hillard.",
+      "description": "Better Blind Insight is founded by Sayyida Victoria Hillard. Its coaching focuses on self-awareness, confidence, relationships, and purposeful personal and professional growth. Individual coaching packages include email and text support, and a complimentary discovery call is available.",
+      "spokenSummary": "Better Blind Insight offers personal and professional empowerment coaching with Sayyida Victoria Hillard.",
+      "blindCommunitySupport": "A coaching business founded by a blind development coach whose lived experience informs its approach to personal growth.",
+      "accessibility": "Public email and website contact options are available. Contact the provider to discuss communication needs, accessible formats, and accommodations; ETIB has not independently audited its website or services.",
+      "contact": {
+        "name": "Sayyida Victoria Hillard and team",
+        "email": "info@BetterBlindInsight.com",
+        "phone": null,
+        "text": null,
+        "website": "https://www.betterblindinsight.com/",
+        "preferredMethod": "Email",
+        "socialLinks": [
+          {
+            "label": "Coaching packages",
+            "url": "https://www.betterblindinsight.com/coaching-packages/"
+          }
+        ]
+      },
+      "location": {
+        "city": null,
+        "region": null,
+        "country": "United States",
+        "serviceArea": "Online inquiries; contact the provider to confirm service coverage.",
+        "remoteAvailable": true,
+        "remoteDetails": "Discovery-call booking and email support are available; contact the coach to confirm session format.",
+        "inPersonNotes": "Contact the provider to confirm any in-person services and access arrangements."
+      },
+      "hours": "Contact the provider for current availability and appointment times.",
+      "languages": [
+        "English"
+      ],
+      "certifications": [],
+      "testimonial": null,
+      "lastVerified": "2026-09-30"
+    },
+    {
+      "id": "clear-vision-coaching",
+      "legacyIds": [],
+      "name": "Clear Vision Coaching",
+      "status": "active",
+      "featured": {
+        "enabled": false,
+        "rank": null
+      },
+      "listingType": "Blind-Owned / Visually Impaired-Owned",
+      "categories": [
+        "Personal and Professional Coaching",
+        "Employment and Career Development"
+      ],
+      "services": [
+        "Development coaching",
+        "Personal branding",
+        "Career growth guidance"
+      ],
+      "summary": "Clear Vision Coaching is Sayyida Victoria Hillard’s development coaching service for personal branding and career growth.",
+      "description": "Sayyida Victoria Hillard identifies Clear Vision Coaching among her coaching businesses. Her official contact page offers inquiries about development coaching, personal branding, and career growth. The dedicated Clear Vision Coaching website is currently under construction, so this listing links to her working contact page.",
+      "spokenSummary": "Clear Vision Coaching is Sayyida Victoria Hillard’s development coaching service for personal branding and career growth.",
+      "blindCommunitySupport": "Founded by a blind development coach; contact Sayyida to discuss support for your personal or professional goals.",
+      "accessibility": "A working public contact page and email address are available. The dedicated cvcoaching.net website is under construction. Contact Sayyida for communication accommodations; website accessibility has not been independently audited.",
+      "contact": {
+        "name": "Sayyida Victoria Hillard and team",
+        "email": "Empower@SayyidaVictoria.com",
+        "phone": null,
+        "text": null,
+        "website": "https://www.sayyidavictoria.com/contact-me/",
+        "preferredMethod": "Email",
+        "socialLinks": []
+      },
+      "location": {
+        "city": null,
+        "region": null,
+        "country": "United States",
+        "serviceArea": "Online inquiries; contact the provider to confirm service coverage.",
+        "remoteAvailable": true,
+        "remoteDetails": "Online inquiries and discovery-call booking are available; confirm coaching delivery format and service coverage directly.",
+        "inPersonNotes": "Contact the provider to confirm any in-person services and access arrangements."
+      },
+      "hours": "Contact the provider for current availability and appointment times.",
+      "languages": [
+        "English"
+      ],
+      "certifications": [],
+      "testimonial": null,
+      "lastVerified": "2026-09-30"
+    },
+    {
+      "id": "blind-table-talk",
+      "legacyIds": [],
+      "name": "Blind Table Talk Podcast",
+      "status": "active",
+      "featured": {
+        "enabled": false,
+        "rank": null
+      },
+      "listingType": "Both",
+      "categories": [
+        "Podcast",
+        "Accessible Media",
+        "Blind and Visually Impaired Support"
+      ],
+      "services": [
+        "Podcast conversations",
+        "Blind community stories",
+        "Community resource spotlights",
+        "Product and service discussions",
+        "Relationship conversations"
+      ],
+      "summary": "Blind Table Talk is a podcast sharing blind and visually impaired community stories, resources, and conversations.",
+      "description": "Led by CEO and host Sayyida Victoria Hillard, Blind Table Talk explores everyday experiences, relationships, community organizations, products, services, and fellow podcasts. Its website provides episode access, community resources, and event information.",
+      "spokenSummary": "Blind Table Talk is a podcast sharing blind and visually impaired community stories, resources, and conversations.",
+      "blindCommunitySupport": "A blind-led podcast centering blind and visually impaired voices and connecting listeners with resources and community perspectives.",
+      "accessibility": "Audio episode access and email contact are available through the official website. Contact the podcast for transcript availability or other communication accommodations.",
+      "contact": {
+        "name": "Sayyida Victoria Hillard and team",
+        "email": "info@BlindTableTalk.com",
+        "phone": null,
+        "text": null,
+        "website": "https://blindtabletalk.com/",
+        "preferredMethod": "Email",
+        "socialLinks": [
+          {
+            "label": "Listen to Blind Table Talk",
+            "url": "https://anchor.fm/blindtabletalk"
+          }
+        ]
+      },
+      "location": {
+        "city": null,
+        "region": null,
+        "country": "United States",
+        "serviceArea": "Online inquiries; contact the provider to confirm service coverage.",
+        "remoteAvailable": true,
+        "remoteDetails": "Episodes and community resources are available online.",
+        "inPersonNotes": "Contact the provider to confirm any in-person services and access arrangements."
+      },
+      "hours": "Contact the provider for current availability and appointment times.",
+      "languages": [
+        "English"
+      ],
+      "certifications": [],
+      "testimonial": null,
+      "lastVerified": "2026-09-30"
     }
   ]
 }
