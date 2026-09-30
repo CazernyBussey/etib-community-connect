@@ -105,6 +105,9 @@ function validateBusiness(business, index, errors, ids, legacyIds, featuredRanks
   }
 
   requiredString(business.name, `${field}.name`, errors);
+  if (business.directoryGroup !== undefined && !["business", "media"].includes(business.directoryGroup)) {
+    errors.push(`${field}.directoryGroup must be business or media.`);
+  }
   if (!businessStatuses.includes(business.status)) {
     errors.push(`${field}.status must be active or inactive.`);
   }
@@ -138,6 +141,16 @@ function validateBusiness(business, index, errors, ids, legacyIds, featuredRanks
   stringArray(business.services, `${field}.services`, errors, { allowEmpty: false });
   requiredString(business.summary, `${field}.summary`, errors);
   requiredString(business.description, `${field}.description`, errors);
+  if (business.descriptionAudio !== undefined) {
+    if (!isPlainObject(business.descriptionAudio)) {
+      errors.push(`${field}.descriptionAudio must be an object.`);
+    } else {
+      requiredString(business.descriptionAudio.text, `${field}.descriptionAudio.text`, errors);
+      if (!/^\/audio\/[a-z0-9-]+\.mp3$/.test(business.descriptionAudio.url || "")) {
+        errors.push(`${field}.descriptionAudio.url must be a local audio file.`);
+      }
+    }
+  }
   requiredString(business.spokenSummary, `${field}.spokenSummary`, errors);
   requiredString(business.blindCommunitySupport, `${field}.blindCommunitySupport`, errors);
   requiredString(business.accessibility, `${field}.accessibility`, errors);
@@ -292,6 +305,7 @@ function supportsContactMethod(business, method) {
 }
 
 function isMediaListing(business) {
+  if (business.directoryGroup) return business.directoryGroup === "media";
   const text = [...business.categories, ...business.services].join(" ").toLowerCase();
   return mediaCategoryTerms.some((term) => text.includes(term));
 }
@@ -338,6 +352,8 @@ export function summarizeBusiness(business) {
     categories: business.categories,
     services: business.services,
     summary: business.summary,
+    description: business.description,
+    descriptionAudio: business.descriptionAudio?.text === business.description ? business.descriptionAudio.url : null,
     spokenSummary: business.spokenSummary,
     contact: {
       email: business.contact.email,

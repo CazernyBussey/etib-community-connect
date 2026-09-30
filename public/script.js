@@ -101,31 +101,74 @@
     node.classList.toggle("error-text", isError);
   }
 
-  function startSpeech(text, label, statusNode, stopButton) {
-    if (!speechSupported) {
-      statusMessage(statusNode, "Spoken playback is not supported by this browser.", true);
+  let activeAudio = null;
+  let activeUtterance = null;
+  let playbackToken = 0;
+
+  function cancelPlayback() {
+    playbackToken += 1;
+    if (activeAudio) {
+      activeAudio.onended = null;
+      activeAudio.onerror = null;
+      activeAudio.pause();
+      activeAudio = null;
+    }
+    if (activeUtterance) {
+      activeUtterance.onend = null;
+      activeUtterance.onerror = null;
+      activeUtterance = null;
+    }
+    if (speechSupported) window.speechSynthesis.cancel();
+  }
+
+  function descriptionAudioUrl(business) {
+    const audio = business.descriptionAudio;
+    if (typeof audio === "string") return audio;
+    return audio?.text === business.description ? audio.url : null;
+  }
+
+  function startSpeech(text, label, statusNode, stopButton, options = {}) {
+    cancelPlayback();
+    const token = playbackToken;
+    const started = () => {
+      if (token !== playbackToken) return;
+      statusMessage(statusNode, `Playing description for ${label}.`);
+      if (stopButton) stopButton.hidden = false;
+      options.onStart?.();
+    };
+    const finish = (message = "", isError = false) => {
+      if (token !== playbackToken) return;
+      activeAudio = null;
+      activeUtterance = null;
+      statusMessage(statusNode, message, isError);
+      if (stopButton) stopButton.hidden = true;
+      options.onFinish?.();
+    };
+    if (options.audioUrl) {
+      const audio = new Audio(options.audioUrl);
+      activeAudio = audio;
+      audio.onended = () => finish();
+      audio.onerror = () => finish("Audio could not load. Please try again.", true);
+      // Start within the click event so mobile browsers permit playback.
+      audio.play().then(started).catch(() => finish("Audio could not play. Please try again.", true));
       return;
     }
-    window.speechSynthesis.cancel();
+    if (!speechSupported) {
+      finish("Spoken playback is not supported by this browser.", true);
+      return;
+    }
     const utterance = new SpeechSynthesisUtterance(text);
-    utterance.onstart = () => {
-      statusMessage(statusNode, `Speaking ${label}.`);
-      if (stopButton) stopButton.hidden = false;
-    };
-    const finish = () => {
-      statusMessage(statusNode, "");
-      if (stopButton) stopButton.hidden = true;
-    };
-    utterance.onend = finish;
-    utterance.onerror = () => {
-      statusMessage(statusNode, "Spoken playback stopped before the listing finished.", true);
-      if (stopButton) stopButton.hidden = true;
-    };
+    activeUtterance = utterance;
+    utterance.lang = "en-US";
+    utterance.onstart = started;
+    utterance.onend = () => finish();
+    utterance.onerror = () => finish("Spoken playback could not finish. Please try again.", true);
+    window.speechSynthesis.resume();
     window.speechSynthesis.speak(utterance);
   }
 
   function stopSpeech(statusNode, stopButton) {
-    if (speechSupported) window.speechSynthesis.cancel();
+    cancelPlayback();
     statusMessage(statusNode, "Spoken playback stopped.");
     if (stopButton) stopButton.hidden = true;
   }
@@ -201,7 +244,6 @@
     let currentIndex = 0;
     let currentBusiness = null;
     let searchController;
-    let directorySpeechToken = 0;
     let directoryGroup = "business";
 
     const initialParameters = new URLSearchParams(window.location.search);
@@ -226,8 +268,7 @@
     }
 
     function stopDirectoryPreview(message = "") {
-      directorySpeechToken += 1;
-      if (speechSupported) window.speechSynthesis.cancel();
+      cancelPlayback();
       resetPreviewButton();
       statusMessage(speechStatus, message);
     }
@@ -259,7 +300,7 @@
       );
       previousButton.disabled = totalListings <= 1;
       nextButton.disabled = totalListings <= 1;
-      previewButton.disabled = !speechSupported;
+      previewButton.disabled = !speechSupported && !descriptionAudioUrl(currentBusiness);
       previousButton.setAttribute("aria-label", `Show the previous business before ${currentBusiness.name}`);
       nextButton.setAttribute("aria-label", `Show the next business after ${currentBusiness.name}`);
       resetPreviewButton();
@@ -319,37 +360,21 @@
     }
 
     function speakCurrentBusiness() {
-      if (!speechSupported || !currentBusiness) {
-        statusMessage(speechStatus, "Spoken preview is not supported by this browser.", true);
-        return;
-      }
+      if (!currentBusiness) return;
       if (previewButton.dataset.speaking === "true") {
         stopDirectoryPreview("Preview stopped.");
         return;
       }
-
-      window.speechSynthesis.cancel();
-      const token = ++directorySpeechToken;
-      const utterance = new SpeechSynthesisUtterance(currentBusiness.spokenSummary || currentBusiness.summary);
-      utterance.onstart = () => {
-        if (token !== directorySpeechToken) return;
-        previewButton.dataset.speaking = "true";
-        previewButton.textContent = "Stop preview";
-        previewButton.setAttribute("aria-label", `Stop preview for ${currentBusiness.name}`);
-        statusMessage(speechStatus, `Playing preview for ${currentBusiness.name}.`);
-      };
-      const finish = () => {
-        if (token !== directorySpeechToken) return;
-        resetPreviewButton();
-        statusMessage(speechStatus, "");
-      };
-      utterance.onend = finish;
-      utterance.onerror = () => {
-        if (token !== directorySpeechToken) return;
-        resetPreviewButton();
-        statusMessage(speechStatus, "The spoken preview stopped before it finished.", true);
-      };
-      window.speechSynthesis.speak(utterance);
+      const business = currentBusiness;
+      previewButton.dataset.speaking = "true";
+      previewButton.textContent = "Stop preview";
+      previewButton.setAttribute("aria-label", `Stop preview for ${business.name}`);
+      statusMessage(speechStatus, `Loading description for ${business.name}.`);
+      startSpeech(business.description || business.spokenSummary || business.summary,
+        business.name, speechStatus, null, {
+          audioUrl: descriptionAudioUrl(business),
+          onFinish: resetPreviewButton
+        });
     }
 
     function navigate(direction) {
@@ -464,19 +489,15 @@
     listenButton.hidden = !speechSupported;
     listenButton.addEventListener("click", () => {
       if (!business) return;
-      const fullSpeech = [
-        business.spokenSummary,
-        business.blindCommunitySupport,
-        `Accessibility: ${business.accessibility}`,
-        `Preferred contact method: ${business.contact.preferredMethod}.`
-      ].filter(Boolean).join(" ");
-      startSpeech(fullSpeech, business.name, speechStatus, stopButton);
+      const fullSpeech = business.description || business.spokenSummary || business.summary;
+      startSpeech(fullSpeech, business.name, speechStatus, stopButton, { audioUrl: descriptionAudioUrl(business) });
     });
     stopButton.addEventListener("click", () => stopSpeech(speechStatus, stopButton));
 
     api(`/listings/${encodeURIComponent(identifier)}`)
       .then((output) => {
         business = output.business;
+        listenButton.hidden = !speechSupported && !descriptionAudioUrl(business);
         document.title = `${business.name} | ETIB Community Connect`;
         const descriptionMeta = document.querySelector('meta[name="description"]');
         if (descriptionMeta) descriptionMeta.content = business.summary;

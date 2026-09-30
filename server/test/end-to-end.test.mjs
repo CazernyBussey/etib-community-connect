@@ -5,6 +5,11 @@ import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
 
+import {loadCatalog, activeBusinesses, getDirectoryOptions, searchBusinesses} from "../directory-data.js";
+const catalog = loadCatalog();
+const total = activeBusinesses(catalog).length;
+const options = getDirectoryOptions(catalog);
+
 const serverDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
 function availablePort() {
@@ -75,8 +80,8 @@ test("the code-managed directory works end to end and blocks public writes", asy
   assert.deepEqual(result.data, {
     ok: true,
     mode: "read-only",
-    businessCount: 1,
-    catalogUpdated: "2026-07-30"
+    businessCount: total,
+    catalogUpdated: catalog.catalogUpdated
   });
   assert.equal(result.response.headers.get("cache-control"), "no-store");
   assert.equal(result.response.headers.get("x-content-type-options"), "nosniff");
@@ -84,14 +89,14 @@ test("the code-managed directory works end to end and blocks public writes", asy
 
   result = await request("/api/directory-options");
   assert.equal(result.response.status, 200);
-  assert.equal(result.data.businessCount, 1);
-  assert.deepEqual(result.data.categories, ["Nonprofit and Community Support"]);
+  assert.equal(result.data.businessCount, total);
+  assert.deepEqual(result.data.categories, options.categories);
   assert.ok(result.data.contactMethods.some((item) => item.value === "email"));
 
   result = await request("/api/listings");
   assert.equal(result.response.status, 200);
-  assert.equal(result.data.pagination.total, 1);
-  assert.equal(result.data.listings[0].id, "etib-inc");
+  assert.equal(result.data.pagination.total, total);
+  assert.ok(result.data.listings.some(b => b.id === "etib-inc"));
   assert.equal(result.data.listings[0].featured.enabled, true);
 
   for (const route of [
@@ -103,12 +108,13 @@ test("the code-managed directory works end to end and blocks public writes", asy
   ]) {
     result = await request(route);
     assert.equal(result.response.status, 200, route);
-    assert.equal(result.data.pagination.total, 1, route);
+    const params = Object.fromEntries(new URL(route, baseUrl).searchParams);
+    assert.equal(result.data.pagination.total, searchBusinesses(catalog, { ...params, query: params.q }).length, route);
   }
 
   result = await request("/api/listings?contactMethod=text");
   assert.equal(result.response.status, 200);
-  assert.equal(result.data.pagination.total, 0);
+  assert.equal(result.data.pagination.total, searchBusinesses(catalog, {contactMethod: "text"}).length);
 
   result = await request("/api/listings?q=not-a-real-business&page=999");
   assert.equal(result.response.status, 200);
@@ -117,7 +123,15 @@ test("the code-managed directory works end to end and blocks public writes", asy
 
   result = await request("/api/featured-listings");
   assert.equal(result.response.status, 200);
-  assert.equal(result.data.listings[0].id, "etib-inc");
+  assert.ok(result.data.listings.some(b => b.id === "etib-inc"));
+
+  result = await request("/api/listings?group=business&q=Even%20Though");
+  assert.ok(result.data.listings.some(b => b.id === "etib-inc"));
+  const listing = result.data.listings.find(b => b.id === "etib-inc");
+  assert.equal(listing.description, catalog.businesses.find(b => b.id === "etib-inc").description);
+  result = await request(listing.descriptionAudio, { accept: "audio/mpeg" });
+  assert.equal(result.response.status, 200);
+  assert.match(result.response.headers.get("content-type"), /audio\/mpeg/);
 
   const stable = await request("/api/listings/etib-inc");
   const legacy = await request("/api/listings/1");

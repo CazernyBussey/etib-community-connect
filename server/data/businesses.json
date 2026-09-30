@@ -85,7 +85,11 @@
       ],
       "certifications": [],
       "testimonial": null,
-      "lastVerified": "2026-08-12"
+      "lastVerified": "2026-08-12",
+      "descriptionAudio": {
+        "url": "/audio/liner-legal-fc4c4c2fe481.mp3",
+        "text": "Liner Legal, founded by Michael Liner, provides disability-law information and legal services related to Social Security Disability Insurance, Supplemental Security Income, and Long-Term Disability matters. Liner Legal shared a short eligibility survey with Even Though I'm Blind, Inc. as part of a resource collaboration to help visitors determine whether they may qualify for an initial conversation about disability benefits."
+      }
     },
     {
       "id": "access-information-news",
@@ -155,7 +159,11 @@
       ],
       "certifications": [],
       "testimonial": null,
-      "lastVerified": "2026-08-12"
+      "lastVerified": "2026-08-12",
+      "descriptionAudio": {
+        "url": "/audio/access-information-news-176c012af369.mp3",
+        "text": "Access Information News is a weekly access-information publication and newsletter published by Aaron Di Blasi through Mind Vault Solutions, Ltd. It shares news, resources, technology, advocacy, and disability-inclusion stories for people with disabilities, accessibility professionals, organizations, and allies. ETIB is a current pro bono sponsor of Access Information News through its PWD Media Co-op."
+      }
     },
     {
       "id": "white-canes-connect",
@@ -239,7 +247,11 @@
       ],
       "certifications": [],
       "testimonial": null,
-      "lastVerified": "2026-09-11"
+      "lastVerified": "2026-09-11",
+      "descriptionAudio": {
+        "url": "/audio/white-canes-connect-08e5297bef47.mp3",
+        "text": "White Canes Connect is presented by the National Federation of the Blind of Pennsylvania and hosted by Lisa Bryant and David B. Goldstein. The weekly podcast spotlights blind Pennsylvanians and explores accessibility, advocacy, technology, education, employment, community events, personal stories, and issues that matter to blind and visually impaired people."
+      }
     },
     {
       "id": "innovative-impact-llc",
@@ -331,7 +343,11 @@
       ],
       "certifications": [],
       "testimonial": null,
-      "lastVerified": "2026-08-12"
+      "lastVerified": "2026-08-12",
+      "descriptionAudio": {
+        "url": "/audio/innovative-impact-llc-9e0e05824eab.mp3",
+        "text": "Innovative Impact, LLC is a disability inclusion consulting firm founded and led by Dr. Kirk Adams. The organization helps businesses, nonprofits, and public institutions improve workforce accessibility, inclusive leadership, hiring, retention, employee development, and universal access across physical, digital, and social environments."
+      }
     },
     {
       "id": "eyes-like-mine",
@@ -398,7 +414,11 @@
       ],
       "certifications": [],
       "testimonial": null,
-      "lastVerified": "2026-08-12"
+      "lastVerified": "2026-08-12",
+      "descriptionAudio": {
+        "url": "/audio/eyes-like-mine-92e8658c0a28.mp3",
+        "text": "Eyes Like Mine Inc. is a Newark-based 501(c)(3) nonprofit that empowers blind and visually impaired people through peer support, advocacy, community outreach, education, and inclusive events. Its programs include support groups, Dancing With The Blind, the Ms. Blind Diva Empowerment Pageant, empowerment workshops, volunteer opportunities, and community partnerships."
+      }
     },
     {
       "id": "imperfektlymade-foundation",
@@ -465,7 +485,11 @@
       ],
       "certifications": [],
       "testimonial": null,
-      "lastVerified": "2026-08-12"
+      "lastVerified": "2026-08-12",
+      "descriptionAudio": {
+        "url": "/audio/imperfektlymade-foundation-9ba389fe1fab.mp3",
+        "text": "Founded by Angela Harris, the IMperfeKtlymade Foundation is an Alexandria, Virginia-based nonprofit supporting blind and visually impaired people through inclusive fashion experiences, creative-career opportunities, community events, and advocacy. The foundation produces fashion shows featuring blind and visually impaired models, develops Style Mate, an accessible styling solution, and offers support initiatives including scholarships for legally blind students pursuing creative careers."
+      }
     },
     {
       "id": "etib-inc",
@@ -540,7 +564,12 @@
       ],
       "certifications": [],
       "testimonial": null,
-      "lastVerified": "2026-08-12"
+      "lastVerified": "2026-08-12",
+      "directoryGroup": "business",
+      "descriptionAudio": {
+        "url": "/audio/etib-inc-4ff7a6f53c84.mp3",
+        "text": "Even Though I'm Blind, Inc. supports the blind and visually impaired community by creating accessible media, advocacy, storytelling, and community-centered opportunities that amplify real voices and lived experiences. Through radio, podcasts, educational content, events, and outreach, ETIB promotes visibility, empowerment, inclusion, and leadership while helping reshape how the world understands blind and visually impaired people."
+      }
     },
     {
       "id": "pwd-media-distribution-co-op",
@@ -614,7 +643,11 @@
       ],
       "certifications": [],
       "testimonial": null,
-      "lastVerified": "2026-08-12"
+      "lastVerified": "2026-08-12",
+      "descriptionAudio": {
+        "url": "/audio/pwd-media-distribution-co-op-40756cddabbb.mp3",
+        "text": "The Persons with Disabilities Media Distribution Co-op brings together disability leaders, businesses, and organizations with verified audiences to share approved content across connected media and social channels. The network is designed to increase reach, visibility, and access to useful information, opportunities, and community resources for blind, low-vision, deaf, hard-of-hearing, deafblind, neurodivergent, and broader disabled communities. Dr. Kirk Adams is a co-founder and contributes his media channels to the network."
+      }
     },
     {
       "id": "north-carolina-reading-service",
@@ -685,7 +718,11 @@
       ],
       "certifications": [],
       "testimonial": null,
-      "lastVerified": "2026-08-13"
+      "lastVerified": "2026-08-13",
+      "descriptionAudio": {
+        "url": "/audio/north-carolina-reading-service-4ba7f10eebf4.mp3",
+        "text": "The North Carolina Reading Service is a Raleigh-based 501(c)(3) nonprofit that has served the blind and print-impaired community since 1983. Volunteers read local and regional newspapers, editorials, obituaries, literature, and advertisements, while special programs cover education, technology, legal matters, vision news, and other community topics. NCRS broadcasts 24 hours a day, seven days a week through streaming audio, website listening, smartphone and tablet apps, and Alexa-enabled devices."
+      }
     },
     {
       "id": "even-though-im-blind-experience-podcast",
@@ -753,7 +790,11 @@
       ],
       "certifications": [],
       "testimonial": null,
-      "lastVerified": "2026-08-17"
+      "lastVerified": "2026-08-17",
+      "descriptionAudio": {
+        "url": "/audio/even-though-im-blind-experience-podcast-70d046cdbf28.mp3",
+        "text": "The Even Though I'm Blind Experience Podcast, produced by Even Though I'm Blind, Inc., features conversations with blind and visually impaired people, advocates, creators, leaders, and community partners. Episodes explore blindness, accessibility, advocacy, creativity, resilience, inclusion, and the everyday experiences that shape the blind and visually impaired community."
+      }
     },
     {
       "id": "podcasts-by-dr-kirk-adams",
@@ -843,7 +884,11 @@
       ],
       "certifications": [],
       "testimonial": null,
-      "lastVerified": "2026-08-18"
+      "lastVerified": "2026-08-18",
+      "descriptionAudio": {
+        "url": "/audio/podcasts-by-dr-kirk-adams-d8f4a088c6ba.mp3",
+        "text": "Podcasts By Dr. Kirk Adams is hosted by Dr. Kirk Adams, former President and CEO of the American Foundation for the Blind and a lifelong advocate for people with visual impairments. The podcast brings together leaders, advocates, entrepreneurs, creators, and innovators to discuss disability rights, employment, accessibility, inclusive leadership, and social change."
+      }
     },
     {
       "id": "blind-professionals-network",
@@ -902,7 +947,11 @@
       ],
       "certifications": [],
       "testimonial": null,
-      "lastVerified": "2026-09-30"
+      "lastVerified": "2026-09-30",
+      "descriptionAudio": {
+        "url": "/audio/blind-professionals-network-cadb0125282e.mp3",
+        "text": "Founded by Sayyida Victoria Hillard, Blind Professionals Network is a nonprofit supporting blind and visually impaired people across career stages. Its free programs include professional development workshops, employment services, assistive technology training, career mentoring, internships, and networking. Its related BPN Empowered podcast is described as coming soon on its official page."
+      }
     },
     {
       "id": "blind-table-talk",
@@ -964,7 +1013,11 @@
       ],
       "certifications": [],
       "testimonial": null,
-      "lastVerified": "2026-09-30"
+      "lastVerified": "2026-09-30",
+      "descriptionAudio": {
+        "url": "/audio/blind-table-talk-0f191aa9dbe1.mp3",
+        "text": "Hosted by Sayyida Victoria Hillard and Joe Fleeks, Blind Table Talk explores everyday experiences, relationships, community organizations, products, services, and fellow podcasts. Episodes are available on Apple Podcasts and Spotify, and its website provides community resources and event information."
+      }
     }
   ]
 }

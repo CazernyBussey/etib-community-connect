@@ -78,3 +78,9 @@ At least one direct contact method is required.
 6. Submit the change through GitHub. Render publishes the updated catalog after the approved change reaches `main`.
 
 The validator blocks duplicate IDs, malformed contact details, invalid listing types, conflicting featured ranks, and incomplete required fields before deployment.
+
+## Directory placement and description audio
+
+Use optional `directoryGroup: "business"` or `"media"` when a listing's placement should override category-based detection. ETIB, Inc. belongs in businesses; the Experience podcast belongs in media.
+
+Description recordings live in `public/audio/`. The optional `descriptionAudio` object contains a local `/audio/…mp3` URL and `text`, the exact description used for the recording. Generate one narration of the full verified description, save the MP3 with a filename containing a hash of that text, and update both fields together. Do not publish temporary signed generation URLs. If a description changes, its old recording is automatically withheld until regenerated; browser speech remains the fallback.
