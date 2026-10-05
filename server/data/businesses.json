@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "catalogUpdated": "2026-09-30",
+  "catalogUpdated": "2026-10-05",
   "businesses": [
     {
       "id": "liner-legal",
@@ -1018,6 +1018,77 @@
         "url": "/audio/blind-table-talk-0f191aa9dbe1.mp3",
         "text": "Hosted by Sayyida Victoria Hillard and Joe Fleeks, Blind Table Talk explores everyday experiences, relationships, community organizations, products, services, and fellow podcasts. Episodes are available on Apple Podcasts and Spotify, and its website provides community resources and event information."
       }
+    },
+    {
+      "id": "aarons-opinion",
+      "legacyIds": [],
+      "name": "Aaron’s Opinion",
+      "directoryGroup": "media",
+      "status": "active",
+      "featured": {
+        "enabled": false,
+        "rank": null
+      },
+      "listingType": "Community Service Provider",
+      "categories": [
+        "Podcast",
+        "Accessible Media",
+        "Blind and Visually Impaired Support",
+        "Advocacy",
+        "Community Stories"
+      ],
+      "services": [
+        "Weekly podcast episodes",
+        "Blindness and disability conversations",
+        "Guest interviews",
+        "Advocacy and community discussions",
+        "Blind and visually impaired community stories",
+        "Audio podcast access",
+        "Video interviews and podcast content"
+      ],
+      "summary": "Aaron’s Opinion is a blind-led podcast hosted by Aaron Richmond that discusses critical issues in the blindness community and broader topics through interviews, advocacy, and community conversations.",
+      "description": "Aaron’s Opinion, created and hosted by Aaron Richmond, is a blind-led podcast focused on critical issues in the blindness community along with broader conversations about disability, advocacy, lived experience, community, and everyday life. The show’s message is, “Help 1 person today, help 1 million people tomorrow.” Episodes feature guests from the blind and disability communities as well as creators, advocates, professionals, and people with stories and perspectives to share.",
+      "spokenSummary": "Aaron’s Opinion is a blind-led podcast hosted by Aaron Richmond featuring conversations about blindness, disability, advocacy, community, lived experience, and stories from a wide range of guests.",
+      "blindCommunitySupport": "The podcast centers blind and visually impaired voices, shares lived experiences and advocacy perspectives, and gives guests a platform to discuss issues, resources, challenges, achievements, and community connections relevant to blind and disabled people.",
+      "accessibility": "Episodes are available online through major podcast platforms and the Aaron’s Opinion TV YouTube channel. Listeners can contact the show by email, phone, text, or WhatsApp for information about the show or communication needs.",
+      "contact": {
+        "name": "Aaron Richmond",
+        "email": "aaronsopinion6@gmail.com",
+        "phone": "2406819869",
+        "text": "2406819869",
+        "website": "https://podcasts.apple.com/us/podcast/aarons-opinion/id1535839694",
+        "preferredMethod": "Website",
+        "socialLinks": [
+          {
+            "label": "Apple Podcasts",
+            "url": "https://podcasts.apple.com/us/podcast/aarons-opinion/id1535839694"
+          },
+          {
+            "label": "YouTube",
+            "url": "https://www.youtube.com/@aaronsopiniontv"
+          },
+          {
+            "label": "Spreaker",
+            "url": "https://www.spreaker.com/podcast/aaron-s-opinion--5920599"
+          }
+        ]
+      },
+      "location": {
+        "city": null,
+        "region": null,
+        "country": "United States",
+        "serviceArea": "Global and online",
+        "remoteAvailable": true,
+        "remoteDetails": "Listeners can access episodes online through podcast platforms and YouTube and can contact the show from anywhere by email, phone, text, or WhatsApp.",
+        "inPersonNotes": null
+      },
+      "hours": "Online podcast; updated regularly. Contact the show directly for current availability.",
+      "languages": [
+        "English"
+      ],
+      "certifications": [],
+      "testimonial": null,
+      "lastVerified": "2026-10-05"
     }
   ]
 }
