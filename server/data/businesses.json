@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "catalogUpdated": "2026-10-05",
+  "catalogUpdated": "2026-10-22",
   "businesses": [
     {
       "id": "liner-legal",
@@ -1089,6 +1089,158 @@
       "certifications": [],
       "testimonial": null,
       "lastVerified": "2026-10-05"
+    },
+    {
+      "legacyIds": [],
+      "status": "active",
+      "featured": {
+        "enabled": false,
+        "rank": null
+      },
+      "listingType": "Community Service Provider",
+      "hours": "Contact the organization for current availability.",
+      "languages": [
+        "English"
+      ],
+      "certifications": [],
+      "testimonial": null,
+      "lastVerified": "2026-10-22",
+      "id": "pediatric-retinal-research-foundation",
+      "name": "Pediatric Retinal Research Foundation (PRRF)",
+      "directoryGroup": "business",
+      "categories": [
+        "Nonprofit and Community Support",
+        "Pediatric Retinal Research",
+        "Family Resources",
+        "Peer Support",
+        "Vision Loss"
+      ],
+      "services": [
+        "Pediatric retinal disease research support",
+        "Retinal disease awareness and information",
+        "Parent and young adult resources",
+        "Stronger Together peer mentorship for adults 18 and older",
+        "Community stories and events",
+        "Volunteer and fundraising opportunities"
+      ],
+      "summary": "PRRF supports individuals and families affected by pediatric retinal diseases through research, information, and community connection.",
+      "description": "The Pediatric Retinal Research Foundation (PRRF) raises awareness of childhood retinal diseases, supports research toward treatments and cures, and connects affected individuals and families with information and community resources. Its website covers conditions including ROP, FEVR, Coats' disease, Norrie disease, PFVS, congenital X-linked retinoschisis, and Stickler syndrome. Its Stronger Together mentorship program connects adults and families through shared experience; participants must be 18 or older.",
+      "spokenSummary": "PRRF supports families affected by childhood retinal diseases through research, resources, and peer connection.",
+      "blindCommunitySupport": "Provides resources for parents and young adults navigating vision loss, peer mentorship, and opportunities to connect with a retinal disease community.",
+      "accessibility": "Website, email, and telephone contact are available. Contact PRRF for accessible formats or communication accommodations. ETIB has not independently audited the website or services.",
+      "contact": {
+        "name": "PRRF team",
+        "email": "info@prrf.org",
+        "phone": "5863712178",
+        "text": null,
+        "website": "https://prrf.org/",
+        "preferredMethod": "Email",
+        "socialLinks": [
+          {
+            "label": "Stronger Together mentorship",
+            "url": "https://prrf.org/stronger-together/"
+          },
+          {
+            "label": "Through Our Eyes podcast",
+            "url": "https://prrf.org/through-our-eyes-podcast/"
+          },
+          {
+            "label": "LinkedIn",
+            "url": "https://www.linkedin.com/company/pediatricrrf"
+          }
+        ]
+      },
+      "location": {
+        "city": "Warren",
+        "region": "Michigan",
+        "country": "United States",
+        "serviceArea": "Online resources; contact PRRF to confirm individual program eligibility and coverage.",
+        "remoteAvailable": true,
+        "remoteDetails": "Resources and contact information are available online; ask PRRF about mentorship participation and communication arrangements.",
+        "inPersonNotes": "Mailing address: PO Box 294, Warren, MI 48090. Contact PRRF before arranging an in-person visit."
+      }
+    },
+    {
+      "legacyIds": [],
+      "status": "active",
+      "featured": {
+        "enabled": false,
+        "rank": null
+      },
+      "listingType": "Community Service Provider",
+      "hours": "Online podcast; check the official page for new episode availability.",
+      "languages": [
+        "English"
+      ],
+      "certifications": [],
+      "testimonial": null,
+      "lastVerified": "2026-10-22",
+      "id": "through-our-eyes-podcast",
+      "name": "Through Our Eyes Podcast",
+      "directoryGroup": "media",
+      "categories": [
+        "Podcast",
+        "Accessible Media",
+        "Blind and Visually Impaired Support",
+        "Community Stories",
+        "Education and Careers"
+      ],
+      "services": [
+        "Audio podcast episodes",
+        "Guest interviews",
+        "Visually impaired young adult perspectives",
+        "Education and career conversations",
+        "Independence and advocacy discussions",
+        "Retinal disease and family stories"
+      ],
+      "summary": "Through Our Eyes is PRRF's podcast about navigating school, careers, and everyday life with visual impairment.",
+      "description": "Through Our Eyes is produced by the Pediatric Retinal Research Foundation. The podcast shares visually impaired young adults' experiences of high school, college, careers, and life beyond school, with practical perspectives on physical, emotional, and educational challenges. Guest conversations also explore independence, advocacy, parenting, assistive technology, and retinal research. Listeners and prospective guests can contact the podcast team by email.",
+      "spokenSummary": "Through Our Eyes is a PRRF podcast sharing visually impaired voices, practical experiences, and conversations about school, careers, independence, and everyday life.",
+      "blindCommunitySupport": "Gives blind and visually impaired people a platform to share lived experiences and connects listeners with community perspectives and resources.",
+      "accessibility": "Audio episodes are available through the official podcast page and Apple Podcasts. Contact the podcast for transcript availability or other communication accommodations.",
+      "contact": {
+        "name": "Through Our Eyes podcast team",
+        "email": "throughoureyes@prrf.org",
+        "phone": null,
+        "text": null,
+        "website": "https://prrf.org/through-our-eyes-podcast/",
+        "preferredMethod": "Email",
+        "socialLinks": [
+          {
+            "label": "Apple Podcasts",
+            "url": "https://podcasts.apple.com/us/podcast/through-our-eyes/id1649264434"
+          },
+          {
+            "label": "Podcast listening and social links",
+            "url": "https://linktr.ee/throughoureyespodcast"
+          },
+          {
+            "label": "Instagram",
+            "url": "https://www.instagram.com/podcastthroughoureyes/"
+          },
+          {
+            "label": "Facebook",
+            "url": "https://www.facebook.com/podcastthroughoureyes"
+          },
+          {
+            "label": "LinkedIn",
+            "url": "https://www.linkedin.com/showcase/through-our-eyes-podcast/"
+          },
+          {
+            "label": "PRRF website",
+            "url": "https://prrf.org/"
+          }
+        ]
+      },
+      "location": {
+        "city": "Warren",
+        "region": "Michigan",
+        "country": "United States",
+        "serviceArea": "Global and online",
+        "remoteAvailable": true,
+        "remoteDetails": "Episodes are available online for listeners worldwide. Contact the team about guest participation.",
+        "inPersonNotes": null
+      }
     }
   ]
 }
