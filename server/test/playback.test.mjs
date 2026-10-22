@@ -21,7 +21,7 @@ function playbackHarness({ supported = true, voices = [] } = {}) {
     clearTimeout(id) { timers.delete(id); },
     statusMessage(node, message) { node.textContent = message; }
   });
-  const start = source.indexOf("  let activeUtterance = null;");
+  const start = source.indexOf("  let activeAudio = null;");
   const end = source.indexOf("  function quickContactActionLinks", start);
   vm.runInContext(source.slice(start, end), context);
   return { context, utterances, synth, timers, get cancellations() { return cancellations; } };
@@ -81,4 +81,37 @@ test("unsupported speech and device startup failures reset playback controls", (
   assert.match(status.textContent, /did not start/);
   assert.equal(stop.hidden, true);
   assert.equal(finishes, 1);
+});
+
+test("hosted audio plays without device speech and Stop cancels playback", async () => {
+  const h = playbackHarness({supported: false}), status = {}, stop = {hidden: true};
+  let pauses = 0;
+  const player = {
+    currentTime: 17, play() { this.onplaying(); return Promise.resolve(); },
+    pause() { pauses++; }
+  };
+  h.context.startSpeech("Description", "PRRF", status, stop, {audioElement: player});
+  assert.match(status.textContent, /Playing description for PRRF/);
+  assert.equal(player.currentTime, 0);
+  assert.equal(stop.hidden, false);
+  h.context.stopSpeech(status, stop);
+  assert.equal(pauses, 1);
+  assert.equal(stop.hidden, true);
+  assert.equal(h.utterances.length, 0);
+});
+test("audio rejection gives an actionable alternative and clears controls", async () => {
+  const h = playbackHarness({supported: false}), status = {}, stop = {hidden: true};
+  let finished = 0;
+  const player = {currentTime: 0, play() {return Promise.reject(new Error("blocked"));}, pause() {}};
+  h.context.startSpeech("Description", "PRRF", status, stop, {audioElement: player, onFinish() {finished++;}});
+  await Promise.resolve();
+  assert.match(status.textContent, /Open description audio link/);
+  assert.equal(stop.hidden, true);
+  assert.equal(finished, 1);
+});
+test("recordings are only used when they match the current description", () => {
+  const {context} = playbackHarness();
+  assert.equal(context.descriptionAudioUrl({description:"New",descriptionAudio:{text:"Old",url:"/audio/test.mp3"}}),null);
+  assert.equal(context.descriptionAudioUrl({description:"New",descriptionAudio:{text:"New",url:"/audio/test.mp3"}}),"/audio/test.mp3");
+  assert.equal(context.descriptionAudioUrl({descriptionAudio:"https://external.example/audio.mp3"}),null);
 });

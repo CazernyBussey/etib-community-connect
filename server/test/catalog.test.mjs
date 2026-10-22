@@ -63,11 +63,12 @@ test("ETIB organization is in businesses while its podcast and Blind Table Talk 
   }
 });
 
-test("every listing has description text and no recorded audio dependency", () => {
+test("every listing has a matching hosted audio description", () => {
   for (const business of activeBusinesses(loadCatalog())) {
     assert.ok(business.description.trim(), business.name);
-    assert.equal(business.descriptionAudio, undefined, business.name);
+    assert.equal(business.descriptionAudio.text, business.description, business.name);
+    assert.ok(business.descriptionAudio.url.startsWith("/audio/"));
     assert.equal(summarizeBusiness(business).description, business.description);
-    assert.equal(summarizeBusiness(business).descriptionAudio, null);
+    assert.equal(summarizeBusiness(business).descriptionAudio, business.descriptionAudio.url);
   }
 });

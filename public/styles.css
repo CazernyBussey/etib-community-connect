@@ -920,3 +920,6 @@ blockquote {
   outline: 3px solid currentColor;
   outline-offset: 3px;
 }
+
+.description-audio { display: block; width: 100%; max-width: 42rem; min-height: 44px; }
+.description-audio-panel { margin-block: 0.75rem; }

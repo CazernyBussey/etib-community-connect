@@ -101,12 +101,21 @@
     node.classList.toggle("error-text", isError);
   }
 
+  let activeAudio = null;
   let activeUtterance = null;
   let playbackToken = 0;
   let speechStartTimer = null;
 
   function cancelPlayback() {
     playbackToken += 1;
+    if (activeAudio) {
+      activeAudio.onplaying = null;
+      activeAudio.onended = null;
+      activeAudio.onerror = null;
+      activeAudio.pause();
+      activeAudio.currentTime = 0;
+      activeAudio = null;
+    }
     clearTimeout(speechStartTimer);
     speechStartTimer = null;
     if (activeUtterance) {
@@ -116,6 +125,22 @@
       activeUtterance = null;
     }
     if (speechSupported) window.speechSynthesis.cancel();
+  }
+
+  function descriptionAudioUrl(business) {
+    const audio = business.descriptionAudio;
+    const url = typeof audio === "string" ? audio
+      : audio?.text === business.description ? audio.url : null;
+    return typeof url === "string" && /^\/audio\/[a-z0-9-]+\.mp3$/.test(url) ? url : null;
+  }
+
+  function descriptionAudioPlayer(business, id) {
+    const url = descriptionAudioUrl(business);
+    if (!url) return "";
+    return `<div class="description-audio-panel">
+      <audio id="${id}" class="description-audio" controls preload="none" src="${escapeHtml(url)}" aria-label="Audio description for ${escapeHtml(business.name)}"></audio>
+      <p><a href="${escapeHtml(url)}">Open description audio for ${escapeHtml(business.name)}</a></p>
+    </div>`;
   }
 
   function speechChunks(text) {
@@ -144,6 +169,28 @@
       if (stopButton) stopButton.hidden = true;
       options.onFinish?.();
     };
+    if (options.audioElement) {
+      const audio = options.audioElement;
+      activeAudio = audio;
+      audio.currentTime = 0;
+      audio.onplaying = () => {
+        if (token !== playbackToken) return;
+        statusMessage(statusNode, `Playing description for ${label}.`);
+        if (stopButton) stopButton.hidden = false;
+        options.onStart?.();
+      };
+      audio.onended = () => finish();
+      audio.onerror = () => finish("The audio could not load. Use the Open description audio link to listen.", true);
+      if (stopButton) stopButton.hidden = false;
+      statusMessage(statusNode, `Loading audio for ${label}.`);
+      try {
+        const playing = audio.play();
+        playing.catch(() => finish("Playback did not start. Use the audio player's Play button or Open description audio link.", true));
+      } catch {
+        finish("Playback did not start. Use the Open description audio link.", true);
+      }
+      return;
+    }
     if (!speechSupported) {
       finish("Spoken playback is not supported by this browser.", true);
       return;
@@ -251,6 +298,7 @@
         <div class="quick-contact-actions" aria-label="Contact and information options for ${escapeHtml(business.name)}">
           ${quickContactActionLinks(business)}
         </div>
+        ${descriptionAudioPlayer(business, "directoryDescriptionAudio")}
         <p class="verification-note">Verified by ETIB on ${escapeHtml(formatDate(business.lastVerified))}.</p>
       </article>
     `;
@@ -303,6 +351,8 @@
     }
 
     function stopDirectoryPreview(message = "") {
+      const player = document.getElementById("directoryDescriptionAudio");
+      if (player) { player.pause(); player.currentTime = 0; }
       cancelPlayback();
       resetPreviewButton();
       statusMessage(speechStatus, message);
@@ -335,7 +385,7 @@
       );
       previousButton.disabled = totalListings <= 1;
       nextButton.disabled = totalListings <= 1;
-      previewButton.disabled = !speechSupported;
+      previewButton.disabled = !speechSupported && !descriptionAudioUrl(currentBusiness);
       previousButton.setAttribute("aria-label", `Show the previous business before ${currentBusiness.name}`);
       nextButton.setAttribute("aria-label", `Show the next business after ${currentBusiness.name}`);
       resetPreviewButton();
@@ -407,6 +457,7 @@
       statusMessage(speechStatus, `Loading description for ${business.name}.`);
       startSpeech(business.description || business.spokenSummary || business.summary,
         business.name, speechStatus, null, {
+          audioElement: document.getElementById("directoryDescriptionAudio"),
           onFinish: resetPreviewButton
         });
     }
@@ -524,14 +575,16 @@
     listenButton.addEventListener("click", () => {
       if (!business) return;
       const fullSpeech = business.description || business.spokenSummary || business.summary;
-      startSpeech(fullSpeech, business.name, speechStatus, stopButton);
+      startSpeech(fullSpeech, business.name, speechStatus, stopButton, { audioElement: document.getElementById("profileDescriptionAudio") });
     });
     stopButton.addEventListener("click", () => stopSpeech(speechStatus, stopButton));
 
     api(`/listings/${encodeURIComponent(identifier)}`)
       .then((output) => {
         business = output.business;
-        listenButton.hidden = !speechSupported;
+        listenButton.hidden = !speechSupported && !descriptionAudioUrl(business);
+        const audioPanel = document.getElementById("profileDescriptionAudioPanel");
+        if (audioPanel) audioPanel.innerHTML = descriptionAudioPlayer(business, "profileDescriptionAudio");
         document.title = `${business.name} | ETIB Community Connect`;
         const descriptionMeta = document.querySelector('meta[name="description"]');
         if (descriptionMeta) descriptionMeta.content = business.summary;
