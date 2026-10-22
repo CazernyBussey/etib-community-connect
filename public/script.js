@@ -101,19 +101,16 @@
     node.classList.toggle("error-text", isError);
   }
 
-  let activeAudio = null;
   let activeUtterance = null;
   let playbackToken = 0;
+  let speechStartTimer = null;
 
   function cancelPlayback() {
     playbackToken += 1;
-    if (activeAudio) {
-      activeAudio.onended = null;
-      activeAudio.onerror = null;
-      activeAudio.pause();
-      activeAudio = null;
-    }
+    clearTimeout(speechStartTimer);
+    speechStartTimer = null;
     if (activeUtterance) {
+      activeUtterance.onstart = null;
       activeUtterance.onend = null;
       activeUtterance.onerror = null;
       activeUtterance = null;
@@ -121,50 +118,88 @@
     if (speechSupported) window.speechSynthesis.cancel();
   }
 
-  function descriptionAudioUrl(business) {
-    const audio = business.descriptionAudio;
-    if (typeof audio === "string") return audio;
-    return audio?.text === business.description ? audio.url : null;
+  function speechChunks(text) {
+    // Short utterances keep long descriptions from stalling on mobile devices.
+    const words = String(text || "").trim().split(/\s+/);
+    const chunks = [];
+    let chunk = "";
+    for (const word of words) {
+      if (chunk && chunk.length + word.length + 1 > 220) {
+        chunks.push(chunk);
+        chunk = "";
+      }
+      chunk += (chunk ? " " : "") + word;
+    }
+    if (chunk) chunks.push(chunk);
+    return chunks;
   }
 
   function startSpeech(text, label, statusNode, stopButton, options = {}) {
     cancelPlayback();
     const token = playbackToken;
-    const started = () => {
-      if (token !== playbackToken) return;
-      statusMessage(statusNode, `Playing description for ${label}.`);
-      if (stopButton) stopButton.hidden = false;
-      options.onStart?.();
-    };
     const finish = (message = "", isError = false) => {
       if (token !== playbackToken) return;
-      activeAudio = null;
-      activeUtterance = null;
+      cancelPlayback();
       statusMessage(statusNode, message, isError);
       if (stopButton) stopButton.hidden = true;
       options.onFinish?.();
     };
-    if (options.audioUrl) {
-      const audio = new Audio(options.audioUrl);
-      activeAudio = audio;
-      audio.onended = () => finish();
-      audio.onerror = () => finish("Audio could not load. Please try again.", true);
-      // Start within the click event so mobile browsers permit playback.
-      audio.play().then(started).catch(() => finish("Audio could not play. Please try again.", true));
-      return;
-    }
     if (!speechSupported) {
       finish("Spoken playback is not supported by this browser.", true);
       return;
     }
-    const utterance = new SpeechSynthesisUtterance(text);
-    activeUtterance = utterance;
-    utterance.lang = "en-US";
-    utterance.onstart = started;
-    utterance.onend = () => finish();
-    utterance.onerror = () => finish("Spoken playback could not finish. Please try again.", true);
-    window.speechSynthesis.resume();
-    window.speechSynthesis.speak(utterance);
+    const chunks = speechChunks(text);
+    if (!chunks.length) {
+      finish("No description is available for this listing.", true);
+      return;
+    }
+    const synth = window.speechSynthesis;
+    let voices = [];
+    try { voices = synth.getVoices(); } catch { /* Use the device default. */ }
+    const english = voices.filter((voice) => /^en(?:[-_]|$)/i.test(voice.lang));
+    const voice = english.find((item) => item.default && item.localService)
+      || english.find((item) => item.localService && /^en[-_]US$/i.test(item.lang))
+      || english.find((item) => item.localService)
+      || english.find((item) => item.default);
+    let index = 0;
+    const speakNext = () => {
+      if (token !== playbackToken) return;
+      if (index >= chunks.length) {
+        finish();
+        return;
+      }
+      const utterance = new SpeechSynthesisUtterance(chunks[index++]);
+      // Retain the active utterance until it ends.
+      activeUtterance = utterance;
+      utterance.lang = voice?.lang || "en-US";
+      if (voice) utterance.voice = voice;
+      utterance.rate = 1;
+      utterance.pitch = 1;
+      utterance.volume = 1;
+      utterance.onstart = () => {
+        if (token !== playbackToken) return;
+        clearTimeout(speechStartTimer);
+        speechStartTimer = null;
+        if (stopButton) stopButton.hidden = false;
+        options.onStart?.();
+      };
+      utterance.onend = speakNext;
+      utterance.onerror = () => finish("Spoken playback could not finish. Please try again.", true);
+      speechStartTimer = setTimeout(() => {
+        finish("The device voice did not start. Please try again.", true);
+      }, 8000);
+      try {
+        // Keep the first speak call inside the user's click, without waiting
+        // for a download or an asynchronously populated voice list.
+        synth.speak(utterance);
+        if (synth.paused) synth.resume();
+      } catch {
+        finish("Spoken playback could not start. Please try again.", true);
+      }
+    };
+    if (stopButton) stopButton.hidden = false;
+    statusMessage(statusNode, `Reading description for ${label}.`);
+    speakNext();
   }
 
   function stopSpeech(statusNode, stopButton) {
@@ -300,7 +335,7 @@
       );
       previousButton.disabled = totalListings <= 1;
       nextButton.disabled = totalListings <= 1;
-      previewButton.disabled = !speechSupported && !descriptionAudioUrl(currentBusiness);
+      previewButton.disabled = !speechSupported;
       previousButton.setAttribute("aria-label", `Show the previous business before ${currentBusiness.name}`);
       nextButton.setAttribute("aria-label", `Show the next business after ${currentBusiness.name}`);
       resetPreviewButton();
@@ -372,7 +407,6 @@
       statusMessage(speechStatus, `Loading description for ${business.name}.`);
       startSpeech(business.description || business.spokenSummary || business.summary,
         business.name, speechStatus, null, {
-          audioUrl: descriptionAudioUrl(business),
           onFinish: resetPreviewButton
         });
     }
@@ -490,14 +524,14 @@
     listenButton.addEventListener("click", () => {
       if (!business) return;
       const fullSpeech = business.description || business.spokenSummary || business.summary;
-      startSpeech(fullSpeech, business.name, speechStatus, stopButton, { audioUrl: descriptionAudioUrl(business) });
+      startSpeech(fullSpeech, business.name, speechStatus, stopButton);
     });
     stopButton.addEventListener("click", () => stopSpeech(speechStatus, stopButton));
 
     api(`/listings/${encodeURIComponent(identifier)}`)
       .then((output) => {
         business = output.business;
-        listenButton.hidden = !speechSupported && !descriptionAudioUrl(business);
+        listenButton.hidden = !speechSupported;
         document.title = `${business.name} | ETIB Community Connect`;
         const descriptionMeta = document.querySelector('meta[name="description"]');
         if (descriptionMeta) descriptionMeta.content = business.summary;

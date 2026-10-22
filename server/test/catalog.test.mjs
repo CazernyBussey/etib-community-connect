@@ -63,10 +63,11 @@ test("ETIB organization is in businesses while its podcast and Blind Table Talk 
   }
 });
 
-test("audio descriptions are withheld when their text no longer matches the listing", () => {
-  const business = structuredClone(findBusiness(loadCatalog(), "etib-inc"));
-  assert.equal(summarizeBusiness(business).description, business.description);
-  assert.ok(summarizeBusiness(business).descriptionAudio);
-  business.description += " Updated information.";
-  assert.equal(summarizeBusiness(business).descriptionAudio, null);
+test("every listing has description text and no recorded audio dependency", () => {
+  for (const business of activeBusinesses(loadCatalog())) {
+    assert.ok(business.description.trim(), business.name);
+    assert.equal(business.descriptionAudio, undefined, business.name);
+    assert.equal(summarizeBusiness(business).description, business.description);
+    assert.equal(summarizeBusiness(business).descriptionAudio, null);
+  }
 });
