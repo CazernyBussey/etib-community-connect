@@ -1,0 +1,107 @@
+{
+  "engine": "Piper 1.8.0",
+  "voice": "en_US-ljspeech-high",
+  "voiceType": "US English female",
+  "modelCard": "https://huggingface.co/rhasspy/piper-voices/blob/main/en/en_US/ljspeech/high/MODEL_CARD",
+  "datasetLicense": "public domain",
+  "engineSource": "https://github.com/OHF-Voice/piper1-gpl",
+  "generated": "2026-10-23",
+  "listings": [
+    {
+      "id": "liner-legal",
+      "url": "/audio/liner-legal-piper-lj-20261023.mp3",
+      "sha256": "db33cd1e365e9a0948e77617fa5721766d8caab646b80230ba2bec35ba5b9330",
+      "duration": 26.853878
+    },
+    {
+      "id": "access-information-news",
+      "url": "/audio/access-information-news-piper-lj-20261023.mp3",
+      "sha256": "b5f3bf4a20435d5b4f648b86e10fe2b66afabfefca30c18e207f48c0337f01b1",
+      "duration": 26.932245
+    },
+    {
+      "id": "white-canes-connect",
+      "url": "/audio/white-canes-connect-piper-lj-20261023.mp3",
+      "sha256": "d570b5829eeecf9929322c820d0729b97ba4312d77bb7074a9008455250e69dc",
+      "duration": 23.14449
+    },
+    {
+      "id": "innovative-impact-llc",
+      "url": "/audio/innovative-impact-llc-piper-lj-20261023.mp3",
+      "sha256": "a6a9a9e21c9c66d422daca67a0fdcc06e97b718198bb58559faecdef761d50d0",
+      "duration": 23.954286
+    },
+    {
+      "id": "eyes-like-mine",
+      "url": "/audio/eyes-like-mine-piper-lj-20261023.mp3",
+      "sha256": "c0cb2623d7dcb4d5b2aa2976810b8715d68ff4182be9f67846e094ee1369b94b",
+      "duration": 25.312653
+    },
+    {
+      "id": "imperfektlymade-foundation",
+      "url": "/audio/imperfektlymade-foundation-piper-lj-20261023.mp3",
+      "sha256": "91678c43a1e8e8a4d0721763ff01042f4d0fc886e28be38a34636da8d36a1311",
+      "duration": 32.026122
+    },
+    {
+      "id": "etib-inc",
+      "url": "/audio/etib-inc-piper-lj-20261023.mp3",
+      "sha256": "8205ea8654885387e05948342dba0e647dbe889c413986e2ce3735bc0ddbdf63",
+      "duration": 27.219592
+    },
+    {
+      "id": "pwd-media-distribution-co-op",
+      "url": "/audio/pwd-media-distribution-co-op-piper-lj-20261023.mp3",
+      "sha256": "fdb90d5ca915f45020708db7b518baa62247098c1c47056f25bce4bb0bbf7645",
+      "duration": 34.168163
+    },
+    {
+      "id": "north-carolina-reading-service",
+      "url": "/audio/north-carolina-reading-service-piper-lj-20261023.mp3",
+      "sha256": "65ecefe375bfee20d1c121e07b5677ff2e5e4a733f406adac294796ed38ec93e",
+      "duration": 36.963265
+    },
+    {
+      "id": "even-though-im-blind-experience-podcast",
+      "url": "/audio/even-though-im-blind-experience-podcast-piper-lj-20261023.mp3",
+      "sha256": "78447f8e09bc1928c0ecb2200dd78842f8c5e93eb7420d9933ab3f9368798971",
+      "duration": 24.607347
+    },
+    {
+      "id": "podcasts-by-dr-kirk-adams",
+      "url": "/audio/podcasts-by-dr-kirk-adams-piper-lj-20261023.mp3",
+      "sha256": "dab33f9fae7d62219f5828908f4bb447b5de84d73109f200e22ba47970ea5ac7",
+      "duration": 24.267755
+    },
+    {
+      "id": "blind-professionals-network",
+      "url": "/audio/blind-professionals-network-piper-lj-20261023.mp3",
+      "sha256": "c8b8d1714641f302493bc6dc3815a758104d15de11cb694b5ea786c5bcd72185",
+      "duration": 24.52898
+    },
+    {
+      "id": "blind-table-talk",
+      "url": "/audio/blind-table-talk-piper-lj-20261023.mp3",
+      "sha256": "9a33e6b8d04bac77eff52035a34546d306e5a537393f21722ddc2287347c95ec",
+      "duration": 19.278367
+    },
+    {
+      "id": "aarons-opinion",
+      "url": "/audio/aarons-opinion-piper-lj-20261023.mp3",
+      "sha256": "3204572103fd8ea8a2bb94b09c7567bcef0c3f5b25c513f0be98c113c923c263",
+      "duration": 30.641633
+    },
+    {
+      "id": "pediatric-retinal-research-foundation",
+      "url": "/audio/pediatric-retinal-research-foundation-piper-lj-20261023.mp3",
+      "sha256": "215b47942f0c5e0c5bbddf54f332c0719ff7e6be41fbb55e247b8360960842ed",
+      "duration": 32.653061
+    },
+    {
+      "id": "through-our-eyes-podcast",
+      "url": "/audio/through-our-eyes-podcast-piper-lj-20261023.mp3",
+      "sha256": "d33d2cc19cad842be4f63b05be16550fb4cbd2b43e3a4151b20262ff7ed9e6a3",
+      "duration": 30.119184
+    }
+  ]
+}
