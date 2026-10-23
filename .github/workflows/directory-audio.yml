@@ -1,0 +1,45 @@
+name: Generate directory narration
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - server/data/businesses.json
+      - server/data/narration-manifest.json
+      - scripts/generate-directory-audio.py
+      - .github/workflows/directory-audio.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: directory-narration-main
+  cancel-in-progress: false
+
+jobs:
+  narrate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: main
+      - name: Prepare free voice tools
+        run: |
+          python3 -m venv /tmp/etib-voice
+          /tmp/etib-voice/bin/pip install piper-tts==1.8.0
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+      - name: Generate new and changed descriptions
+        run: /tmp/etib-voice/bin/python scripts/generate-directory-audio.py
+      - name: Verify every active listing has the fixed voice
+        run: node server/validate-audio.js
+      - name: Save matching audio and catalog together
+        run: |
+          git add public/audio server/data/businesses.json server/data/narration-manifest.json
+          if git diff --cached --quiet; then exit 0; fi
+          git config user.name 'ETIB Directory Audio'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'Generate matching free-voice directory descriptions'
+          git push origin HEAD:main

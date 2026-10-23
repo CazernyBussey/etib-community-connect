@@ -10,10 +10,12 @@
   "scripts": {
     "start": "node server.js",
     "dev": "node --watch server.js",
-    "validate:data": "node validate-data.js",
+    "validate:data": "node validate-data.js && npm run validate:audio",
     "check": "node --check server.js && node --check directory-data.js && node --check validate-data.js && node --check ../public/script.js",
     "check:html": "html-validate ../public/*.html",
-    "test": "npm run check && npm run validate:data && npm run check:html && node --test test/*.test.mjs"
+    "test": "npm run check && npm run validate:data && npm run check:html && node --test test/*.test.mjs",
+    "prestart": "node validate-audio.js",
+    "validate:audio": "node validate-audio.js"
   },
   "dependencies": {
     "express": "^5.2.1",

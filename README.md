@@ -27,7 +27,7 @@ Use these supporting files:
 - Immediate Call, Email, Text, and More Information actions when available
 - Seamless wraparound browsing across all matching businesses without exposing technical result pages
 - Detailed profiles with services, blind-community support, accessibility, location, hours, languages, and direct contact options
-- Optional browser speech playback
+- Matching audio descriptions in one free Piper female voice for every listing
 - Legacy listing ID redirects through the read-only detail API
 
 ## Read-only controls
@@ -58,7 +58,11 @@ Open `http://localhost:8080`.
 1. Follow `BUSINESS-INTAKE-GUIDE.md`.
 2. Add or update the record in `server/data/businesses.json`.
 3. Update `catalogUpdated` and the business `lastVerified` date.
-4. Run:
+4. New or changed descriptions are narrated automatically by `.github/workflows/directory-audio.yml` after a catalog update reaches main. The fixed voice is `en_US-ljspeech-high` (Piper, public-domain LJ Speech dataset). The workflow commits generated MP3s, matching text, and checksums together. No ElevenLabs credits or API keys are needed. Deploy startup and data validation reject missing, stale, changed, or different-voice audio. Wait for the narration commit and successful deployment before announcing a listing as live.
+
+   To generate before publishing, install `piper-tts==1.8.0` and FFmpeg, then run `python scripts/generate-directory-audio.py` from the repository root. Existing valid recordings are reused. Model checksums are pinned so a replacement model cannot silently change the voice.
+
+5. Run:
 
    ```bash
    cd server
@@ -66,7 +70,7 @@ Open `http://localhost:8080`.
    npm audit --omit=dev
    ```
 
-5. Publish the reviewed change through GitHub.
+6. Publish the reviewed change through GitHub. If another catalog update wins the race while the narration job is running, its push fails safely and the queued run generates against the latest main branch.
 
 ## Deployment
 
