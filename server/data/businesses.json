@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "catalogUpdated": "2026-10-22",
+  "catalogUpdated": "2026-10-24",
   "businesses": [
     {
       "id": "liner-legal",
@@ -1253,6 +1253,119 @@
         "url": "/audio/through-our-eyes-podcast-piper-lj-20261023.mp3",
         "text": "Through Our Eyes is produced by the Pediatric Retinal Research Foundation. The podcast shares visually impaired young adults' experiences of high school, college, careers, and life beyond school, with practical perspectives on physical, emotional, and educational challenges. Guest conversations also explore independence, advocacy, parenting, assistive technology, and retinal research. Listeners and prospective guests can contact the podcast team by email."
       }
+    },
+    {
+      "id": "double-tap",
+      "legacyIds": [],
+      "name": "Double Tap",
+      "directoryGroup": "media",
+      "status": "active",
+      "featured": {
+        "enabled": false,
+        "rank": null
+      },
+      "listingType": "Community Service Provider",
+      "categories": [
+        "Podcast",
+        "Accessible Media",
+        "Assistive Technology",
+        "Technology News",
+        "Blind and Visually Impaired Support"
+      ],
+      "services": [
+        "Daily technology podcast",
+        "Accessible technology news and reviews",
+        "Assistive technology discussions",
+        "Guest interviews",
+        "Listener questions and feedback",
+        "Live online radio",
+        "YouTube video episodes",
+        "Accessibility newsletter",
+        "Media sponsorship and partnerships"
+      ],
+      "summary": "Double Tap is a technology podcast and radio show hosted by Steven Scott and Shaun Preece for blind and low vision listeners.",
+      "description": "Double Tap, hosted by Steven Scott and Shaun Preece, explores technology from a blind and low vision perspective. The show covers accessibility, assistive technology, mainstream devices, apps, and AI through news, reviews, guest interviews, and listener conversations. Episodes are available through its website, major podcast platforms, and YouTube. Double Tap also offers live online listening, technology stories, a newsletter, and media sponsorship opportunities.",
+      "spokenSummary": "Double Tap is a technology podcast and radio show hosted by Steven Scott and Shaun Preece, with accessible tech news, reviews, interviews, and listener conversations for the blind and low vision community.",
+      "blindCommunitySupport": "Centers blind and low vision perspectives and shares practical information about accessible technology, independent living, and participation in everyday life. Listeners can contribute questions, feedback, and audio messages.",
+      "accessibility": "Audio podcast episodes and online listening are available alongside YouTube videos. The contact page accepts email, audio attachments, telephone calls, and WhatsApp messages. Contact the team about transcripts or other communication accommodations.",
+      "contact": {
+        "name": "Double Tap team",
+        "email": "feedback@doubletaponair.com",
+        "phone": "+18778034567",
+        "text": null,
+        "website": "https://doubletaponair.com/",
+        "preferredMethod": "Email",
+        "socialLinks": [
+          {
+            "label": "YouTube",
+            "url": "https://www.youtube.com/@doubletapvideo"
+          },
+          {
+            "label": "Apple Podcasts",
+            "url": "https://podcasts.apple.com/ca/podcast/double-tap/id1309267346"
+          },
+          {
+            "label": "Spotify",
+            "url": "https://open.spotify.com/show/668i4cqfCi14qnSGBd8yqh"
+          },
+          {
+            "label": "Facebook",
+            "url": "https://doubletaponair.com/facebook/"
+          },
+          {
+            "label": "Instagram",
+            "url": "https://doubletaponair.com/instagram/"
+          },
+          {
+            "label": "X",
+            "url": "https://doubletaponair.com/x/"
+          },
+          {
+            "label": "TikTok",
+            "url": "https://doubletaponair.com/tiktok/"
+          },
+          {
+            "label": "Threads",
+            "url": "https://doubletaponair.com/threads/"
+          },
+          {
+            "label": "LinkedIn",
+            "url": "https://www.linkedin.com/company/doubletaponair"
+          },
+          {
+            "label": "WhatsApp",
+            "url": "https://wa.me/16134810144"
+          },
+          {
+            "label": "Listen live",
+            "url": "https://doubletaponair.com/live/"
+          },
+          {
+            "label": "Newsletter",
+            "url": "https://doubletaponair.com/newsletter/"
+          },
+          {
+            "label": "Contact and sponsorship inquiries",
+            "url": "https://doubletaponair.com/contact/"
+          }
+        ]
+      },
+      "location": {
+        "city": "Montreal",
+        "region": "Quebec",
+        "country": "Canada",
+        "serviceArea": "Worldwide; online podcast, video, and radio access",
+        "remoteAvailable": true,
+        "remoteDetails": "Episodes and resources are available online worldwide. UK and rest-of-world telephone contact: +44 20 4571 3354. WhatsApp: +1 613 481 0144.",
+        "inPersonNotes": null
+      },
+      "hours": "Episodes and online resources are available on demand. Check the official website for new episodes and the live listening schedule; contact the team for response availability.",
+      "languages": [
+        "English"
+      ],
+      "certifications": [],
+      "testimonial": null,
+      "lastVerified": "2026-10-24"
     }
   ]
 }
