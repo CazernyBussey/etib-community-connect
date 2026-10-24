@@ -102,6 +102,12 @@
       "url": "/audio/through-our-eyes-podcast-piper-lj-20261023.mp3",
       "sha256": "d33d2cc19cad842be4f63b05be16550fb4cbd2b43e3a4151b20262ff7ed9e6a3",
       "duration": 30.119184
+    },
+    {
+      "id": "double-tap",
+      "url": "/audio/double-tap-piper-lj-68f92d0fe2bef1b5.mp3",
+      "sha256": "2ba69d43b8fe3b20bbe8da3ade2fe2a1257e83560c2780693c2721ee2138e415",
+      "duration": 31.70684807256236
     }
   ]
 }

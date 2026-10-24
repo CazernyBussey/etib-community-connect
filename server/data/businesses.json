@@ -1365,7 +1365,11 @@
       ],
       "certifications": [],
       "testimonial": null,
-      "lastVerified": "2026-10-24"
+      "lastVerified": "2026-10-24",
+      "descriptionAudio": {
+        "url": "/audio/double-tap-piper-lj-68f92d0fe2bef1b5.mp3",
+        "text": "Double Tap, hosted by Steven Scott and Shaun Preece, explores technology from a blind and low vision perspective. The show covers accessibility, assistive technology, mainstream devices, apps, and AI through news, reviews, guest interviews, and listener conversations. Episodes are available through its website, major podcast platforms, and YouTube. Double Tap also offers live online listening, technology stories, a newsletter, and media sponsorship opportunities."
+      }
     }
   ]
 }
