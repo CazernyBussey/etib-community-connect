@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "catalogUpdated": "2026-10-24",
+  "catalogUpdated": "2026-10-28",
   "businesses": [
     {
       "id": "liner-legal",
@@ -1370,6 +1370,74 @@
         "url": "/audio/double-tap-piper-lj-68f92d0fe2bef1b5.mp3",
         "text": "Double Tap, hosted by Steven Scott and Shaun Preece, explores technology from a blind and low vision perspective. The show covers accessibility, assistive technology, mainstream devices, apps, and AI through news, reviews, guest interviews, and listener conversations. Episodes are available through its website, major podcast platforms, and YouTube. Double Tap also offers live online listening, technology stories, a newsletter, and media sponsorship opportunities."
       }
+    },
+    {
+      "id": "jamie-estelle-roth",
+      "legacyIds": [],
+      "name": "Jamie Estelle Roth",
+      "status": "active",
+      "featured": {
+        "enabled": false,
+        "rank": null
+      },
+      "listingType": "Community Service Provider",
+      "categories": [
+        "Author",
+        "Podcast",
+        "Blind and Visually Impaired Voices",
+        "Motivational Speaking",
+        "Personal Growth"
+      ],
+      "services": [
+        "Memoir and audiobook",
+        "My Higher Self Has Questions podcast",
+        "Speaking engagements",
+        "Conversations about vision loss, resilience, and acceptance",
+        "Spiritual storytelling and community gatherings"
+      ],
+      "summary": "Jamie Estelle Roth is an author, speaker, and podcaster sharing stories of vision loss, resilience, acceptance, and spiritual growth.",
+      "description": "Jamie Estelle Roth is a California-based author, speaker, and host of My Higher Self Has Questions. Her memoir, Should’ve Seen That Coming: Navigating the In-Between Moments of Acceptance, Surrender, and Resilience, describes her experience of progressive vision loss and finding new purpose through change. Her writing, podcast, and speaking explore grief, acceptance, resilience, spirituality, and personal transformation.",
+      "spokenSummary": "Meet Jamie Estelle Roth, an author, speaker, and podcaster who shares her journey through vision loss and explores resilience, acceptance, and spiritual growth.",
+      "blindCommunitySupport": "Jamie shares her lived experience of vision loss through her memoir, audiobook, podcast, and public conversations, offering visibility and encouragement to blind and visually impaired audiences.",
+      "accessibility": "Her memoir is available as an audiobook narrated by Jamie. Her podcast is available through online audio platforms. Contact Jamie through her website for specific accessibility or event accommodations.",
+      "contact": {
+        "name": "Jamie Estelle Roth",
+        "email": null,
+        "phone": null,
+        "text": null,
+        "website": "https://www.jamieestelleroth.com/",
+        "preferredMethod": "Website",
+        "socialLinks": [
+          {
+            "label": "My Higher Self Has Questions podcast",
+            "url": "https://www.jamieestelleroth.com/podcasts"
+          },
+          {
+            "label": "ETIB Experience interview",
+            "url": "https://youtu.be/jK2K5O6Rxx8"
+          },
+          {
+            "label": "ETIB featured article",
+            "url": "https://eventhoughimblind.com/2026/10/28/jamie-roth-sees-now-what-she-didnt-see-before/"
+          }
+        ]
+      },
+      "location": {
+        "city": null,
+        "region": "California",
+        "country": "United States",
+        "serviceArea": "Online and speaking engagements",
+        "remoteAvailable": true,
+        "remoteDetails": "Podcast, audiobook, and online content available remotely.",
+        "inPersonNotes": "Contact Jamie to inquire about speaking or events."
+      },
+      "hours": "Contact through website for inquiries.",
+      "languages": [
+        "English"
+      ],
+      "certifications": [],
+      "testimonial": null,
+      "lastVerified": "2026-10-28"
     }
   ]
 }
