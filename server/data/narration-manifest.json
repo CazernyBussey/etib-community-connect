@@ -108,6 +108,12 @@
       "url": "/audio/double-tap-piper-lj-68f92d0fe2bef1b5.mp3",
       "sha256": "2ba69d43b8fe3b20bbe8da3ade2fe2a1257e83560c2780693c2721ee2138e415",
       "duration": 31.70684807256236
+    },
+    {
+      "id": "jamie-estelle-roth",
+      "url": "/audio/jamie-estelle-roth-piper-lj-cf6298c006a91a07.mp3",
+      "sha256": "c76b417844dc3f03c7476ad1ce4019428c0dca1c4639f00b992f563581ad5465",
+      "duration": 27.70140589569161
     }
   ]
 }
