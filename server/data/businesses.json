@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "catalogUpdated": "2026-10-28",
+  "catalogUpdated": "2026-11-09",
   "businesses": [
     {
       "id": "liner-legal",
@@ -1434,6 +1434,96 @@
         "url": "/audio/jamie-estelle-roth-piper-lj-cf6298c006a91a07.mp3",
         "text": "Jamie Estelle Roth is a California-based author, speaker, and host of My Higher Self Has Questions. Her memoir, Should’ve Seen That Coming: Navigating the In-Between Moments of Acceptance, Surrender, and Resilience, describes her experience of progressive vision loss and finding new purpose through change. Her writing, podcast, and speaking explore grief, acceptance, resilience, spirituality, and personal transformation."
       }
+    },
+    {
+      "id": "lighthouse-guild",
+      "legacyIds": [],
+      "name": "Lighthouse Guild",
+      "status": "active",
+      "featured": {
+        "enabled": false,
+        "rank": null
+      },
+      "directoryGroup": "business",
+      "listingType": "Community Service Provider",
+      "categories": [
+        "Vision Rehabilitation",
+        "Blind and Visually Impaired Support",
+        "Assistive Technology",
+        "Orientation and Mobility",
+        "Independent Living",
+        "Behavioral Health",
+        "Education and Employment"
+      ],
+      "services": [
+        "Low vision and eye care",
+        "Vision rehabilitation and occupational therapy",
+        "Orientation and mobility training",
+        "Independent living skills",
+        "Assistive technology assessment and training",
+        "Technology Center",
+        "Behavioral health services",
+        "Online vision-loss support groups",
+        "Academic and career services",
+        "Scholarships and youth programs",
+        "GuildCare adult day health care",
+        "Reading services"
+      ],
+      "summary": "Lighthouse Guild provides vision care, rehabilitation, assistive technology training, and education, career, and support services for people who are blind or visually impaired.",
+      "description": "Lighthouse Guild is a New York City-based nonprofit that provides vision care, rehabilitation, and practical support for people who are blind or visually impaired. Its services include low-vision care, orientation and mobility training, independent living skills, assistive technology evaluation and training, behavioral health care, and academic and career programs. Lighthouse Guild also offers online support groups, educational programs, and resources for people with vision loss and their families. Its Manhattan headquarters includes a Technology Center where clients can explore assistive devices with professional guidance. Services, eligibility, appointment requirements, and remote availability vary by program.",
+      "spokenSummary": "Lighthouse Guild supports people with vision loss through vision care, rehabilitation, technology training, independent living skills, and online support programs.",
+      "blindCommunitySupport": "Lighthouse Guild focuses on helping blind and visually impaired people build independence through clinical and rehabilitation services, mobility and daily-living training, technology access, education, career support, and opportunities to connect with peers.",
+      "accessibility": "Lighthouse Guild lists TTY 711 and provides online support programs, some accessible by telephone or video. Its Technology Center offers assistive-device evaluation and training; certain services require an assessment or referral. Contact Lighthouse Guild to confirm appointment needs, program eligibility, communication accommodations, and site access before visiting.",
+      "contact": {
+        "name": "Lighthouse Guild team",
+        "email": null,
+        "phone": "8002844422",
+        "text": null,
+        "website": "https://lighthouseguild.org/",
+        "preferredMethod": "Phone",
+        "socialLinks": [
+          {
+            "label": "Contact Lighthouse Guild",
+            "url": "https://lighthouseguild.org/contact/"
+          },
+          {
+            "label": "Services and support",
+            "url": "https://lighthouseguild.org/support-services/"
+          },
+          {
+            "label": "Technology Center",
+            "url": "https://lighthouseguild.org/technology/technology-center/"
+          },
+          {
+            "label": "Facebook",
+            "url": "https://www.facebook.com/lighthouseguild/"
+          },
+          {
+            "label": "Instagram",
+            "url": "https://www.instagram.com/lighthouseguild/"
+          },
+          {
+            "label": "LinkedIn",
+            "url": "https://www.linkedin.com/company/lighthouseguild/"
+          }
+        ]
+      },
+      "location": {
+        "city": "New York",
+        "region": "New York",
+        "country": "United States",
+        "serviceArea": "New York City-area in-person services and selected virtual programs available beyond New York; eligibility varies",
+        "remoteAvailable": true,
+        "remoteDetails": "Online support groups and virtual educational programs are offered; some groups are available nationally. Clinical care and other programs may require in-person visits or referrals.",
+        "inPersonNotes": "Manhattan headquarters: 250 West 64th Street, New York, NY 10023. Contact Lighthouse Guild to confirm program location, appointment or referral requirements, and access arrangements."
+      },
+      "hours": "Hours vary by department and program. Eye care services list Monday-Friday, 9 AM-5 PM Eastern; call for current appointment and program schedules.",
+      "languages": [
+        "English"
+      ],
+      "certifications": [],
+      "testimonial": null,
+      "lastVerified": "2026-11-09"
     }
   ]
 }
