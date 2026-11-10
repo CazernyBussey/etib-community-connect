@@ -114,6 +114,12 @@
       "url": "/audio/jamie-estelle-roth-piper-lj-cf6298c006a91a07.mp3",
       "sha256": "c76b417844dc3f03c7476ad1ce4019428c0dca1c4639f00b992f563581ad5465",
       "duration": 27.70140589569161
+    },
+    {
+      "id": "lighthouse-guild",
+      "url": "/audio/lighthouse-guild-piper-lj-3cad962c874b1fef.mp3",
+      "sha256": "a9e167df706ca593afa107157baa6c975318805190ab113256bf6c150ab5d773",
+      "duration": 45.72009070294784
     }
   ]
 }

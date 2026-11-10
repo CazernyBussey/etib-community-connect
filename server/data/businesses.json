@@ -1523,7 +1523,11 @@
       ],
       "certifications": [],
       "testimonial": null,
-      "lastVerified": "2026-11-09"
+      "lastVerified": "2026-11-09",
+      "descriptionAudio": {
+        "url": "/audio/lighthouse-guild-piper-lj-3cad962c874b1fef.mp3",
+        "text": "Lighthouse Guild is a New York City-based nonprofit that provides vision care, rehabilitation, and practical support for people who are blind or visually impaired. Its services include low-vision care, orientation and mobility training, independent living skills, assistive technology evaluation and training, behavioral health care, and academic and career programs. Lighthouse Guild also offers online support groups, educational programs, and resources for people with vision loss and their families. Its Manhattan headquarters includes a Technology Center where clients can explore assistive devices with professional guidance. Services, eligibility, appointment requirements, and remote availability vary by program."
+      }
     }
   ]
 }
