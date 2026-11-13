@@ -1532,7 +1532,7 @@
     {
       "id": "marty-schultz",
       "legacyIds": [],
-      "name": "Marty Schultz",
+      "name": "ObjectiveEd",
       "status": "active",
       "featured": {
         "enabled": false,
@@ -1565,16 +1565,16 @@
         "email": "marty@objectiveed.com",
         "phone": null,
         "text": null,
-        "website": "https://www.martyschultz.net/",
+        "website": "https://www.objectiveed.com/",
         "preferredMethod": "Email",
         "socialLinks": [
           {
-            "label": "Contact Marty",
-            "url": "https://www.martyschultz.net/contact"
+            "label": "Marty Schultz website",
+            "url": "https://www.martyschultz.net/"
           },
           {
-            "label": "ObjectiveEd",
-            "url": "https://www.objectiveed.com/"
+            "label": "Contact Marty",
+            "url": "https://www.martyschultz.net/contact"
           },
           {
             "label": "Blindfold Games",
