@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "catalogUpdated": "2026-11-09",
+  "catalogUpdated": "2026-11-12",
   "businesses": [
     {
       "id": "liner-legal",
@@ -1528,6 +1528,80 @@
         "url": "/audio/lighthouse-guild-piper-lj-3cad962c874b1fef.mp3",
         "text": "Lighthouse Guild is a New York City-based nonprofit that provides vision care, rehabilitation, and practical support for people who are blind or visually impaired. Its services include low-vision care, orientation and mobility training, independent living skills, assistive technology evaluation and training, behavioral health care, and academic and career programs. Lighthouse Guild also offers online support groups, educational programs, and resources for people with vision loss and their families. Its Manhattan headquarters includes a Technology Center where clients can explore assistive devices with professional guidance. Services, eligibility, appointment requirements, and remote availability vary by program."
       }
+    },
+    {
+      "id": "marty-schultz",
+      "legacyIds": [],
+      "name": "Marty Schultz",
+      "status": "active",
+      "featured": {
+        "enabled": false,
+        "rank": null
+      },
+      "listingType": "Community Service Provider",
+      "categories": [
+        "Accessible Technology",
+        "Accessible Gaming",
+        "Education",
+        "Entrepreneurship",
+        "Public Speaking"
+      ],
+      "services": [
+        "Blindfold Games accessible audio games",
+        "ObjectiveEd educational technology",
+        "BuddyBooks reading support",
+        "BLV Steps skill-building for blind and low-vision students",
+        "LifeLaunch Virtual Adventures life skills practice",
+        "Keynote speaking",
+        "Entrepreneurship mentoring"
+      ],
+      "summary": "Marty Schultz is a technology entrepreneur, speaker, and creator of Blindfold Games whose work with ObjectiveEd supports accessible learning.",
+      "description": "Marty Schultz creates software and speaks about entrepreneurship, app development, and learning through play. He founded Blindfold Games, a collection of accessible audio games shaped by feedback from blind and visually impaired players. Through ObjectiveEd, his work extends to educational tools for students, families, teachers, and agencies, including BuddyBooks reading support, BLV Steps for blind and low-vision learners, and LifeLaunch Virtual Adventures for life skills practice. He also mentors entrepreneurs and presents on building software businesses.",
+      "spokenSummary": "Marty Schultz is the creator of Blindfold Games and a technology entrepreneur and speaker. His work with ObjectiveEd supports accessible gaming, reading practice, and skill-building for students with disabilities.",
+      "blindCommunitySupport": "Blindfold Games offers audio-based play for blind and visually impaired people. ObjectiveEd's BLV Steps helps blind and low-vision students practice VoiceOver gestures, orientation and mobility concepts, and transition readiness. Other ObjectiveEd tools support reading and life skills for students with disabilities.",
+      "accessibility": "Blindfold Games focuses on accessible audio gaming. ObjectiveEd offers structured apps for blind and low-vision learners. Compatibility, eligibility, pricing, and accommodations vary by product; contact Marty or ObjectiveEd for details.",
+      "contact": {
+        "name": "Marty Schultz",
+        "email": "marty@objectiveed.com",
+        "phone": null,
+        "text": null,
+        "website": "https://www.martyschultz.net/",
+        "preferredMethod": "Email",
+        "socialLinks": [
+          {
+            "label": "Contact Marty",
+            "url": "https://www.martyschultz.net/contact"
+          },
+          {
+            "label": "ObjectiveEd",
+            "url": "https://www.objectiveed.com/"
+          },
+          {
+            "label": "Blindfold Games",
+            "url": "https://blindfoldgames.org/"
+          },
+          {
+            "label": "ObjectiveEd Innovation Lab",
+            "url": "https://research.objectiveed.com/"
+          }
+        ]
+      },
+      "location": {
+        "city": null,
+        "region": null,
+        "country": "United States",
+        "serviceArea": "Online resources and speaking engagements by arrangement",
+        "remoteAvailable": true,
+        "remoteDetails": "Accessible games and educational resources are available online. Contact Marty for speaking and mentoring availability.",
+        "inPersonNotes": null
+      },
+      "hours": "Contact by email or through the website for availability.",
+      "languages": [
+        "English"
+      ],
+      "certifications": [],
+      "testimonial": null,
+      "lastVerified": "2026-11-12"
     }
   ]
 }
