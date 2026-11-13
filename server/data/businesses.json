@@ -1601,7 +1601,11 @@
       ],
       "certifications": [],
       "testimonial": null,
-      "lastVerified": "2026-11-12"
+      "lastVerified": "2026-11-12",
+      "descriptionAudio": {
+        "url": "/audio/marty-schultz-piper-lj-977ae9f720ab1616.mp3",
+        "text": "Marty Schultz creates software and speaks about entrepreneurship, app development, and learning through play. He founded Blindfold Games, a collection of accessible audio games shaped by feedback from blind and visually impaired players. Through ObjectiveEd, his work extends to educational tools for students, families, teachers, and agencies, including BuddyBooks reading support, BLV Steps for blind and low-vision learners, and LifeLaunch Virtual Adventures for life skills practice. He also mentors entrepreneurs and presents on building software businesses."
+      }
     }
   ]
 }

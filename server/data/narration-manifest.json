@@ -120,6 +120,12 @@
       "url": "/audio/lighthouse-guild-piper-lj-3cad962c874b1fef.mp3",
       "sha256": "a9e167df706ca593afa107157baa6c975318805190ab113256bf6c150ab5d773",
       "duration": 45.72009070294784
+    },
+    {
+      "id": "marty-schultz",
+      "url": "/audio/marty-schultz-piper-lj-977ae9f720ab1616.mp3",
+      "sha256": "27f3a779283885e67500b01903e246aa70ff7b6fc69f090c5a47c33898076dce",
+      "duration": 35.9328798185941
     }
   ]
 }
