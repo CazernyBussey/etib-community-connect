@@ -1637,14 +1637,14 @@
       "description": "Living the Dream with Curveball is an interview podcast hosted by Curtis “Curveball” Jackson, who has been blind since birth. Since 2020, the show has released more than 1,000 episodes featuring authors, entrepreneurs, advocates, artists, and people from many walks of life. Through personal stories and practical lessons, Curtis invites guests to share their experiences and inspire listeners to pursue their dreams. The show also featured Even Though I’m Blind founder Cazerny Bussey in the episode Beyond Sight: Cazerny Bussey on Vision, Advocacy, and Empowering the Blind Community.",
       "spokenSummary": "Living the Dream with Curveball is a podcast hosted by blind creator Curtis Jackson, sharing inspiring interviews and stories from guests of many backgrounds.",
       "blindCommunitySupport": "Hosted by Curtis Jackson, a blind media creator. The podcast offers a platform for diverse voices, including blind and visually impaired guests, to share personal experiences and perspectives.",
-      "accessibility": "Audio episodes are available on the official podcast website and Apple Podcasts. Apple Podcasts supports VoiceOver navigation. Contact the show through its official website to ask about transcripts or other accommodations.",
+      "accessibility": "Audio episodes are available on the official podcast website and Apple Podcasts. Apple Podcasts supports VoiceOver navigation. Listeners and prospective guests can contact the show by email or through the official website's contact form for questions about transcript availability or other accommodations.",
       "contact": {
         "name": "Curtis “Curveball” Jackson",
-        "email": null,
+        "email": "curtisjackson1978@att.net",
         "phone": null,
         "text": null,
         "website": "https://www.curveball337.com/",
-        "preferredMethod": "Website",
+        "preferredMethod": "Email",
         "socialLinks": [
           {
             "label": "Apple Podcasts — show",
@@ -1657,6 +1657,14 @@
           {
             "label": "ETIB feature article",
             "url": "https://eventhoughimblind.com/2026/11/14/living-the-dream-with-curveball-curtis-jackson-podcast/"
+          },
+          {
+            "label": "Contact the podcast",
+            "url": "https://www.curveball337.com/contact/"
+          },
+          {
+            "label": "Apply to be a podcast guest",
+            "url": "https://www.podmatch.com/hostdetailpreview/1628631536976x919760049303001600"
           }
         ]
       },
