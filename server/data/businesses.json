@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "catalogUpdated": "2026-11-12",
+  "catalogUpdated": "2026-11-14",
   "businesses": [
     {
       "id": "liner-legal",
@@ -1606,6 +1606,76 @@
         "url": "/audio/marty-schultz-piper-lj-977ae9f720ab1616.mp3",
         "text": "Marty Schultz creates software and speaks about entrepreneurship, app development, and learning through play. He founded Blindfold Games, a collection of accessible audio games shaped by feedback from blind and visually impaired players. Through ObjectiveEd, his work extends to educational tools for students, families, teachers, and agencies, including BuddyBooks reading support, BLV Steps for blind and low-vision learners, and LifeLaunch Virtual Adventures for life skills practice. He also mentors entrepreneurs and presents on building software businesses."
       }
+    },
+    {
+      "id": "living-the-dream-with-curveball",
+      "legacyIds": [],
+      "name": "Living the Dream with Curveball",
+      "directoryGroup": "media",
+      "status": "active",
+      "featured": {
+        "enabled": false,
+        "rank": null
+      },
+      "listingType": "Community Service Provider",
+      "categories": [
+        "Podcast",
+        "Accessible Media",
+        "Blind and Visually Impaired Support",
+        "Community Stories",
+        "Motivation and Inspiration"
+      ],
+      "services": [
+        "Podcast interviews",
+        "Guest storytelling",
+        "Motivational conversations",
+        "Entrepreneurship discussions",
+        "Blind-led media",
+        "Audio podcast listening"
+      ],
+      "summary": "Living the Dream with Curveball is a blind-hosted interview podcast featuring people whose stories teach, motivate, and inspire.",
+      "description": "Living the Dream with Curveball is an interview podcast hosted by Curtis “Curveball” Jackson, who has been blind since birth. Since 2020, the show has released more than 1,000 episodes featuring authors, entrepreneurs, advocates, artists, and people from many walks of life. Through personal stories and practical lessons, Curtis invites guests to share their experiences and inspire listeners to pursue their dreams. The show also featured Even Though I’m Blind founder Cazerny Bussey in the episode Beyond Sight: Cazerny Bussey on Vision, Advocacy, and Empowering the Blind Community.",
+      "spokenSummary": "Living the Dream with Curveball is a podcast hosted by blind creator Curtis Jackson, sharing inspiring interviews and stories from guests of many backgrounds.",
+      "blindCommunitySupport": "Hosted by Curtis Jackson, a blind media creator. The podcast offers a platform for diverse voices, including blind and visually impaired guests, to share personal experiences and perspectives.",
+      "accessibility": "Audio episodes are available on the official podcast website and Apple Podcasts. Apple Podcasts supports VoiceOver navigation. Contact the show through its official website to ask about transcripts or other accommodations.",
+      "contact": {
+        "name": "Curtis “Curveball” Jackson",
+        "email": null,
+        "phone": null,
+        "text": null,
+        "website": "https://www.curveball337.com/",
+        "preferredMethod": "Website",
+        "socialLinks": [
+          {
+            "label": "Apple Podcasts — show",
+            "url": "https://podcasts.apple.com/us/podcast/living-the-dream-with-curveball/id1531485905"
+          },
+          {
+            "label": "Apple Podcasts — Cazerny Bussey interview",
+            "url": "https://podcasts.apple.com/us/podcast/beyond-sight-cazerny-bussey-on-vision-advocacy-and/id1531485905?i=1000801876937"
+          },
+          {
+            "label": "ETIB feature article",
+            "url": "https://eventhoughimblind.com/2026/11/14/living-the-dream-with-curveball-curtis-jackson-podcast/"
+          }
+        ]
+      },
+      "location": {
+        "city": "Wichita",
+        "region": "Kansas",
+        "country": "United States",
+        "serviceArea": "Global and online",
+        "remoteAvailable": true,
+        "remoteDetails": "Listeners can access podcast episodes online from anywhere.",
+        "inPersonNotes": null
+      },
+      "hours": "Online podcast; visit the official website for the latest episodes.",
+      "languages": [
+        "English"
+      ],
+      "certifications": [],
+      "testimonial": null,
+      "lastVerified": "2026-11-14"
     }
   ]
 }
